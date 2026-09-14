@@ -28,7 +28,8 @@
             --btn-add-giorno: #5855f7;   
             --btn-submit: #22c55e;       
             --btn-back: #ef4444;         
-            --btn-share: #0284c7;        /* Colore pulsante "Copia Link Cliente" */
+            --btn-share: #0284c7;        
+            --btn-delete-ex: #ef4444;    /* Colore pulsante elimina esercizio */
 
             /* 4. Scheda Finale */
             --header-giorno-1: #0284c7;  
@@ -119,6 +120,16 @@
         .btn-submit { background-color: var(--btn-submit); color: #ffffff; }
         .btn-share { background-color: var(--btn-share); color: #ffffff; }
         .btn-back { background-color: var(--btn-back); color: #ffffff; margin-top: 10px; }
+        
+        .btn-remove-ex {
+            background-color: var(--btn-delete-ex);
+            color: #ffffff;
+            padding: 8px 14px;
+            font-size: 0.9rem;
+            margin-top: 12px;
+            width: auto;
+            float: right;
+        }
 
         #scheda-finale { display: none; }
         
@@ -210,6 +221,9 @@
 
                         <label>Tempo di Recupero:</label>
                         <input type="text" class="ex-recupero" placeholder="es. 90 secondi">
+
+                        <button type="button" class="btn-remove-ex" onclick="rimuoviEsercizio(this)">🗑️ Rimuovi Esercizio</button>
+                        <div style="clear: both;"></div>
                     </div>
                 </div>
 
@@ -234,6 +248,17 @@
     <script>
         let datiSchedaAttuale = null;
 
+        function rimuoviEsercizio(btn) {
+            const esercizioBox = btn.closest('.esercizio-box');
+            const container = esercizioBox.parentElement;
+            
+            if (container.querySelectorAll('.esercizio-box').length > 1) {
+                esercizioBox.remove();
+            } else {
+                alert("Devi mantenere almeno un esercizio per questo giorno!");
+            }
+        }
+
         function aggiungiEsercizio(btn) {
             const giornoBox = btn.closest('.giorno-box');
             const container = giornoBox.querySelector('.lista-esercizi-giorno');
@@ -257,6 +282,9 @@
 
                 <label>Tempo di Recupero:</label>
                 <input type="text" class="ex-recupero" placeholder="es. 60 secondi">
+
+                <button type="button" class="btn-remove-ex" onclick="rimuoviEsercizio(this)">🗑️ Rimuovi Esercizio</button>
+                <div style="clear: both;"></div>
             `;
             container.appendChild(nuovoEsercizio);
         }
@@ -301,6 +329,9 @@
 
                         <label>Tempo di Recupero:</label>
                         <input type="text" class="ex-recupero" placeholder="es. 2 minuti">
+
+                        <button type="button" class="btn-remove-ex" onclick="rimuoviEsercizio(this)">🗑️ Rimuovi Esercizio</button>
+                        <div style="clear: both;"></div>
                     </div>
                 </div>
 
