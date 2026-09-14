@@ -28,6 +28,7 @@
             --btn-add-giorno: #5855f7;   
             --btn-submit: #22c55e;       
             --btn-back: #ef4444;         
+            --btn-share: #0284c7;        /* Colore pulsante "Copia Link Cliente" */
 
             /* 4. Scheda Finale */
             --header-giorno-1: #0284c7;  
@@ -116,7 +117,8 @@
         .btn-add { background-color: var(--btn-add-ex); color: #0f172a; }
         .btn-add-giorno { background-color: var(--btn-add-giorno); color: #ffffff; margin-top: 25px; }
         .btn-submit { background-color: var(--btn-submit); color: #ffffff; }
-        .btn-back { background-color: var(--btn-back); color: #ffffff; margin-top: 20px; }
+        .btn-share { background-color: var(--btn-share); color: #ffffff; }
+        .btn-back { background-color: var(--btn-back); color: #ffffff; margin-top: 10px; }
 
         #scheda-finale { display: none; }
         
@@ -225,10 +227,13 @@
             <!-- Qui verranno inseriti i giorni espandibili -->
         </div>
 
-        <button class="btn-back" onclick="tornaAlForm()">← Torna a Modificare</button>
+        <button class="btn-share" id="btn-condividi" onclick="copiaLinkCliente()">🔗 Copia Link da inviare al Cliente</button>
+        <button class="btn-back" id="btn-modifica" onclick="tornaAlForm()">← Torna a Modificare</button>
     </div>
 
     <script>
+        let datiSchedaAttuale = null;
+
         function aggiungiEsercizio(btn) {
             const giornoBox = btn.closest('.giorno-box');
             const container = giornoBox.querySelector('.lista-esercizi-giorno');
@@ -306,14 +311,12 @@
 
         function generaSchedaFinale() {
             const nomeCliente = document.getElementById('nome-cliente').value;
-            if (nomeCliente.trim() !== "") {
-                document.getElementById('titolo-principale').innerText = "Scheda " + nomeCliente;
-            } else {
-                document.getElementById('titolo-principale').innerText = "Scheda Allenamento";
-            }
-
             const blocchiGiorno = document.querySelectorAll('.giorno-box');
-            let htmlSchedaFinale = "";
+            
+            datiSchedaAttuale = {
+                cliente: nomeCliente,
+                giorni: []
+            };
 
             blocchiGiorno.forEach((giornoBox) => {
                 const giornoNome = giornoBox.querySelector('.giorno-select').value;
@@ -324,31 +327,57 @@
                 const serie = giornoBox.querySelectorAll('.ex-serie');
                 const recuperi = giornoBox.querySelectorAll('.ex-recupero');
 
-                let htmlEsercizi = "";
-
+                let esercizi = [];
                 for (let i = 0; i < nomi.length; i++) {
-                    const nomeVal = nomi[i].value || `Esercizio ${i+1}`;
-                    const muscoloVal = muscoliEx[i].value;
-                    const serieVal = serie[i].value || "3x10";
-                    const recuperoVal = recuperi[i].value || "60 sec";
+                    esercizi.push({
+                        nome: nomi[i].value || `Esercizio ${i+1}`,
+                        muscolo: muscoliEx[i].value,
+                        serie: serie[i].value || "3x10",
+                        recupero: recuperi[i].value || "60 sec"
+                    });
+                }
 
+                datiSchedaAttuale.giorni.push({
+                    nome: giornoNome,
+                    muscoli: muscoli,
+                    esercizi: esercizi
+                });
+            });
+
+            renderizzaScheda(datiSchedaAttuale);
+            document.getElementById('form-creazione').style.display = 'none';
+            document.getElementById('scheda-finale').style.display = 'block';
+        }
+
+        function renderizzaScheda(data) {
+            if (data.cliente && data.cliente.trim() !== "") {
+                document.getElementById('titolo-principale').innerText = "Scheda " + data.cliente;
+            } else {
+                document.getElementById('titolo-principale').innerText = "Scheda Allenamento";
+            }
+
+            let htmlSchedaFinale = "";
+
+            data.giorni.forEach((giorno) => {
+                let htmlEsercizi = "";
+                giorno.esercizi.forEach((ex, i) => {
                     htmlEsercizi += `
                         <div class="ex-card-final">
-                            <p class="ex-title">${i+1}. ${nomeVal}</p>
-                            ${muscoloVal ? `<span class="ex-muscolo-tag">${muscoloVal}</span>` : ''}
+                            <p class="ex-title">${i+1}. ${ex.nome}</p>
+                            ${ex.muscolo ? `<span class="ex-muscolo-tag">${ex.muscolo}</span>` : ''}
                             <div class="ex-details">
-                                <span>Serie: <b>${serieVal}</b></span>
-                                <span>Recupero: <b>${recuperoVal}</b></span>
+                                <span>Serie: <b>${ex.serie}</b></span>
+                                <span>Recupero: <b>${ex.recupero}</b></span>
                             </div>
                         </div>
                     `;
-                }
+                });
 
                 htmlSchedaFinale += `
                     <details>
                         <summary>
-                            <span>${giornoNome}</span>
-                            <span style="font-size: 0.9rem; font-weight: normal; opacity: 0.9;">${muscoli}</span>
+                            <span>${giorno.nome}</span>
+                            <span style="font-size: 0.9rem; font-weight: normal; opacity: 0.9;">${giorno.muscoli}</span>
                         </summary>
                         <div class="dettagli-giorno-content">
                             ${htmlEsercizi}
@@ -358,15 +387,48 @@
             });
 
             document.getElementById('res-lista-giorni').innerHTML = htmlSchedaFinale;
-            document.getElementById('form-creazione').style.display = 'none';
-            document.getElementById('scheda-finale').style.display = 'block';
+        }
+
+        function copiaLinkCliente() {
+            if (!datiSchedaAttuale) return;
+            
+            const jsonString = JSON.stringify(datiSchedaAttuale);
+            const encodedData = encodeURIComponent(jsonString);
+            
+            const urlCliente = window.location.origin + window.location.pathname + "?data=" + encodedData;
+
+            navigator.clipboard.writeText(urlCliente).then(() => {
+                const btn = document.getElementById('btn-condividi');
+                btn.innerText = "✅ Link Copiato! Invialo su WhatsApp";
+                setTimeout(() => {
+                    btn.innerText = "🔗 Copia Link da inviare al Cliente";
+                }, 3000);
+            });
         }
 
         function tornaAlForm() {
             document.getElementById('form-creazione').style.display = 'block';
             document.getElementById('scheda-finale').style.display = 'none';
         }
-    </script>
 
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const dataParam = urlParams.get('data');
+
+            if (dataParam) {
+                try {
+                    const data = JSON.parse(decodeURIComponent(dataParam));
+                    document.getElementById('form-creazione').style.display = 'none';
+                    document.getElementById('btn-condividi').style.display = 'none';
+                    document.getElementById('btn-modifica').style.display = 'none';
+                    
+                    renderizzaScheda(data);
+                    document.getElementById('scheda-finale').style.display = 'block';
+                } catch (e) {
+                    console.error("Errore nel caricamento dei dati", e);
+                }
+            }
+        };
+    </script>
 </body>
 </html>
