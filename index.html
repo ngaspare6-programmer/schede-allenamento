@@ -7,7 +7,6 @@
     <style>
         /* ==========================================================
            === CONTROLLO COLORI (VARIABILI CSS) ===
-           Modifica i codici colore qui sotto per cambiare la grafica!
         ========================================================== */
         :root {
             /* 1. Sfondi */
@@ -29,7 +28,7 @@
             --btn-submit: #22c55e;       
             --btn-back: #ef4444;         
             --btn-share: #0284c7;        
-            --btn-delete-ex: #ef4444;    /* Colore pulsante elimina esercizio */
+            --btn-delete-ex: #ef4444;    
 
             /* 4. Scheda Finale */
             --header-giorno-1: #0284c7;  
@@ -41,14 +40,14 @@
         }
 
         /* ==========================================================
-           === CONTROLLO DIMENSIONI TESTI (FONT-SIZE) ===
+           === CONTROLLO DIMENSIONI TESTI ===
         ========================================================== */
         h1 { font-size: 2.2rem; color: var(--color-titoli); text-align: center; margin-bottom: 20px; }
-        h2 { font-size: 1.5rem; }
+        h2 { font-size: 1.5rem; text-align: center; }
         h3 { font-size: 1.2rem; }
 
-        label[for="nome-cliente"] { font-size: 2rem; color: var(--color-titoli); }
-        #nome-cliente { font-size: 1.5rem; padding: 14px; font-weight: bold; }
+        label[for="nome-cliente-iniziale"] { font-size: 1.8rem; color: var(--color-titoli); }
+        #nome-cliente-iniziale { font-size: 1.5rem; padding: 14px; font-weight: bold; }
 
         label[for="giorno"] { font-size: 2rem; color: var(--color-titoli); }
         .giorno-select { font-size: 1.5rem; padding: 14px; font-weight: bold; }
@@ -64,8 +63,6 @@
 
         button { font-size: 1.1rem; }
 
-        .sessione-header h2 { font-size: 1.6rem; }
-        .sessione-header p { font-size: 1.1rem; }
         .ex-title { font-size: 1.3rem; }        
         .ex-muscolo-tag { font-size: 0.9rem; } 
         .ex-details { font-size: 1.05rem; }     
@@ -131,8 +128,38 @@
             float: right;
         }
 
+        /* === GESTIONE VISIBILITÀ SCHERMATE === */
+        #schermata-menu { display: none; }
+        #form-creazione { display: none; }
         #scheda-finale { display: none; }
-        
+
+        /* === CARD SCELTA MENU === */
+        .menu-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .menu-box {
+            background-color: var(--bg-giorno-box);
+            border: 2px solid var(--color-bordi);
+            border-radius: 10px;
+            padding: 30px 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+
+        .menu-box:hover {
+            transform: translateY(-4px);
+            border-color: var(--btn-add-ex);
+        }
+
+        .menu-box h3 { margin: 0; font-size: 1.3rem; color: var(--color-titoli); }
+        .menu-box.disabled { opacity: 0.5; cursor: not-allowed; }
+        .menu-box.disabled:hover { transform: none; border-color: var(--color-bordi); }
+
         details {
             background-color: var(--bg-card);
             border-radius: 8px;
@@ -175,18 +202,35 @@
 </head>
 <body>
 
-    <h1 id="titolo-principale">Scheda Allenamento </h1>
+    <h1 id="titolo-principale">Gestionale Fit</h1>
 
-    <!-- FORM CREAZIONE -->
+    <!-- SCHERMATA 1: NOMINATIVO ATLETA -->
+    <div class="card" id="schermata-inizio">
+        <h2>Benvenuto</h2>
+        <label for="nome-cliente-iniziale">Nome Cliente / Atleta:</label>
+        <input type="text" id="nome-cliente-iniziale" placeholder="es. Mario Rossi">
+        <button class="btn-submit" onclick="vaiAlMenu()">Avanti →</button>
+    </div>
+
+    <!-- SCHERMATA 2: MENU DI SCELTA -->
+    <div class="card" id="schermata-menu">
+        <h2 id="sottotitolo-menu">Seleziona Scheda</h2>
+        <div class="menu-grid">
+            <div class="menu-box" onclick="apriSchedaAllenamento()">
+                <h3>Scheda Allenamento</h3>
+            </div>
+            <div class="menu-box disabled" onclick="alert('La sezione Alimentazione sarà disponibile a breve!')">
+                <h3>Scheda Alimentazione</h3>
+                <span style="font-size: 0.8rem; color: var(--color-etichette);">(In arrivo)</span>
+            </div>
+        </div>
+        <button class="btn-back" onclick="tornaAllaHome()">← Cambia Atleta</button>
+    </div>
+
+    <!-- SCHERMATA 3: FORM CREAZIONE SCHEDA ALLENAMENTO -->
     <div class="card" id="form-creazione">
-        <h2>Crea Scheda Completa</h2>
+        <h2>Crea Scheda Allenamento</h2>
         
-        <label for="nome-cliente">Nome Cliente / Atleta:</label>
-        <input type="text" id="nome-cliente" placeholder="es. Mario Rossi">
-
-        <hr style="border-color: var(--color-bordi); margin: 20px 0;">
-
-        <!-- CONTENITORE GIORNI -->
         <div id="contenitore-giorni">
             <div class="giorno-box">
                 <label for="giorno">Giorno / Sessione:</label>
@@ -231,15 +275,14 @@
             </div>
         </div>
 
-        <button class="btn-add-giorno" onclick="aggiungiGiorno()">+ AGGIUNGI UN ALTRO GIORNO </button>
-        <button class="btn-submit" onclick="generaSchedaFinale()">Genera Scheda Finale </button>
+        <button class="btn-add-giorno" onclick="aggiungiGiorno()">+ AGGIUNGI UN ALTRO GIORNO</button>
+        <button class="btn-submit" onclick="generaSchedaFinale()">Genera Scheda Finale</button>
+        <button class="btn-back" onclick="tornaAlMenu()">← Torna al Menu</button>
     </div>
 
-    <!-- VISTA SCHEDA COMPILATA CON FRECCETTINE -->
+    <!-- SCHERMATA 4: VISTA SCHEDA FINALE -->
     <div class="card" id="scheda-finale">
-        <div id="res-lista-giorni">
-            <!-- Qui verranno inseriti i giorni espandibili -->
-        </div>
+        <div id="res-lista-giorni"></div>
 
         <button class="btn-share" id="btn-condividi" onclick="copiaLinkCliente()">🔗 Copia Link da inviare al Cliente</button>
         <button class="btn-back" id="btn-modifica" onclick="tornaAlForm()">← Torna a Modificare</button>
@@ -247,7 +290,39 @@
 
     <script>
         let datiSchedaAttuale = null;
+        let nomeAtletaSalvato = "";
 
+        // NAVIGAZIONE TRA LE SCHERMATE
+        function vaiAlMenu() {
+            const inputNome = document.getElementById('nome-cliente-iniziale').value;
+            if (inputNome.trim() === "") {
+                alert("Per favore inserisci il nome del cliente!");
+                return;
+            }
+            nomeAtletaSalvato = inputNome;
+            document.getElementById('titolo-principale').innerText = "Atleta: " + nomeAtletaSalvato;
+            
+            document.getElementById('schermata-inizio').style.display = 'none';
+            document.getElementById('schermata-menu').style.display = 'block';
+        }
+
+        function tornaAllaHome() {
+            document.getElementById('titolo-principale').innerText = "Gestionale Fit";
+            document.getElementById('schermata-menu').style.display = 'none';
+            document.getElementById('schermata-inizio').style.display = 'block';
+        }
+
+        function apriSchedaAllenamento() {
+            document.getElementById('schermata-menu').style.display = 'none';
+            document.getElementById('form-creazione').style.display = 'block';
+        }
+
+        function tornaAlMenu() {
+            document.getElementById('form-creazione').style.display = 'none';
+            document.getElementById('schermata-menu').style.display = 'block';
+        }
+
+        // GESTIONE ESERCIZI E GIORNI
         function rimuoviEsercizio(btn) {
             const esercizioBox = btn.closest('.esercizio-box');
             const container = esercizioBox.parentElement;
@@ -341,11 +416,10 @@
         }
 
         function generaSchedaFinale() {
-            const nomeCliente = document.getElementById('nome-cliente').value;
             const blocchiGiorno = document.querySelectorAll('.giorno-box');
             
             datiSchedaAttuale = {
-                cliente: nomeCliente,
+                cliente: nomeAtletaSalvato,
                 giorni: []
             };
 
@@ -442,6 +516,7 @@
             document.getElementById('scheda-finale').style.display = 'none';
         }
 
+        // APERTURA LINK CLIENTE
         window.onload = function() {
             const urlParams = new URLSearchParams(window.location.search);
             const dataParam = urlParams.get('data');
@@ -449,6 +524,8 @@
             if (dataParam) {
                 try {
                     const data = JSON.parse(decodeURIComponent(dataParam));
+                    document.getElementById('schermata-inizio').style.display = 'none';
+                    document.getElementById('schermata-menu').style.display = 'none';
                     document.getElementById('form-creazione').style.display = 'none';
                     document.getElementById('btn-condividi').style.display = 'none';
                     document.getElementById('btn-modifica').style.display = 'none';
