@@ -357,6 +357,7 @@
 
         <button class="btn-share" id="btn-condividi" onclick="copiaLinkCliente()">🔗 Copia Link da inviare al Cliente</button>
         <button class="btn-back" id="btn-modifica" onclick="tornaAlForm()">← Torna a Modificare</button>
+        <button class="btn-back" id="btn-menu-finale" onclick="tornaAlMenu()">← Torna al Menu</button>
     </div>
 
     <script>
@@ -396,6 +397,7 @@
 
         function tornaAlMenu() {
             document.getElementById('form-creazione').style.display = 'none';
+            document.getElementById('scheda-finale').style.display = 'none';
             document.getElementById('schermata-menu').style.display = 'block';
         }
 
@@ -599,7 +601,6 @@
         // SALVATAGGIO E GESTIONE STORICO (LOCALSTORAGE)
         function salvaInStorico(scheda) {
             let storico = JSON.parse(localStorage.getItem('storicoAtleti')) || [];
-            // Rimuovi eventuale scheda precedente con lo stesso nome per aggiornarla
             storico = storico.filter(item => item.cliente.toLowerCase() !== scheda.cliente.toLowerCase());
             storico.push(scheda);
             localStorage.setItem('storicoAtleti', JSON.stringify(storico));
@@ -636,7 +637,6 @@
             datiSchedaAttuale = schedaSelezionata;
             nomeAtletaSalvato = schedaSelezionata.cliente;
 
-            // Nascondi le schermate iniziali e mostra direttamente la scheda finale generata
             document.getElementById('schermata-inizio').style.display = 'none';
             document.getElementById('schermata-menu').style.display = 'none';
             document.getElementById('form-creazione').style.display = 'none';
@@ -644,7 +644,7 @@
             renderizzaScheda(schedaSelezionata);
             document.getElementById('scheda-finale').style.display = 'block';
             
-            toggleDrawer(); // Chiudi il menu
+            toggleDrawer();
         }
 
         function eliminaDaStorico(index) {
@@ -662,13 +662,13 @@
             if (dataParam) {
                 try {
                     const data = JSON.parse(decodeURIComponent(dataParam));
-                    // Nascondi anche il tasto del menu se è il cliente ad aprire il link
                     document.getElementById('menu-btn').style.display = 'none';
                     document.getElementById('schermata-inizio').style.display = 'none';
                     document.getElementById('schermata-menu').style.display = 'none';
                     document.getElementById('form-creazione').style.display = 'none';
                     document.getElementById('btn-condividi').style.display = 'none';
                     document.getElementById('btn-modifica').style.display = 'none';
+                    document.getElementById('btn-menu-finale').style.display = 'none';
                     
                     renderizzaScheda(data);
                     document.getElementById('scheda-finale').style.display = 'block';
