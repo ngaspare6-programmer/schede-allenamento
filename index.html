@@ -303,47 +303,7 @@
         <h2>Crea Scheda Allenamento</h2>
         
         <div id="contenitore-giorni">
-            <div class="giorno-box">
-                <label for="giorno">Giorno / Sessione:</label>
-                <select class="giorno-select">
-                    <option value="Giorno 1">Giorno 1</option>
-                    <option value="Giorno 2">Giorno 2</option>
-                    <option value="Giorno 3">Giorno 3</option>
-                    <option value="Giorno 4">Giorno 4</option>
-                    <option value="Giorno 5">Giorno 5</option>
-                    <option value="Richiamo / Extra">Richiamo / Extra</option>
-                </select>
-
-                <label for="muscoli-generali">Muscoli Coinvolti:</label>
-                <input type="text" class="muscoli-input" placeholder="es. Spalle e Schiena">
-
-                <h3 style="margin-top: 20px;">Esercizi</h3>
-                <div class="lista-esercizi-giorno">
-                    <div class="esercizio-box">
-                        <label>Nome Esercizio:</label>
-                        <input type="text" class="ex-nome" placeholder="es. Lat Machine">
-
-                        <div class="grid-2">
-                            <div>
-                                <label>Muscolo (opzionale):</label>
-                                <input type="text" class="ex-muscolo" placeholder="es. Schiena">
-                            </div>
-                            <div>
-                                <label>Serie x Reps:</label>
-                                <input type="text" class="ex-serie" placeholder="es. 4x10">
-                            </div>
-                        </div>
-
-                        <label>Tempo di Recupero:</label>
-                        <input type="text" class="ex-recupero" placeholder="es. 90 secondi">
-
-                        <button type="button" class="btn-remove-ex" onclick="rimuoviEsercizio(this)">🗑️ Rimuovi Esercizio</button>
-                        <div style="clear: both;"></div>
-                    </div>
-                </div>
-
-                <button class="btn-add" onclick="aggiungiEsercizio(this)">+ Aggiungi un altro esercizio</button>
-            </div>
+            <!-- Il contenuto dei giorni verrà gestito dinamicamente -->
         </div>
 
         <button class="btn-add-giorno" onclick="aggiungiGiorno()">+ AGGIUNGI UN ALTRO GIORNO</button>
@@ -377,7 +337,13 @@
                 alert("Per favore inserisci il nome del cliente!");
                 return;
             }
-            nomeAtletaSalvato = inputNome;
+            
+            // Se stiamo creando un NUOVO atleta (nome diverso da quello attualmente salvato), resettiamo il form
+            if (nomeAtletaSalvato.toLowerCase() !== inputNome.trim().toLowerCase()) {
+                resetFormAllenamento();
+            }
+
+            nomeAtletaSalvato = inputNome.trim();
             document.getElementById('titolo-principale').innerText = "Atleta: " + nomeAtletaSalvato;
             
             document.getElementById('schermata-inizio').style.display = 'none';
@@ -399,6 +365,14 @@
             document.getElementById('form-creazione').style.display = 'none';
             document.getElementById('scheda-finale').style.display = 'none';
             document.getElementById('schermata-menu').style.display = 'block';
+        }
+
+        // RESET COMPLETO FORM PER NUOVO ATLETA
+        function resetFormAllenamento() {
+            datiSchedaAttuale = null;
+            const contenitore = document.getElementById('contenitore-giorni');
+            contenitore.innerHTML = '';
+            aggiungiGiorno(); // Inserisce 1 giorno vuoto di base
         }
 
         // GESTIONE ESERCIZI E GIORNI
@@ -629,6 +603,66 @@
             container.innerHTML = html;
         }
 
+        function popolaFormConDati(scheda) {
+            const contenitore = document.getElementById('contenitore-giorni');
+            contenitore.innerHTML = ''; // Svuota l'attuale form
+
+            scheda.giorni.forEach((giornoData) => {
+                const nuovoGiorno = document.createElement('div');
+                nuovoGiorno.className = 'giorno-box';
+                
+                let eserciziHtml = '';
+                giornoData.esercizi.forEach((ex) => {
+                    eserciziHtml += `
+                        <div class="esercizio-box">
+                            <label>Nome Esercizio:</label>
+                            <input type="text" class="ex-nome" value="${ex.nome}">
+
+                            <div class="grid-2">
+                                <div>
+                                    <label>Muscolo (opzionale):</label>
+                                    <input type="text" class="ex-muscolo" value="${ex.muscolo || ''}">
+                                </div>
+                                <div>
+                                    <label>Serie x Reps:</label>
+                                    <input type="text" class="ex-serie" value="${ex.serie}">
+                                </div>
+                            </div>
+
+                            <label>Tempo di Recupero:</label>
+                            <input type="text" class="ex-recupero" value="${ex.recupero}">
+
+                            <button type="button" class="btn-remove-ex" onclick="rimuoviEsercizio(this)">🗑️ Rimuovi Esercizio</button>
+                            <div style="clear: both;"></div>
+                        </div>
+                    `;
+                });
+
+                nuovoGiorno.innerHTML = `
+                    <label>Giorno / Sessione:</label>
+                    <select class="giorno-select">
+                        <option value="Giorno 1" ${giornoData.nome === 'Giorno 1' ? 'selected' : ''}>Giorno 1</option>
+                        <option value="Giorno 2" ${giornoData.nome === 'Giorno 2' ? 'selected' : ''}>Giorno 2</option>
+                        <option value="Giorno 3" ${giornoData.nome === 'Giorno 3' ? 'selected' : ''}>Giorno 3</option>
+                        <option value="Giorno 4" ${giornoData.nome === 'Giorno 4' ? 'selected' : ''}>Giorno 4</option>
+                        <option value="Giorno 5" ${giornoData.nome === 'Giorno 5' ? 'selected' : ''}>Giorno 5</option>
+                        <option value="Richiamo / Extra" ${giornoData.nome === 'Richiamo / Extra' ? 'selected' : ''}>Richiamo / Extra</option>
+                    </select>
+
+                    <label>Muscoli Coinvolti:</label>
+                    <input type="text" class="muscoli-input" value="${giornoData.muscoli}">
+
+                    <h3 style="margin-top: 20px;">Esercizi</h3>
+                    <div class="lista-esercizi-giorno">
+                        ${eserciziHtml}
+                    </div>
+
+                    <button class="btn-add" onclick="aggiungiEsercizio(this)">+ Aggiungi un altro esercizio</button>
+                `;
+                contenitore.appendChild(nuovoGiorno);
+            });
+        }
+
         function caricaAtletaDaStorico(index) {
             const storico = JSON.parse(localStorage.getItem('storicoAtleti')) || [];
             const schedaSelezionata = storico[index];
@@ -636,6 +670,10 @@
 
             datiSchedaAttuale = schedaSelezionata;
             nomeAtletaSalvato = schedaSelezionata.cliente;
+            document.getElementById('nome-cliente-iniziale').value = nomeAtletaSalvato;
+
+            // Popola il form con i dati caricati dallo storico
+            popolaFormConDati(schedaSelezionata);
 
             document.getElementById('schermata-inizio').style.display = 'none';
             document.getElementById('schermata-menu').style.display = 'none';
@@ -654,8 +692,10 @@
             aggiornaListaStorico();
         }
 
-        // APERTURA LINK CLIENTE
+        // CARICAMENTO INIZIALE
         window.onload = function() {
+            resetFormAllenamento();
+
             const urlParams = new URLSearchParams(window.location.search);
             const dataParam = urlParams.get('data');
 
