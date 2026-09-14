@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestionale Schede Allenamento</title>
+    <style>
+        /* ==========================================================
+           === CONTROLLO COLORI (VARIABILI CSS) ===
+           Modifica i codici colore qui sotto per cambiare la grafica!
+        ========================================================== */
+        :root {
+            /* 1. Sfondi */
+            --bg-pagina: #0f172a;        
+            --bg-card: #1e293b;          
+            --bg-input: #0f172a;         
+            --bg-giorno-box: #1a2332;    
+            --bg-esercizio-box: #0f172a; 
+
+            /* 2. Testi e Bordi */
+            --color-titoli: #fcfcfc;     
+            --color-testo: #fcfcfc;      
+            --color-etichette: #fcfcfc;  
+            --color-bordi: #133d77;      
+
+            /* 3. Pulsanti */
+            --btn-add-ex: #38bdf8;       
+            --btn-add-giorno: #5855f7;   
+            --btn-submit: #22c55e;       
+            --btn-back: #ef4444;         
+
+            /* 4. Scheda Finale */
+            --header-giorno-1: #0284c7;  
+            --header-giorno-2: #0369a1;  
+            --card-ex-finale: #0f172a;   
+            --bordo-ex-finale: #38bdf8;  
+            --tag-muscolo-bg: #1e293b;   
+            --tag-muscolo-text: #38bdf8; 
+        }
+
+        /* ==========================================================
+           === CONTROLLO DIMENSIONI TESTI (FONT-SIZE) ===
+        ========================================================== */
+        h1 { font-size: 2.2rem; color: var(--color-titoli); text-align: center; margin-bottom: 20px; }
+        h2 { font-size: 1.5rem; }
+        h3 { font-size: 1.2rem; }
+
+        label[for="nome-cliente"] { font-size: 2rem; color: var(--color-titoli); }
+        #nome-cliente { font-size: 1.5rem; padding: 14px; font-weight: bold; }
+
+        label[for="giorno"] { font-size: 2rem; color: var(--color-titoli); }
+        .giorno-select { font-size: 1.5rem; padding: 14px; font-weight: bold; }
+
+        label[for="muscoli-generali"] { font-size: 2rem; }
+        .muscoli-input { font-size: 1.5rem; }
+
+        .esercizio-box label { font-size: 1.5rem; }
+        .ex-nome { font-size: 1.1rem; font-weight: bold; }
+        .ex-muscolo { font-size: 1rem; }
+        .ex-serie { font-size: 1rem; }
+        .ex-recupero { font-size: 1rem; }
+
+        button { font-size: 1.1rem; }
+
+        .sessione-header h2 { font-size: 1.6rem; }
+        .sessione-header p { font-size: 1.1rem; }
+        .ex-title { font-size: 1.3rem; }        
+        .ex-muscolo-tag { font-size: 0.9rem; } 
+        .ex-details { font-size: 1.05rem; }     
+
+        /* ==========================================================
+           === APPLICAZIONE STILI E LAYOUT ===
+        ========================================================== */
+        body { 
+            font-family: 'Segoe UI', Arial, sans-serif; 
+            background-color: var(--bg-pagina); 
+            color: var(--color-testo); 
+            margin: 0; 
+            padding: 20px; 
+        }
+
+        .card { 
+            background-color: var(--bg-card); 
+            padding: 25px; 
+            border-radius: 12px; 
+            max-width: 650px; 
+            margin: 0 auto; 
+            border: 1px solid var(--color-bordi); 
+        }
+        
+        label { display: block; margin-top: 18px; color: var(--color-etichette); font-weight: bold; }
+        
+        input, select { 
+            width: 100%; 
+            padding: 12px; 
+            margin-top: 6px; 
+            border-radius: 6px; 
+            border: 1px solid var(--color-bordi); 
+            background-color: var(--bg-input); 
+            color: var(--color-testo); 
+            box-sizing: border-box;
+        }
+
+        .giorno-box {
+            background-color: var(--bg-giorno-box);
+            padding: 18px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            border: 1px solid var(--color-titoli);
+        }
+
+        .esercizio-box { background-color: var(--bg-esercizio-box); padding: 18px; border-radius: 8px; margin-top: 18px; border: 1px solid var(--color-bordi); }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        
+        button { width: 100%; padding: 14px; margin-top: 18px; border-radius: 6px; border: none; font-weight: bold; cursor: pointer; }
+        .btn-add { background-color: var(--btn-add-ex); color: #0f172a; }
+        .btn-add-giorno { background-color: var(--btn-add-giorno); color: #ffffff; margin-top: 25px; }
+        .btn-submit { background-color: var(--btn-submit); color: #ffffff; }
+        .btn-back { background-color: var(--btn-back); color: #ffffff; margin-top: 20px; }
+
+        #scheda-finale { display: none; }
+        
+        details {
+            background-color: var(--bg-card);
+            border-radius: 8px;
+            margin-bottom: 12px;
+            border: 1px solid var(--color-bordi);
+            overflow: hidden;
+        }
+
+        summary {
+            background: linear-gradient(135deg, var(--header-giorno-1), var(--header-giorno-2));
+            padding: 15px 20px;
+            font-size: 1.4rem;
+            font-weight: bold;
+            cursor: pointer;
+            list-style: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        summary::after {
+            content: "▼";
+            font-size: 1rem;
+            transition: transform 0.2s ease;
+        }
+
+        details[open] summary::after {
+            transform: rotate(180deg);
+        }
+
+        .dettagli-giorno-content {
+            padding: 15px;
+        }
+
+        .ex-card-final { background-color: var(--card-ex-finale); padding: 15px; border-radius: 8px; margin-bottom: 12px; border-left: 5px solid var(--bordo-ex-finale); }
+        .ex-title { font-weight: bold; margin: 0; color: var(--color-testo); }
+        .ex-muscolo-tag { display: inline-block; background-color: var(--tag-muscolo-bg); color: var(--tag-muscolo-text); padding: 4px 10px; border-radius: 4px; margin-top: 6px; font-weight: bold; }
+        .ex-details { display: flex; justify-content: space-between; margin-top: 10px; color: var(--color-etichette); }
+    </style>
+</head>
+<body>
+
+    <h1 id="titolo-principale">Scheda Allenamento </h1>
+
+    <!-- FORM CREAZIONE -->
+    <div class="card" id="form-creazione">
+        <h2>Crea Scheda Completa</h2>
+        
+        <label for="nome-cliente">Nome Cliente / Atleta:</label>
+        <input type="text" id="nome-cliente" placeholder="es. Mario Rossi">
+
+        <hr style="border-color: var(--color-bordi); margin: 20px 0;">
+
+        <!-- CONTENITORE GIORNI -->
+        <div id="contenitore-giorni">
+            <div class="giorno-box">
+                <label for="giorno">Giorno / Sessione:</label>
+                <select class="giorno-select">
+                    <option value="Giorno 1">Giorno 1</option>
+                    <option value="Giorno 2">Giorno 2</option>
+                    <option value="Giorno 3">Giorno 3</option>
+                    <option value="Giorno 4">Giorno 4</option>
+                    <option value="Giorno 5">Giorno 5</option>
+                    <option value="Richiamo / Extra">Richiamo / Extra</option>
+                </select>
+
+                <label for="muscoli-generali">Muscoli Coinvolti:</label>
+                <input type="text" class="muscoli-input" placeholder="es. Spalle e Schiena">
+
+                <h3 style="margin-top: 20px;">Esercizi</h3>
+                <div class="lista-esercizi-giorno">
+                    <div class="esercizio-box">
+                        <label>Nome Esercizio:</label>
+                        <input type="text" class="ex-nome" placeholder="es. Lat Machine">
+
+                        <div class="grid-2">
+                            <div>
+                                <label>Muscolo (opzionale):</label>
+                                <input type="text" class="ex-muscolo" placeholder="es. Schiena">
+                            </div>
+                            <div>
+                                <label>Serie x Reps:</label>
+                                <input type="text" class="ex-serie" placeholder="es. 4x10">
+                            </div>
+                        </div>
+
+                        <label>Tempo di Recupero:</label>
+                        <input type="text" class="ex-recupero" placeholder="es. 90 secondi">
+                    </div>
+                </div>
+
+                <button class="btn-add" onclick="aggiungiEsercizio(this)">+ Aggiungi un altro esercizio</button>
+            </div>
+        </div>
+
+        <button class="btn-add-giorno" onclick="aggiungiGiorno()">+ AGGIUNGI UN ALTRO GIORNO </button>
+        <button class="btn-submit" onclick="generaSchedaFinale()">Genera Scheda Finale </button>
+    </div>
+
+    <!-- VISTA SCHEDA COMPILATA CON FRECCETTINE -->
+    <div class="card" id="scheda-finale">
+        <div id="res-lista-giorni">
+            <!-- Qui verranno inseriti i giorni espandibili -->
+        </div>
+
+        <button class="btn-back" onclick="tornaAlForm()">← Torna a Modificare</button>
+    </div>
+
+    <script>
+        function aggiungiEsercizio(btn) {
+            const giornoBox = btn.closest('.giorno-box');
+            const container = giornoBox.querySelector('.lista-esercizi-giorno');
+            
+            const nuovoEsercizio = document.createElement('div');
+            nuovoEsercizio.className = 'esercizio-box';
+            nuovoEsercizio.innerHTML = `
+                <label>Nome Esercizio:</label>
+                <input type="text" class="ex-nome" placeholder="es. Alzate Laterali">
+
+                <div class="grid-2">
+                    <div>
+                        <label>Muscolo (opzionale):</label>
+                        <input type="text" class="ex-muscolo" placeholder="es. Spalle">
+                    </div>
+                    <div>
+                        <label>Serie x Reps:</label>
+                        <input type="text" class="ex-serie" placeholder="es. 3x12">
+                    </div>
+                </div>
+
+                <label>Tempo di Recupero:</label>
+                <input type="text" class="ex-recupero" placeholder="es. 60 secondi">
+            `;
+            container.appendChild(nuovoEsercizio);
+        }
+
+        function aggiungiGiorno() {
+            const contenitore = document.getElementById('contenitore-giorni');
+            const numeroGiorni = contenitore.querySelectorAll('.giorno-box').length + 1;
+            
+            const nuovoGiorno = document.createElement('div');
+            nuovoGiorno.className = 'giorno-box';
+            nuovoGiorno.innerHTML = `
+                <label>Giorno / Sessione:</label>
+                <select class="giorno-select">
+                    <option value="Giorno ${numeroGiorni}">Giorno ${numeroGiorni}</option>
+                    <option value="Giorno 1">Giorno 1</option>
+                    <option value="Giorno 2">Giorno 2</option>
+                    <option value="Giorno 3">Giorno 3</option>
+                    <option value="Giorno 4">Giorno 4</option>
+                    <option value="Giorno 5">Giorno 5</option>
+                    <option value="Richiamo / Extra">Richiamo / Extra</option>
+                </select>
+
+                <label>Muscoli Coinvolti:</label>
+                <input type="text" class="muscoli-input" placeholder="es. Petto e Bicipiti">
+
+                <h3 style="margin-top: 20px;">Esercizi</h3>
+                <div class="lista-esercizi-giorno">
+                    <div class="esercizio-box">
+                        <label>Nome Esercizio:</label>
+                        <input type="text" class="ex-nome" placeholder="es. Panca Piana">
+
+                        <div class="grid-2">
+                            <div>
+                                <label>Muscolo (opzionale):</label>
+                                <input type="text" class="ex-muscolo" placeholder="es. Petto">
+                            </div>
+                            <div>
+                                <label>Serie x Reps:</label>
+                                <input type="text" class="ex-serie" placeholder="es. 4x8">
+                            </div>
+                        </div>
+
+                        <label>Tempo di Recupero:</label>
+                        <input type="text" class="ex-recupero" placeholder="es. 2 minuti">
+                    </div>
+                </div>
+
+                <button class="btn-add" onclick="aggiungiEsercizio(this)">+ Aggiungi un altro esercizio</button>
+            `;
+            contenitore.appendChild(nuovoGiorno);
+        }
+
+        function generaSchedaFinale() {
+            const nomeCliente = document.getElementById('nome-cliente').value;
+            if (nomeCliente.trim() !== "") {
+                document.getElementById('titolo-principale').innerText = "Scheda " + nomeCliente;
+            } else {
+                document.getElementById('titolo-principale').innerText = "Scheda Allenamento";
+            }
+
+            const blocchiGiorno = document.querySelectorAll('.giorno-box');
+            let htmlSchedaFinale = "";
+
+            blocchiGiorno.forEach((giornoBox) => {
+                const giornoNome = giornoBox.querySelector('.giorno-select').value;
+                const muscoli = giornoBox.querySelector('.muscoli-input').value || "Generali";
+
+                const nomi = giornoBox.querySelectorAll('.ex-nome');
+                const muscoliEx = giornoBox.querySelectorAll('.ex-muscolo');
+                const serie = giornoBox.querySelectorAll('.ex-serie');
+                const recuperi = giornoBox.querySelectorAll('.ex-recupero');
+
+                let htmlEsercizi = "";
+
+                for (let i = 0; i < nomi.length; i++) {
+                    const nomeVal = nomi[i].value || `Esercizio ${i+1}`;
+                    const muscoloVal = muscoliEx[i].value;
+                    const serieVal = serie[i].value || "3x10";
+                    const recuperoVal = recuperi[i].value || "60 sec";
+
+                    htmlEsercizi += `
+                        <div class="ex-card-final">
+                            <p class="ex-title">${i+1}. ${nomeVal}</p>
+                            ${muscoloVal ? `<span class="ex-muscolo-tag">${muscoloVal}</span>` : ''}
+                            <div class="ex-details">
+                                <span>Serie: <b>${serieVal}</b></span>
+                                <span>Recupero: <b>${recuperoVal}</b></span>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                htmlSchedaFinale += `
+                    <details>
+                        <summary>
+                            <span>${giornoNome}</span>
+                            <span style="font-size: 0.9rem; font-weight: normal; opacity: 0.9;">${muscoli}</span>
+                        </summary>
+                        <div class="dettagli-giorno-content">
+                            ${htmlEsercizi}
+                        </div>
+                    </details>
+                `;
+            });
+
+            document.getElementById('res-lista-giorni').innerHTML = htmlSchedaFinale;
+            document.getElementById('form-creazione').style.display = 'none';
+            document.getElementById('scheda-finale').style.display = 'block';
+        }
+
+        function tornaAlForm() {
+            document.getElementById('form-creazione').style.display = 'block';
+            document.getElementById('scheda-finale').style.display = 'none';
+        }
+    </script>
+
+</body>
+</html>
