@@ -68,7 +68,7 @@
         .ex-details { font-size: 1.05rem; }     
 
         /* ==========================================================
-           === APPLICAZIONE STILI E LAYOUT ===
+           === LAYOUT GENERALE ===
         ========================================================== */
         body { 
             font-family: 'Segoe UI', Arial, sans-serif; 
@@ -126,6 +126,67 @@
             margin-top: 12px;
             width: auto;
             float: right;
+        }
+
+        /* === TASTO E PANNELLO MENU LATERALE === */
+        #menu-btn {
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            background-color: var(--bg-card);
+            color: var(--color-titoli);
+            border: 1px solid var(--color-bordi);
+            font-size: 1.5rem;
+            padding: 8px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            z-index: 1000;
+            width: auto;
+            margin: 0;
+        }
+
+        #side-drawer {
+            position: fixed;
+            top: 0;
+            left: -320px;
+            width: 300px;
+            height: 100%;
+            background-color: var(--bg-card);
+            border-right: 2px solid var(--color-bordi);
+            box-shadow: 5px 0 15px rgba(0,0,0,0.5);
+            transition: left 0.3s ease;
+            z-index: 999;
+            padding: 20px;
+            box-sizing: border-box;
+            overflow-y: auto;
+        }
+
+        #side-drawer.open {
+            left: 0;
+        }
+
+        .atleta-item {
+            background-color: var(--bg-giorno-box);
+            border: 1px solid var(--color-bordi);
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .atleta-item span {
+            font-weight: bold;
+            cursor: pointer;
+            color: var(--btn-add-ex);
+        }
+
+        .atleta-actions button {
+            width: auto;
+            padding: 6px 10px;
+            margin: 0;
+            font-size: 0.8rem;
         }
 
         /* === GESTIONE VISIBILITÀ SCHERMATE === */
@@ -201,6 +262,16 @@
     </style>
 </head>
 <body>
+
+    <!-- PULSANTE MENU TRE RIGHE -->
+    <button id="menu-btn" onclick="toggleDrawer()">☰</button>
+
+    <!-- DRAWER LATERALE STORICO ATLETI -->
+    <div id="side-drawer">
+        <h2 style="margin-top: 40px;">Storico Atleti</h2>
+        <p style="font-size: 0.9rem; color: var(--color-etichette);">Clicca su un atleta per caricare e modificare la sua scheda:</p>
+        <div id="lista-storico-atleti"></div>
+    </div>
 
     <h1 id="titolo-principale">Gestionale Fit</h1>
 
@@ -291,6 +362,12 @@
     <script>
         let datiSchedaAttuale = null;
         let nomeAtletaSalvato = "";
+
+        // GESTIONE DRAWER MENU
+        function toggleDrawer() {
+            document.getElementById('side-drawer').classList.toggle('open');
+            aggiornaListaStorico();
+        }
 
         // NAVIGAZIONE TRA LE SCHERMATE
         function vaiAlMenu() {
@@ -449,6 +526,9 @@
                 });
             });
 
+            // SALVATAGGIO AUTOMATICO NEL LOCAL STORAGE
+            salvaInStorico(datiSchedaAttuale);
+
             renderizzaScheda(datiSchedaAttuale);
             document.getElementById('form-creazione').style.display = 'none';
             document.getElementById('scheda-finale').style.display = 'block';
@@ -516,6 +596,64 @@
             document.getElementById('scheda-finale').style.display = 'none';
         }
 
+        // SALVATAGGIO E GESTIONE STORICO (LOCALSTORAGE)
+        function salvaInStorico(scheda) {
+            let storico = JSON.parse(localStorage.getItem('storicoAtleti')) || [];
+            // Rimuovi eventuale scheda precedente con lo stesso nome per aggiornarla
+            storico = storico.filter(item => item.cliente.toLowerCase() !== scheda.cliente.toLowerCase());
+            storico.push(scheda);
+            localStorage.setItem('storicoAtleti', JSON.stringify(storico));
+        }
+
+        function aggiornaListaStorico() {
+            const container = document.getElementById('lista-storico-atleti');
+            const storico = JSON.parse(localStorage.getItem('storicoAtleti')) || [];
+
+            if (storico.length === 0) {
+                container.innerHTML = "<p style='color: var(--color-etichette);'>Nessun atleta salvato.</p>";
+                return;
+            }
+
+            let html = "";
+            storico.forEach((item, index) => {
+                html += `
+                    <div class="atleta-item">
+                        <span onclick="caricaAtletaDaStorico(${index})">${item.cliente}</span>
+                        <div class="atleta-actions">
+                            <button class="btn-back" onclick="eliminaDaStorico(${index})">🗑️</button>
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function caricaAtletaDaStorico(index) {
+            const storico = JSON.parse(localStorage.getItem('storicoAtleti')) || [];
+            const schedaSelezionata = storico[index];
+            if (!schedaSelezionata) return;
+
+            datiSchedaAttuale = schedaSelezionata;
+            nomeAtletaSalvato = schedaSelezionata.cliente;
+
+            // Nascondi le schermate iniziali e mostra direttamente la scheda finale generata
+            document.getElementById('schermata-inizio').style.display = 'none';
+            document.getElementById('schermata-menu').style.display = 'none';
+            document.getElementById('form-creazione').style.display = 'none';
+
+            renderizzaScheda(schedaSelezionata);
+            document.getElementById('scheda-finale').style.display = 'block';
+            
+            toggleDrawer(); // Chiudi il menu
+        }
+
+        function eliminaDaStorico(index) {
+            let storico = JSON.parse(localStorage.getItem('storicoAtleti')) || [];
+            storico.splice(index, 1);
+            localStorage.setItem('storicoAtleti', JSON.stringify(storico));
+            aggiornaListaStorico();
+        }
+
         // APERTURA LINK CLIENTE
         window.onload = function() {
             const urlParams = new URLSearchParams(window.location.search);
@@ -524,6 +662,8 @@
             if (dataParam) {
                 try {
                     const data = JSON.parse(decodeURIComponent(dataParam));
+                    // Nascondi anche il tasto del menu se è il cliente ad aprire il link
+                    document.getElementById('menu-btn').style.display = 'none';
                     document.getElementById('schermata-inizio').style.display = 'none';
                     document.getElementById('schermata-menu').style.display = 'none';
                     document.getElementById('form-creazione').style.display = 'none';
