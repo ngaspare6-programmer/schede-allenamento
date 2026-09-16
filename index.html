@@ -374,12 +374,11 @@
         } /* Chiusura nascondi schermate */
     </style> <!-- Chiusura del blocco degli stili CSS -->
 </head> <!-- Chiusura dell'intestazione dell'HTML -->
-<body> <!-- Inizio del corpo visibile dell'applicazione web -->
+<body>
 
     <!-- ==========================================================
        === 1. LIBRERIA ATTIVA: ESERCIZI PREDEFINITI ===
     ========================================================== -->
-    <!-- Questa lista invisibile ha id="lista-esercizi-suggeriti" -->
     <datalist id="lista-esercizi-suggeriti">
         <!-- PETTO -->
         <option value="Panca Piana Bilanciere"></option>
@@ -408,7 +407,6 @@
     <!-- ==========================================================
        === 2. LIBRERIA ATTIVA: GRUPPI MUSCOLARI ===
     ========================================================== -->
-    <!-- Questa lista invisibile ha id="lista-muscoli-suggeriti" -->
     <datalist id="lista-muscoli-suggeriti">
         <option value="Petto"></option>
         <option value="Dorso"></option>
@@ -420,47 +418,17 @@
         <option value="Full Body"></option>
     </datalist>
 
-    <!-- ==========================================================
-       === 3. LIBRERIA OPZIONALE (DISATTIVATA NEI COMMENTI): SERIE E REPS ===
-       Se desideri attivarla in futuro, rimuovi le righe <!-- e --> qui sotto!
-    ========================================================== -->
-    <!-- 
-    <datalist id="lista-serie-suggerite">
-        <option value="3x8"></option>
-        <option value="3x10"></option>
-        <option value="3x12"></option>
-        <option value="4x8"></option>
-        <option value="4x10"></option>
-        <option value="5x5"></option>
-        <option value="Piramidale 12-10-8-6"></option>
-    </datalist>
-    -->
-
-    <!-- ==========================================================
-       === 4. LIBRERIA OPZIONALE (DISATTIVATA NEI COMMENTI): TEMPO DI RECUPERO ===
-       Se desideri attivarla in futuro, rimuovi le righe <!-- e --> qui sotto!
-    ========================================================== -->
-    <!-- 
-    <datalist id="lista-recuperi-suggeriti">
-        <option value="45 secondi"></option>
-        <option value="60 secondi"></option>
-        <option value="90 secondi"></option>
-        <option value="2 minuti"></option>
-        <option value="3 minuti"></option>
-    </datalist>
-    -->
-
     <!-- PULSANTE MENU TRE RIGHE (Per il Trainer per visualizzare lo storico atleti) -->
-    <button id="menu-btn" onclick="toggleDrawer()">MENU</button> <!-- Tasto fisso visibile in alto a sinistra che al click richiama la funzione JavaScript toggleDrawer() per aprire/chiudere il menu laterale -->
+    <button id="menu-btn" onclick="toggleDrawer()">MENU</button>
 
     <!-- DRAWER LATERALE STORICO ATLETI -->
-    <div id="side-drawer"> <!-- Contenitore del menu laterale che scivola da sinistra -->
-        <h2 style="margin-top: 40px;">Storico Atleti</h2> <!-- Titolo del menu con margine superiore per non sovrapporsi al tasto MENU -->
-        <p style="font-size: 0.85rem; color: var(--color-etichette);">Seleziona un atleta per caricare la sua scheda:</p> <!-- Istruzioni per il trainer -->
-        <div id="lista-storico-atleti"></div> <!-- Contenitore vuoto che verrà popolato da JavaScript con i nomi degli atleti salvati nel browser -->
-    </div> <!-- Chiusura menu laterale -->
+    <div id="side-drawer">
+        <h2 style="margin-top: 40px;">Storico Atleti</h2>
+        <p style="font-size: 0.85rem; color: var(--color-etichette);">Seleziona un atleta per caricare la sua scheda:</p>
+        <div id="lista-storico-atleti"></div>
+    </div>
 
-    <h1 id="titolo-principale">Gestionale Fit</h1> <!-- Titolo principale dell'applicazione visibile sempre in alto al centro della pagina -->
+    <h1 id="titolo-principale">Gestionale Fit</h1>
 
     <!-- SCHERMATA 1: PORTALE INIZIALE (DOPPIA SCELTA) -->
     <div class="card" id="schermata-scelta"> <!-- Prima card visibile all'apertura dell'app -->
@@ -647,13 +615,11 @@
                     </div>
                     <div>
                         <label>Serie x Reps:</label>
-                        <!-- SE VUOI ATTIVARE LA TENDINA ANCHE QUI: aggiungi list="lista-serie-suggerite" dentro l'input sotto -->
                         <input type="text" class="ex-serie" placeholder="es. 3x12">
                     </div>
                 </div>
 
                 <label>Tempo di Recupero:</label>
-                <!-- SE VUOI ATTIVARE LA TENDINA ANCHE QUI: aggiungi list="lista-recuperi-suggeriti" dentro l'input sotto -->
                 <input type="text" class="ex-recupero" placeholder="es. 60 secondi">
 
                 <label>Link Foto/GIF Esercizio (opzionale):</label>
@@ -702,13 +668,11 @@
                             </div>
                             <div>
                                 <label>Serie x Reps:</label>
-                                <!-- SE VUOI ATTIVARE LA TENDINA ANCHE QUI: aggiungi list="lista-serie-suggerite" dentro l'input sotto -->
                                 <input type="text" class="ex-serie" placeholder="es. 4x8">
                             </div>
                         </div>
 
                         <label>Tempo di Recupero:</label>
-                        <!-- SE VUOI ATTIVARE LA TENDINA ANCHE QUI: aggiungi list="lista-recuperi-suggeriti" dentro l'input sotto -->
                         <input type="text" class="ex-recupero" placeholder="es. 2 minuti">
 
                         <label>Link Foto/GIF Esercizio (opzionale):</label>
@@ -727,7 +691,7 @@
         function generaSchedaFinale() { // Legge tutti i dati inseriti nel form e li trasforma nella scheda finale visibile
             const blocchiGiorno = document.querySelectorAll('.giorno-box'); // Trova tutti i blocchi giorno presenti nel form
             
-            datiSchedaAttuale = { // Inizializza l'oggetto della scheda attuale
+            datiSchedaAttuale = { // Inizializza l'oggetto della schedaattuale
                 cliente: nomeAtletaSalvato, // Associa il nome del cliente
                 giorni: [] // Prepara una lista vuota per raccogliere i giorni
             }; // Chiusura datiSchedaAttuale
