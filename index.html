@@ -377,56 +377,78 @@
 <body> <!-- Inizio del corpo visibile dell'applicazione web -->
 
     <!-- ==========================================================
-       === LIBRERIA DI ESERCIZI PREDEFINITI (DATALIST FLUIDA) ===
+       === 1. LIBRERIA ATTIVA: ESERCIZI PREDEFINITI ===
     ========================================================== -->
-    <!-- Questo elemento invisibile racchiude tutte le opzioni suggerite nel menu a tendina quando il trainer seleziona un esercizio -->
+    <!-- Questa lista invisibile ha id="lista-esercizi-suggeriti" -->
     <datalist id="lista-esercizi-suggeriti">
         <!-- PETTO -->
         <option value="Panca Piana Bilanciere"></option>
         <option value="Panca Inclinata Manubri"></option>
-        <option value="Panca Reclinata Bilanciere"></option>
-        <option value="Croci su Panca Piana"></option>
         <option value="Croci ai Cavi"></option>
         <option value="Dip alle Parallele"></option>
-        <option value="Chest Press Machine"></option>
         <!-- DORSO -->
         <option value="Trazioni alla Sbarra"></option>
         <option value="Lat Machine Avanti"></option>
         <option value="Rematore con Bilanciere"></option>
-        <option value="Rematore con Manubrio"></option>
         <option value="Pulley Basso"></option>
-        <option value="Pulldown a Braccia Tese"></option>
         <option value="Stacco da Terra"></option>
         <!-- GAMBE -->
         <option value="Squat con Bilanciere"></option>
         <option value="Leg Press 45°"></option>
-        <option value="Hack Squat"></option>
         <option value="Affondi con Manubri"></option>
         <option value="Leg Extension"></option>
         <option value="Leg Curl da Seduto"></option>
-        <option value="Stacco Rumeno"></option>
-        <option value="Calf Raise in Piedi"></option>
-        <option value="Hip Thrust con Bilanciere"></option>
-        <!-- SPALLE -->
+        <!-- SPALLE & BRACCIA -->
         <option value="Military Press Bilanciere"></option>
-        <option value="Lento Avanti con Manubri"></option>
         <option value="Alzate Laterali Manubri"></option>
-        <option value="Alzate Frontali Cavi"></option>
-        <option value="Face Pull"></option>
-        <option value="Alzate a 90° su Panca"></option>
-        <!-- BRACCIA -->
         <option value="Curl con Bilanciere Sagomato"></option>
-        <option value="Curl Alternato Manubri"></option>
-        <option value="Curl Panca Scott"></option>
         <option value="Pushdown Cavo Alto"></option>
-        <option value="French Press Bilanciere"></option>
-        <option value="Dip su Panca"></option>
-        <!-- ADDOME & CORE -->
-        <option value="Crunch a Terra"></option>
-        <option value="Plank Addominale"></option>
-        <option value="Leg Raise alla Sbarra"></option>
-        <option value="Ab Wheel Rollout"></option>
     </datalist>
+
+    <!-- ==========================================================
+       === 2. LIBRERIA ATTIVA: GRUPPI MUSCOLARI ===
+    ========================================================== -->
+    <!-- Questa lista invisibile ha id="lista-muscoli-suggeriti" -->
+    <datalist id="lista-muscoli-suggeriti">
+        <option value="Petto"></option>
+        <option value="Dorso"></option>
+        <option value="Gambe"></option>
+        <option value="Spalle"></option>
+        <option value="Bicipiti"></option>
+        <option value="Tricipiti"></option>
+        <option value="Addome"></option>
+        <option value="Full Body"></option>
+    </datalist>
+
+    <!-- ==========================================================
+       === 3. LIBRERIA OPZIONALE (DISATTIVATA NEI COMMENTI): SERIE E REPS ===
+       Se desideri attivarla in futuro, rimuovi le righe <!-- e --> qui sotto!
+    ========================================================== -->
+    <!-- 
+    <datalist id="lista-serie-suggerite">
+        <option value="3x8"></option>
+        <option value="3x10"></option>
+        <option value="3x12"></option>
+        <option value="4x8"></option>
+        <option value="4x10"></option>
+        <option value="5x5"></option>
+        <option value="Piramidale 12-10-8-6"></option>
+    </datalist>
+    -->
+
+    <!-- ==========================================================
+       === 4. LIBRERIA OPZIONALE (DISATTIVATA NEI COMMENTI): TEMPO DI RECUPERO ===
+       Se desideri attivarla in futuro, rimuovi le righe <!-- e --> qui sotto!
+    ========================================================== -->
+    <!-- 
+    <datalist id="lista-recuperi-suggeriti">
+        <option value="45 secondi"></option>
+        <option value="60 secondi"></option>
+        <option value="90 secondi"></option>
+        <option value="2 minuti"></option>
+        <option value="3 minuti"></option>
+    </datalist>
+    -->
 
     <!-- PULSANTE MENU TRE RIGHE (Per il Trainer per visualizzare lo storico atleti) -->
     <button id="menu-btn" onclick="toggleDrawer()">MENU</button> <!-- Tasto fisso visibile in alto a sinistra che al click richiama la funzione JavaScript toggleDrawer() per aprire/chiudere il menu laterale -->
@@ -614,21 +636,24 @@
             nuovoEsercizio.className = 'esercizio-box'; // Assegna la classe CSS 'esercizio-box' per applicare gli stili grafici
             nuovoEsercizio.innerHTML = `
                 <label>Nome Esercizio:</label>
-                <!-- MENU A TENDINA FLUIDO: list="lista-esercizi-suggeriti" collega l'input alla lista predefinita in alto -->
+                <!-- ATTIVO: list="lista-esercizi-suggeriti" collega l'input alla lista predefinita in alto -->
                 <input type="text" class="ex-nome" list="lista-esercizi-suggeriti" placeholder="Seleziona dalla lista o scrivi...">
 
                 <div class="grid-2">
                     <div>
                         <label>Muscolo (opzionale):</label>
-                        <input type="text" class="ex-muscolo" placeholder="es. Spalle">
+                        <!-- ATTIVO: list="lista-muscoli-suggeriti" collega l'input alla lista dei muscoli -->
+                        <input type="text" class="ex-muscolo" list="lista-muscoli-suggeriti" placeholder="es. Spalle">
                     </div>
                     <div>
                         <label>Serie x Reps:</label>
+                        <!-- SE VUOI ATTIVARE LA TENDINA ANCHE QUI: aggiungi list="lista-serie-suggerite" dentro l'input sotto -->
                         <input type="text" class="ex-serie" placeholder="es. 3x12">
                     </div>
                 </div>
 
                 <label>Tempo di Recupero:</label>
+                <!-- SE VUOI ATTIVARE LA TENDINA ANCHE QUI: aggiungi list="lista-recuperi-suggeriti" dentro l'input sotto -->
                 <input type="text" class="ex-recupero" placeholder="es. 60 secondi">
 
                 <label>Link Foto/GIF Esercizio (opzionale):</label>
@@ -636,7 +661,7 @@
 
                 <button type="button" class="btn-remove-ex" onclick="rimuoviEsercizio(this)">Elimina Esercizio</button>
                 <div style="clear: both;"></div>
-            `; // Inserisce il codice HTML con la tendina fluida per la scelta dell'esercizio
+            `; // Inserisce il codice HTML con la tendina fluida per la scelta dell'esercizio e del muscolo
             container.appendChild(nuovoEsercizio); // Appende l'esercizio creato in coda alla lista del giorno nel documento
         } // Chiusura aggiungiEsercizio
 
@@ -659,27 +684,31 @@
                 </select>
 
                 <label>Muscoli Coinvolti:</label>
-                <input type="text" class="muscoli-input" placeholder="es. Petto e Bicipiti">
+                <!-- ATTIVO: list="lista-muscoli-suggeriti" per suggerire i gruppi muscolari generali -->
+                <input type="text" class="muscoli-input" list="lista-muscoli-suggeriti" placeholder="es. Petto e Bicipiti">
 
                 <h3 style="margin-top: 20px;">Esercizi</h3>
                 <div class="lista-esercizi-giorno">
                     <div class="esercizio-box">
                         <label>Nome Esercizio:</label>
-                        <!-- MENU A TENDINA FLUIDO: list="lista-esercizi-suggeriti" per mostrare le opzioni mantenendo la scrittura libera -->
+                        <!-- ATTIVO: list="lista-esercizi-suggeriti" per suggerire gli esercizi -->
                         <input type="text" class="ex-nome" list="lista-esercizi-suggeriti" placeholder="Seleziona dalla lista o scrivi...">
 
                         <div class="grid-2">
                             <div>
                                 <label>Muscolo (opzionale):</label>
-                                <input type="text" class="ex-muscolo" placeholder="es. Petto">
+                                <!-- ATTIVO: list="lista-muscoli-suggeriti" per suggerire i muscoli dell'esercizio -->
+                                <input type="text" class="ex-muscolo" list="lista-muscoli-suggeriti" placeholder="es. Petto">
                             </div>
                             <div>
                                 <label>Serie x Reps:</label>
+                                <!-- SE VUOI ATTIVARE LA TENDINA ANCHE QUI: aggiungi list="lista-serie-suggerite" dentro l'input sotto -->
                                 <input type="text" class="ex-serie" placeholder="es. 4x8">
                             </div>
                         </div>
 
                         <label>Tempo di Recupero:</label>
+                        <!-- SE VUOI ATTIVARE LA TENDINA ANCHE QUI: aggiungi list="lista-recuperi-suggeriti" dentro l'input sotto -->
                         <input type="text" class="ex-recupero" placeholder="es. 2 minuti">
 
                         <label>Link Foto/GIF Esercizio (opzionale):</label>
@@ -691,7 +720,7 @@
                 </div>
 
                 <button class="btn-add" onclick="aggiungiEsercizio(this)">+ Aggiungi un altro esercizio</button>
-            `; // Inserisce l'HTML con il menu del giorno ed il primo esercizio dotato di datalist fluida
+            `; // Inserisce l'HTML con le datalist attive ed i commenti per quelle opzionali
             contenitore.appendChild(nuovoGiorno); // Appende il blocco giorno completo dentro al form generale
         } // Chiusura aggiungiGiorno
 
@@ -906,7 +935,7 @@
                             <div class="grid-2">
                                 <div>
                                     <label>Muscolo (opzionale):</label>
-                                    <input type="text" class="ex-muscolo" value="${ex.muscolo || ''}">
+                                    <input type="text" class="ex-muscolo" list="lista-muscoli-suggeriti" value="${ex.muscolo || ''}">
                                 </div>
                                 <div>
                                     <label>Serie x Reps:</label>
@@ -938,7 +967,7 @@
                     </select>
 
                     <label>Muscoli Coinvolti:</label>
-                    <input type="text" class="muscoli-input" value="${giornoData.muscoli}">
+                    <input type="text" class="muscoli-input" list="lista-muscoli-suggeriti" value="${giornoData.muscoli}">
 
                     <h3 style="margin-top: 20px;">Esercizi</h3>
                     <div class="lista-esercizi-giorno">${eserciziHtml}</div>
