@@ -604,14 +604,14 @@
             nuovoEsercizio.className = 'esercizio-box'; // Assegna la classe CSS 'esercizio-box' per applicare gli stili grafici
             nuovoEsercizio.innerHTML = `
                 <label>Nome Esercizio:</label>
-                <!-- ATTIVO: list="lista-esercizi-suggeriti" collega l'input alla lista predefinita in alto -->
-                <input type="text" class="ex-nome" list="lista-esercizi-suggeriti" placeholder="Seleziona dalla lista o scrivi...">
+                <!-- ATTIVO CON FIX MOBILE: onfocus="this.value=''" per mostrare sempre la lista completa al tocco su smartphone -->
+                <input type="text" class="ex-nome" list="lista-esercizi-suggeriti" placeholder="Seleziona dalla lista o scrivi..." onfocus="this.value=''" onchange="this.blur()">
 
                 <div class="grid-2">
                     <div>
                         <label>Muscolo (opzionale):</label>
-                        <!-- ATTIVO: list="lista-muscoli-suggeriti" collega l'input alla lista dei muscoli -->
-                        <input type="text" class="ex-muscolo" list="lista-muscoli-suggeriti" placeholder="es. Spalle">
+                        <!-- ATTIVO CON FIX MOBILE: list="lista-muscoli-suggeriti" per mostrare la lista muscoli senza bug -->
+                        <input type="text" class="ex-muscolo" list="lista-muscoli-suggeriti" placeholder="es. Spalle" onfocus="this.value=''" onchange="this.blur()">
                     </div>
                     <div>
                         <label>Serie x Reps:</label>
@@ -627,7 +627,7 @@
 
                 <button type="button" class="btn-remove-ex" onclick="rimuoviEsercizio(this)">Elimina Esercizio</button>
                 <div style="clear: both;"></div>
-            `; // Inserisce il codice HTML con la tendina fluida per la scelta dell'esercizio e del muscolo
+            `; // Inserisce il codice HTML con la tendina fluida e il fix per mobile
             container.appendChild(nuovoEsercizio); // Appende l'esercizio creato in coda alla lista del giorno nel documento
         } // Chiusura aggiungiEsercizio
 
@@ -650,21 +650,21 @@
                 </select>
 
                 <label>Muscoli Coinvolti:</label>
-                <!-- ATTIVO: list="lista-muscoli-suggeriti" per suggerire i gruppi muscolari generali -->
-                <input type="text" class="muscoli-input" list="lista-muscoli-suggeriti" placeholder="es. Petto e Bicipiti">
+                <!-- ATTIVO CON FIX MOBILE: list="lista-muscoli-suggeriti" per suggerire i gruppi muscolari generali -->
+                <input type="text" class="muscoli-input" list="lista-muscoli-suggeriti" placeholder="es. Petto e Bicipiti" onfocus="this.value=''" onchange="this.blur()">
 
                 <h3 style="margin-top: 20px;">Esercizi</h3>
                 <div class="lista-esercizi-giorno">
                     <div class="esercizio-box">
                         <label>Nome Esercizio:</label>
-                        <!-- ATTIVO: list="lista-esercizi-suggeriti" per suggerire gli esercizi -->
-                        <input type="text" class="ex-nome" list="lista-esercizi-suggeriti" placeholder="Seleziona dalla lista o scrivi...">
+                        <!-- ATTIVO CON FIX MOBILE: list="lista-esercizi-suggeriti" per suggerire gli esercizi -->
+                        <input type="text" class="ex-nome" list="lista-esercizi-suggeriti" placeholder="Seleziona dalla lista o scrivi..." onfocus="this.value=''" onchange="this.blur()">
 
                         <div class="grid-2">
                             <div>
                                 <label>Muscolo (opzionale):</label>
-                                <!-- ATTIVO: list="lista-muscoli-suggeriti" per suggerire i muscoli dell'esercizio -->
-                                <input type="text" class="ex-muscolo" list="lista-muscoli-suggeriti" placeholder="es. Petto">
+                                <!-- ATTIVO CON FIX MOBILE: list="lista-muscoli-suggeriti" per suggerire i muscoli dell'esercizio -->
+                                <input type="text" class="ex-muscolo" list="lista-muscoli-suggeriti" placeholder="es. Petto" onfocus="this.value=''" onchange="this.blur()">
                             </div>
                             <div>
                                 <label>Serie x Reps:</label>
@@ -684,14 +684,14 @@
                 </div>
 
                 <button class="btn-add" onclick="aggiungiEsercizio(this)">+ Aggiungi un altro esercizio</button>
-            `; // Inserisce l'HTML con le datalist attive ed i commenti per quelle opzionali
+            `; // Inserisce l'HTML con le datalist ed i relativi controlli per mobile
             contenitore.appendChild(nuovoGiorno); // Appende il blocco giorno completo dentro al form generale
         } // Chiusura aggiungiGiorno
 
         function generaSchedaFinale() { // Legge tutti i dati inseriti nel form e li trasforma nella scheda finale visibile
             const blocchiGiorno = document.querySelectorAll('.giorno-box'); // Trova tutti i blocchi giorno presenti nel form
             
-            datiSchedaAttuale = { // Inizializza l'oggetto della schedaattuale
+            datiSchedaAttuale = { // Inizializza l'oggetto della scheda attuale
                 cliente: nomeAtletaSalvato, // Associa il nome del cliente
                 giorni: [] // Prepara una lista vuota per raccogliere i giorni
             }; // Chiusura datiSchedaAttuale
@@ -894,12 +894,12 @@
                     eserciziHtml += `
                         <div class="esercizio-box">
                             <label>Nome Esercizio:</label>
-                            <input type="text" class="ex-nome" list="lista-esercizi-suggeriti" value="${ex.nome}">
+                            <input type="text" class="ex-nome" list="lista-esercizi-suggeriti" value="${ex.nome}" onfocus="this.value=''" onchange="this.blur()">
 
                             <div class="grid-2">
                                 <div>
                                     <label>Muscolo (opzionale):</label>
-                                    <input type="text" class="ex-muscolo" list="lista-muscoli-suggeriti" value="${ex.muscolo || ''}">
+                                    <input type="text" class="ex-muscolo" list="lista-muscoli-suggeriti" value="${ex.muscolo || ''}" onfocus="this.value=''" onchange="this.blur()">
                                 </div>
                                 <div>
                                     <label>Serie x Reps:</label>
@@ -916,7 +916,7 @@
                             <button type="button" class="btn-remove-ex" onclick="rimuoviEsercizio(this)">Elimina Esercizio</button>
                             <div style="clear: both;"></div>
                         </div>
-                    `; // Inserisce i valori salvati nelle rispettive caselle di testo (compreso l'URL immagine/GIF)
+                    `; // Inserisce i valori salvati nelle rispettive caselle di testo con controlli mobile attivi
                 }); // Chiusura forEach esercizi
 
                 nuovoGiorno.innerHTML = `
@@ -931,7 +931,7 @@
                     </select>
 
                     <label>Muscoli Coinvolti:</label>
-                    <input type="text" class="muscoli-input" list="lista-muscoli-suggeriti" value="${giornoData.muscoli}">
+                    <input type="text" class="muscoli-input" list="lista-muscoli-suggeriti" value="${giornoData.muscoli}" onfocus="this.value=''" onchange="this.blur()">
 
                     <h3 style="margin-top: 20px;">Esercizi</h3>
                     <div class="lista-esercizi-giorno">${eserciziHtml}</div>
