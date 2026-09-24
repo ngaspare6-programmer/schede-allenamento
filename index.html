@@ -361,12 +361,12 @@
 
         footer strong { color: var(--btn-add-ex); }
 
+        #schermata-admin-panel,
         #schermata-login-trainer,
         #schermata-login-atleta,
         #schermata-menu,
         #form-creazione,
-        #scheda-finale,
-        #sezione-gestione-staff { display: none; }
+        #scheda-finale { display: none; }
     </style>
 </head>
 <body>
@@ -437,40 +437,44 @@
         </div>
     </div>
 
-    <!-- SCHERMATA 1B: DASHBOARD TRAINER (MOSTRA SUBITO NOME ATLETA + GESTIONE STAFF SE ADMIN) -->
+    <!-- SCHERMATA EXCLUSIVE ADMIN: PANNELLO DI GESTIONE STAFF -->
+    <div class="card" id="schermata-admin-panel">
+        <h2 style="color: var(--btn-add-ex);">Pannello Amministratore</h2>
+        <p style="text-align: center; color: var(--color-etichette);">Gestione autorizzazioni e Staff Personal Trainer</p>
+        
+        <div style="background-color: var(--bg-giorno-box); padding: 15px; border-radius: 10px; border: 1px solid var(--color-bordi); margin-top: 15px;">
+            <h3>Aggiungi Nuovo Personal Trainer</h3>
+            <label>Nome e Cognome Trainer:</label>
+            <input type="text" id="new-trainer-nome" placeholder="es. Marco Rossi">
+            <label>PIN Assegnato (4 cifre):</label>
+            <input type="text" id="new-trainer-pin" placeholder="es. 1234" maxlength="6">
+            <button class="btn-add" onclick="aggiungiNuovoTrainer()">+ Aggiungi Trainer</button>
+        </div>
+
+        <h3 style="margin-top: 25px; margin-bottom: 5px;">Staff Attivo</h3>
+        <table class="staff-table">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>PIN</th>
+                    <th>Azione</th>
+                </tr>
+            </thead>
+            <tbody id="lista-staff-body"></tbody>
+        </table>
+
+        <button class="btn-back" onclick="tornaAllaHome()">Logout Admin</button>
+    </div>
+
+    <!-- SCHERMATA 1B: DASHBOARD OPERATIVA PERSONAL TRAINER -->
     <div class="card" id="schermata-login-trainer">
         <h2 id="welcome-trainer-title">Area Personal Trainer</h2>
         
-        <!-- SEZIONE LENTI E SCHEDE ATLETA -->
         <div style="background-color: var(--bg-giorno-box); padding: 15px; border-radius: 10px; border: 1px solid var(--color-bordi);">
             <h3 style="margin-top:0;">Gestione Schede Atleti</h3>
             <label for="nome-cliente-iniziale">Inserisci Nome del Cliente / Atleta:</label>
             <input type="text" id="nome-cliente-iniziale" placeholder="es. Mario Rossi">
             <button class="btn-submit" onclick="vaiAlMenu()">Avanti alle Schede</button>
-        </div>
-
-        <!-- SEZIONE GESTIONE STAFF (IMMEDIATA SE ADMIN) -->
-        <div id="sezione-gestione-staff" style="margin-top: 25px; border-top: 1px solid var(--color-bordi); padding-top: 20px;">
-            <h3 style="color: var(--btn-add-ex);">Pannello Admin: Gestione Staff</h3>
-            
-            <label>Aggiungi Nuovo Personal Trainer:</label>
-            <div class="grid-2">
-                <input type="text" id="new-trainer-nome" placeholder="Nome Trainer">
-                <input type="text" id="new-trainer-pin" placeholder="PIN (es. 1234)" maxlength="6">
-            </div>
-            <button class="btn-add" onclick="aggiungiNuovoTrainer()">+ Aggiungi Trainer</button>
-
-            <h4 style="margin-top: 20px; margin-bottom: 5px;">Staff Attivo:</h4>
-            <table class="staff-table">
-                <thead>
-                    <tr>
-                        <th>Nome</th>
-                        <th>PIN</th>
-                        <th>Azione</th>
-                    </tr>
-                </thead>
-                <tbody id="lista-staff-body"></tbody>
-            </table>
         </div>
 
         <button class="btn-back" onclick="tornaAllaHome()">Indietro / Logout</button>
@@ -543,7 +547,7 @@
         let datiSchedaAttuale = null;
         let nomeAtletaSalvato = "";
         let isModalitaAtleta = false;
-        let currentTrainer = null; // Memorizza la sessione corrente del trainer
+        let currentTrainer = null;
 
         function toggleDrawer() {
             document.getElementById('side-drawer').classList.toggle('open');
@@ -551,14 +555,13 @@
         }
 
         // ==========================================================================
-        // 🔐 LOGIN TRAINER E VERIFICA PIN DALLA TABELLA TRAINERS SUPABASE
+        // 🔐 LOGIN CON DIVISIONE NETTA: ADMIN vs TRAINER STANDARD
         // ==========================================================================
         async function apriLoginTrainer() {
             if (!currentTrainer) {
-                const pinInserito = prompt("Inserisci il tuo PIN Personal Trainer:");
+                const pinInserito = prompt("Inserisci il tuo PIN di accesso:");
                 if (!pinInserito) return;
 
-                // Chiamata a Supabase per verificare se il PIN esiste
                 const { data: trainer, error } = await supabaseClient
                     .from('trainers')
                     .select('*')
@@ -573,17 +576,18 @@
                 currentTrainer = trainer;
             }
 
-            document.getElementById('welcome-trainer-title').innerText = `Area Trainer (${currentTrainer.nome})`;
             document.getElementById('schermata-scelta').style.display = 'none';
-            document.getElementById('schermata-login-trainer').style.display = 'block';
-            document.getElementById('menu-btn').style.display = 'block';
 
-            // Mostra SUBITO la sezione Gestione Staff se il trainer loggato è Admin
+            // SE SEI ADMIN -> VAI DIRETTAMENTE AL PANNELLO AMMINISTRATORE
             if (currentTrainer.is_admin) {
-                document.getElementById('sezione-gestione-staff').style.display = 'block';
+                document.getElementById('schermata-admin-panel').style.display = 'block';
+                document.getElementById('menu-btn').style.display = 'none';
                 caricaListaStaff();
             } else {
-                document.getElementById('sezione-gestione-staff').style.display = 'none';
+                // SE SEI UN TRAINER STANDARD -> VAI ALL'AREA OPERATIVA SCHEDE
+                document.getElementById('welcome-trainer-title').innerText = `Area Trainer (${currentTrainer.nome})`;
+                document.getElementById('schermata-login-trainer').style.display = 'block';
+                document.getElementById('menu-btn').style.display = 'block';
             }
         }
 
@@ -595,11 +599,12 @@
 
         function tornaAllaHome() {
             isModalitaAtleta = false;
-            currentTrainer = null; // Reset sessione al logout
+            currentTrainer = null;
             const h1El = document.getElementById('titolo-principale');
             const titoloBase = h1El ? (h1El.getAttribute('data-titolo-originale') || "Gestionale Fit") : "Gestionale Fit";
             document.getElementById('titolo-principale').innerText = titoloBase;
             
+            document.getElementById('schermata-admin-panel').style.display = 'none';
             document.getElementById('schermata-login-trainer').style.display = 'none';
             document.getElementById('schermata-login-atleta').style.display = 'none';
             document.getElementById('schermata-menu').style.display = 'none';
@@ -647,7 +652,7 @@
         }
 
         // ==========================================================================
-        // 👑 FUNZIONI AMMINISTRATORE: GESTIONE STAFF TRAINER DALLA TABELLA SUPABASE
+        // 👑 FUNZIONI AMMINISTRATORE: GESTIONE STAFF SUPABASE
         // ==========================================================================
         async function caricaListaStaff() {
             const { data: staff, error } = await supabaseClient
@@ -663,10 +668,10 @@
             staff.forEach(t => {
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
-                    <td>${t.nome} ${t.is_admin ? '<small style="color:var(--btn-add-ex);">(Admin)</small>' : ''}</td>
+                    <td>${t.nome} ${t.is_admin ? '<small style="color:var(--btn-add-ex);">(Admin Master)</small>' : ''}</td>
                     <td><code>${t.pin}</code></td>
                     <td>
-                        ${!t.is_admin ? `<button class="btn-remove-ex" style="float:none; margin:0;" onclick="eliminaTrainer('${t.id}')">Rimuovi</button>` : '<i>-</i>'}
+                        ${!t.is_admin ? `<button class="btn-remove-ex" style="float:none; margin:0;" onclick="eliminaTrainer('${t.id}')">Rimuovi</button>` : '<i>Non Rimuovibile</i>'}
                     </td>
                 `;
                 tbody.appendChild(tr);
@@ -1113,6 +1118,7 @@
             popolaFormConDati(schedaSelezionata);
 
             document.getElementById('schermata-scelta').style.display = 'none';
+            document.getElementById('schermata-admin-panel').style.display = 'none';
             document.getElementById('schermata-login-trainer').style.display = 'none';
             document.getElementById('schermata-menu').style.display = 'none';
             document.getElementById('form-creazione').style.display = 'none';
@@ -1128,7 +1134,7 @@
             const { error } = await supabaseClient
                 .from('schede')
                 .delete()
-                .eq('id', idRecord);
+                .eq('idRecord', idRecord);
 
             if (error) {
                 alert("Errore durante l'eliminazione dal Cloud.");
@@ -1154,6 +1160,7 @@
                     
                     document.getElementById('menu-btn').style.display = 'none';
                     document.getElementById('schermata-scelta').style.display = 'none';
+                    document.getElementById('schermata-admin-panel').style.display = 'none';
                     document.getElementById('schermata-login-trainer').style.display = 'none';
                     document.getElementById('schermata-login-atleta').style.display = 'none';
                     document.getElementById('schermata-menu').style.display = 'none';
