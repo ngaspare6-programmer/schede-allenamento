@@ -185,7 +185,7 @@
             background-color: var(--bg-card);
             color: var(--color-titoli);
             border: 1px solid var(--color-bordi);
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             padding: 8px 14px;
             border-radius: 8px;
             cursor: pointer;
@@ -193,6 +193,25 @@
             width: auto;
             margin: 0;
             font-family: inherit;
+            display: none;
+        }
+
+        #logout-btn {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            background-color: var(--btn-back);
+            color: #ffffff;
+            border: 1px solid var(--color-bordi);
+            font-size: 1.1rem;
+            padding: 8px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            z-index: 1000;
+            width: auto;
+            margin: 0;
+            font-family: inherit;
+            font-weight: 700;
             display: none;
         }
 
@@ -483,6 +502,7 @@
     </datalist>
 
     <button id="menu-btn" onclick="toggleDrawer()">MENU</button>
+    <button id="logout-btn" onclick="tornaAllaHome()">LOGOUT</button>
 
     <div id="side-drawer">
         <h2 style="margin-top: 40px;">Miei Atleti</h2>
@@ -662,6 +682,7 @@
             azzeraTuttiInput();
             document.getElementById('schermata-scelta').style.display = 'none';
             document.getElementById('schermata-login-form-trainer').style.display = 'block';
+            document.getElementById('logout-btn').style.display = 'none'; // Nascosto nella schermata credenziali
         }
 
         async function eseguiLoginTrainer() {
@@ -692,6 +713,8 @@
             nomeAtletaSalvato = "";
             pinAtletaSalvato = "";
 
+            document.getElementById('logout-btn').style.display = 'block';
+
             if (currentTrainer.is_admin) {
                 document.getElementById('schermata-admin-panel').style.display = 'block';
                 document.getElementById('menu-btn').style.display = 'none';
@@ -707,6 +730,7 @@
             azzeraTuttiInput();
             document.getElementById('schermata-scelta').style.display = 'none';
             document.getElementById('schermata-login-atleta').style.display = 'block';
+            document.getElementById('logout-btn').style.display = 'none'; // Nascosto nella schermata credenziali
             document.getElementById('menu-btn').style.display = 'none';
         }
 
@@ -733,6 +757,7 @@
             document.getElementById('form-creazione').style.display = 'none';
             document.getElementById('scheda-finale').style.display = 'none';
             document.getElementById('menu-btn').style.display = 'none';
+            document.getElementById('logout-btn').style.display = 'none';
             document.getElementById('schermata-scelta').style.display = 'block';
         }
 
@@ -740,6 +765,7 @@
             document.getElementById('schermata-menu').style.display = 'none';
             document.getElementById('schermata-login-trainer').style.display = 'block';
             document.getElementById('menu-btn').style.display = 'block';
+            document.getElementById('logout-btn').style.display = 'block';
             
             document.getElementById('nome-cliente-iniziale').value = '';
             document.getElementById('pin-cliente-iniziale').value = '';
@@ -770,11 +796,13 @@
             document.getElementById('schermata-login-trainer').style.display = 'none';
             document.getElementById('schermata-menu').style.display = 'block';
             document.getElementById('menu-btn').style.display = 'block';
+            document.getElementById('logout-btn').style.display = 'block';
         }
 
         function apriSchedaAllenamento() {
             document.getElementById('schermata-menu').style.display = 'none';
             document.getElementById('form-creazione').style.display = 'block';
+            document.getElementById('logout-btn').style.display = 'block';
         }
 
         function tornaAlMenu() {
@@ -782,6 +810,7 @@
             document.getElementById('scheda-finale').style.display = 'none';
             document.getElementById('schermata-menu').style.display = 'block';
             document.getElementById('menu-btn').style.display = 'block';
+            document.getElementById('logout-btn').style.display = 'block';
         }
 
         async function caricaListaStaff() {
@@ -1014,6 +1043,7 @@
             
             document.getElementById('form-creazione').style.display = 'none';
             document.getElementById('scheda-finale').style.display = 'block';
+            document.getElementById('logout-btn').style.display = 'block';
         }
 
         async function caricaStoricoLogAtleta(nomeCliente) {
@@ -1031,7 +1061,6 @@
             }
         }
 
-        // FUNZIONE PER CANCELLARE UN SINGOLO RECORD DI STORICO DAL DB
         async function eliminaSingoloLog(logId) {
             if (!confirm("Sei sicuro di voler eliminare questa sessione dallo storico?")) return;
 
@@ -1058,6 +1087,7 @@
                 document.getElementById('btn-salva-log').style.display = 'block';
                 document.getElementById('btn-esci-atleta').style.display = 'block';
                 document.getElementById('menu-btn').style.display = 'none';
+                document.getElementById('logout-btn').style.display = 'block';
             } else {
                 document.getElementById('btn-condividi').style.display = 'block';
                 document.getElementById('btn-modifica').style.display = 'block';
@@ -1065,6 +1095,7 @@
                 document.getElementById('btn-salva-log').style.display = 'none';
                 document.getElementById('btn-esci-atleta').style.display = 'none';
                 document.getElementById('menu-btn').style.display = 'block';
+                document.getElementById('logout-btn').style.display = 'block';
             }
 
             let htmlSchedaFinale = "";
@@ -1082,7 +1113,6 @@
                     if (logEsercizio.length > 0) {
                         let righeStorico = "";
                         logEsercizio.forEach(l => {
-                            // Se siamo in modalità trainer, mostriamo il tasto elimina a destra
                             let azioneElimina = !isModalitaAtleta ? 
                                 `<button class="btn-elimina-log" onclick="eliminaSingoloLog(${l.id})">Elimina</button>` : 
                                 ``;
@@ -1257,6 +1287,7 @@
                 renderizzaScheda(trovata);
                 document.getElementById('scheda-finale').style.display = 'block';
                 document.getElementById('menu-btn').style.display = 'none';
+                document.getElementById('logout-btn').style.display = 'block';
             } else {
                 alert("Nome o PIN non validi. Verifica le tue credenziali con il tuo Personal Trainer.");
             }
@@ -1278,6 +1309,7 @@
         function tornaAlForm() {
             document.getElementById('form-creazione').style.display = 'block';
             document.getElementById('scheda-finale').style.display = 'none';
+            document.getElementById('logout-btn').style.display = 'block';
         }
 
         async function salvaInStorico(scheda) {
@@ -1454,6 +1486,7 @@
             renderizzaScheda(schedaSelezionata);
             document.getElementById('scheda-finale').style.display = 'block';
             document.getElementById('menu-btn').style.display = 'block';
+            document.getElementById('logout-btn').style.display = 'block';
             
             toggleDrawer();
         }
@@ -1499,6 +1532,7 @@
                     document.getElementById('schermata-login-atleta').style.display = 'none';
                     document.getElementById('schermata-menu').style.display = 'none';
                     document.getElementById('form-creazione').style.display = 'none';
+                    document.getElementById('logout-btn').style.display = 'block';
                     
                     caricaStoricoLogAtleta(nomeAtletaSalvato).then(() => {
                         renderizzaScheda(data);
