@@ -1155,16 +1155,22 @@
             toggleDrawer();
         }
 
+        // ==========================================================================
+        // 🗑️ ELIMINAZIONE DALLO STORICO (CORRETTO PUNTAMENTO COLONNA SUPABASE 'id')
+        // ==========================================================================
         async function eliminaDaStorico(idRecord, index) {
+            if (!confirm("Sei sicuro di voler eliminare questo atleta dallo storico?")) return;
+
             const { error } = await supabaseClient
                 .from('schede')
                 .delete()
                 .eq('id', idRecord);
 
             if (error) {
-                alert("Errore durante l'eliminazione dal Cloud.");
+                alert("Errore durante l'eliminazione dal Cloud: " + error.message);
                 console.error(error);
             } else {
+                alert("Atleta eliminato con successo!");
                 aggiornaListaStorico();
             }
         }
