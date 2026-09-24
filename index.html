@@ -548,24 +548,24 @@
     <!-- SCHERMATA 4: DASHBOARD OPERATIVA TRAINER (Inserimento Nome Atleta)        -->
     <!-- ========================================================================== -->
     <div class="card" id="schermata-login-trainer">
-    <h2 id="welcome-trainer-title">Area Personal Trainer</h2>
-    
-    <div style="background-color: var(--bg-giorno-box); padding: 15px; border-radius: 10px; border: 1px solid var(--color-bordi);">
-        <h3 style="margin-top:0;">Gestione Schede Atleti</h3>
-        <label for="nome-cliente-iniziale">Inserisci Nome del Cliente / Atleta:</label>
-        <input type="text" id="nome-cliente-iniziale" name="no_autofill_cliente_nome" placeholder="es. Mario Rossi" autocomplete="new-password" required>
+        <h2 id="welcome-trainer-title">Area Personal Trainer</h2>
+        
+        <div style="background-color: var(--bg-giorno-box); padding: 15px; border-radius: 10px; border: 1px solid var(--color-bordi);">
+            <h3 style="margin-top:0;">Gestione Schede Atleti</h3>
+            <label for="nome-cliente-iniziale">Inserisci Nome del Cliente / Atleta:</label>
+            <input type="text" id="nome-cliente-iniziale" name="no_autofill_cliente_nome" placeholder="es. Mario Rossi" autocomplete="new-password" required>
 
-        <label for="pin-cliente-iniziale">PIN Assegnato all'Atleta (4 cifre):</label>
-        <div style="display: flex; gap: 8px;">
-            <input type="text" id="pin-cliente-iniziale" name="no_autofill_cliente_pin" placeholder="Clicca su 'Genera PIN'" maxlength="6" autocomplete="new-password" readonly style="background-color: var(--bg-card); cursor: not-allowed;">
-            <button type="button" class="btn-add" style="width: auto; padding: 0 15px; margin-top: 6px; white-space: nowrap;" onclick="generaPinCasualeInput('pin-cliente-iniziale')">Genera PIN</button>
+            <label for="pin-cliente-iniziale">PIN Assegnato all'Atleta (4 cifre):</label>
+            <div style="display: flex; gap: 8px;">
+                <input type="text" id="pin-cliente-iniziale" name="no_autofill_cliente_pin" placeholder="Clicca su 'Genera PIN'" maxlength="6" autocomplete="new-password" readonly style="background-color: var(--bg-card); cursor: not-allowed;">
+                <button type="button" class="btn-add" style="width: auto; padding: 0 15px; margin-top: 6px; white-space: nowrap;" onclick="generaPinCasualeInput('pin-cliente-iniziale')">Genera PIN</button>
+            </div>
+
+            <button class="btn-submit" onclick="vaiAlMenu()">Avanti alle Schede</button>
         </div>
 
-        <button class="btn-submit" onclick="vaiAlMenu()">Avanti alle Schede</button>
+        <button class="btn-back" onclick="tornaAllaHome()">Indietro / Logout</button>
     </div>
-
-    <button class="btn-back" onclick="tornaAllaHome()">Indietro / Logout</button>
-</div>
 
     <!-- ========================================================================== -->
     <!-- SCHERMATA 5: AREA ATLETA (Ricerca Scheda con PIN)                       -->
@@ -755,24 +755,25 @@
         }
 
         function vaiAlMenu() {
-            const inputNome = document.getElementById('nome-cliente-iniziale').value;
-            let inputPin = document.getElementById('pin-cliente-iniziale').value.trim();
+            const inputNome = document.getElementById('nome-cliente-iniziale').value.trim();
+            const inputPin = document.getElementById('pin-cliente-iniziale').value.trim();
 
-            if (inputNome.trim() === "") {
+            if (inputNome === "") {
                 alert("Per favore inserisci il nome del cliente!");
                 return;
             }
 
-            if (!inputPin) {
-                inputPin = Math.floor(1000 + Math.random() * 9000).toString();
-                document.getElementById('pin-cliente-iniziale').value = inputPin;
+            // BLOCCO OBBLIGATORIO: Impedisce di andare avanti se il PIN non è stato generato
+            if (inputPin === "") {
+                alert("Devi generare un PIN per l'atleta prima di proseguire!");
+                return;
             }
 
-            if (nomeAtletaSalvato.toLowerCase() !== inputNome.trim().toLowerCase()) {
+            if (nomeAtletaSalvato.toLowerCase() !== inputNome.toLowerCase()) {
                 resetFormAllenamento();
             }
 
-            nomeAtletaSalvato = inputNome.trim();
+            nomeAtletaSalvato = inputNome;
             pinAtletaSalvato = inputPin;
             document.getElementById('titolo-principale').innerText = "Atleta: " + nomeAtletaSalvato;
             
