@@ -498,12 +498,12 @@
         <h2>Accredito Staff / Trainer</h2>
         <p style="text-align: center; color: var(--color-etichette);">Inserisci le tue credenziali di accesso</p>
         
-        <form onsubmit="event.preventDefault(); eseguiLoginTrainer();">
+        <form onsubmit="event.preventDefault(); eseguiLoginTrainer();" autocomplete="off">
             <label for="login-trainer-nome">Nome Personal Trainer:</label>
-            <input type="text" id="login-trainer-nome" placeholder="es. Gaspare Napoli" autocomplete="off" required>
+            <input type="text" id="login-trainer-nome" name="no_autofill_trainer_nome" placeholder="es. Gaspare Napoli" autocomplete="new-password" required>
 
             <label for="login-trainer-pin">PIN di Sicurezza:</label>
-            <input type="password" inputmode="numeric" id="login-trainer-pin" placeholder="••••" maxlength="6" autocomplete="off" required>
+            <input type="password" inputmode="numeric" id="login-trainer-pin" name="no_autofill_trainer_pin" placeholder="••••" maxlength="6" autocomplete="new-password" required>
 
             <button type="submit" class="btn-submit">Accedi al Gestionale</button>
         </form>
@@ -520,10 +520,10 @@
         <div style="background-color: var(--bg-giorno-box); padding: 15px; border-radius: 10px; border: 1px solid var(--color-bordi); margin-top: 15px;">
             <h3>Aggiungi Nuovo Personal Trainer</h3>
             <label>Nome e Cognome Trainer:</label>
-            <input type="text" id="new-trainer-nome" placeholder="es. Marco Rossi" autocomplete="off">
+            <input type="text" id="new-trainer-nome" name="no_autofill_new_trainer_nome" placeholder="es. Marco Rossi" autocomplete="new-password">
             <label>PIN Assegnato (4 cifre):</label>
             <div style="display: flex; gap: 8px;">
-                <input type="text" id="new-trainer-pin" placeholder="es. 1234" maxlength="6" autocomplete="off">
+                <input type="text" id="new-trainer-pin" name="no_autofill_new_trainer_pin" placeholder="es. 1234" maxlength="6" autocomplete="new-password">
                 <button type="button" class="btn-add" style="width: auto; padding: 0 15px; margin-top: 6px; white-space: nowrap;" onclick="generaPinCasualeInput('new-trainer-pin')">Genera PIN</button>
             </div>
             <button class="btn-add" onclick="aggiungiNuovoTrainer()">+ Aggiungi Trainer</button>
@@ -553,11 +553,11 @@
         <div style="background-color: var(--bg-giorno-box); padding: 15px; border-radius: 10px; border: 1px solid var(--color-bordi);">
             <h3 style="margin-top:0;">Gestione Schede Atleti</h3>
             <label for="nome-cliente-iniziale">Inserisci Nome del Cliente / Atleta:</label>
-            <input type="text" id="nome-cliente-iniziale" placeholder="es. Mario Rossi" autocomplete="off">
+            <input type="text" id="nome-cliente-iniziale" name="no_autofill_cliente_nome" placeholder="es. Mario Rossi" autocomplete="new-password">
 
             <label for="pin-cliente-iniziale">PIN Assegnato all'Atleta (4 cifre):</label>
             <div style="display: flex; gap: 8px;">
-                <input type="text" id="pin-cliente-iniziale" placeholder="es. 1234" maxlength="6" autocomplete="off">
+                <input type="text" id="pin-cliente-iniziale" name="no_autofill_cliente_pin" placeholder="es. 1234" maxlength="6" autocomplete="new-password">
                 <button type="button" class="btn-add" style="width: auto; padding: 0 15px; margin-top: 6px; white-space: nowrap;" onclick="generaPinCasualeInput('pin-cliente-iniziale')">Genera PIN</button>
             </div>
 
@@ -574,12 +574,12 @@
         <h2>Area Atleta</h2>
         <p style="text-align: center; color: var(--color-etichette);">Inserisci il tuo nome e il PIN fornito dal tuo Trainer</p>
         
-        <form onsubmit="event.preventDefault(); caricaSchedaAtletaDaInput();">
+        <form onsubmit="event.preventDefault(); caricaSchedaAtletaDaInput();" autocomplete="off">
             <label for="nome-atleta-cerca">Inserisci il tuo Nome e Cognome:</label>
-            <input type="text" id="nome-atleta-cerca" placeholder="es. Mario Rossi" autocomplete="off" required>
+            <input type="text" id="nome-atleta-cerca" name="no_autofill_cerca_atleta_nome" placeholder="es. Mario Rossi" autocomplete="new-password" required>
 
             <label for="pin-atleta-cerca">Inserisci il tuo PIN:</label>
-            <input type="password" inputmode="numeric" id="pin-atleta-cerca" placeholder="••••" maxlength="6" autocomplete="off" required>
+            <input type="password" inputmode="numeric" id="pin-atleta-cerca" name="no_autofill_cerca_atleta_pin" placeholder="••••" maxlength="6" autocomplete="new-password" required>
 
             <button type="submit" class="btn-submit">Apri La Mia Scheda</button>
         </form>
@@ -649,6 +649,13 @@
         let isModalitaAtleta = false;
         let currentTrainer = null;
 
+        function azzeraTuttiInput() {
+            const inputs = document.querySelectorAll('input');
+            inputs.forEach(input => {
+                input.value = '';
+            });
+        }
+
         function toggleDrawer() {
             document.getElementById('side-drawer').classList.toggle('open');
             aggiornaListaStorico();
@@ -660,6 +667,7 @@
         }
 
         function mostraFormLoginTrainer() {
+            azzeraTuttiInput();
             document.getElementById('schermata-scelta').style.display = 'none';
             document.getElementById('schermata-login-form-trainer').style.display = 'block';
         }
@@ -688,11 +696,8 @@
             currentTrainer = trainer;
             document.getElementById('schermata-login-form-trainer').style.display = 'none';
 
-            // Pulizia e reset totale per un'interfaccia pulita
-            document.getElementById('login-trainer-nome').value = '';
-            document.getElementById('login-trainer-pin').value = '';
-            document.getElementById('nome-cliente-iniziale').value = '';
-            document.getElementById('pin-cliente-iniziale').value = '';
+            // Pulizia totale degli input
+            azzeraTuttiInput();
             nomeAtletaSalvato = "";
             pinAtletaSalvato = "";
 
@@ -708,6 +713,7 @@
         }
 
         function apriLoginAtleta() {
+            azzeraTuttiInput();
             document.getElementById('schermata-scelta').style.display = 'none';
             document.getElementById('schermata-login-atleta').style.display = 'block';
             document.getElementById('menu-btn').style.display = 'none';
@@ -725,13 +731,8 @@
             const titoloBase = h1El ? (h1El.getAttribute('data-titolo-originale') || "Gestionale Fit") : "Gestionale Fit";
             document.getElementById('titolo-principale').innerText = titoloBase;
             
-            // Reset di tutti gli input di testo
-            document.getElementById('login-trainer-nome').value = '';
-            document.getElementById('login-trainer-pin').value = '';
-            document.getElementById('nome-cliente-iniziale').value = '';
-            document.getElementById('pin-cliente-iniziale').value = '';
-            document.getElementById('nome-atleta-cerca').value = '';
-            document.getElementById('pin-atleta-cerca').value = '';
+            // Svuota in modo assoluto ogni campo di testo
+            azzeraTuttiInput();
             
             document.getElementById('schermata-login-form-trainer').style.display = 'none';
             document.getElementById('schermata-admin-panel').style.display = 'none';
@@ -748,6 +749,9 @@
             document.getElementById('schermata-menu').style.display = 'none';
             document.getElementById('schermata-login-trainer').style.display = 'block';
             document.getElementById('menu-btn').style.display = 'block';
+            
+            document.getElementById('nome-cliente-iniziale').value = '';
+            document.getElementById('pin-cliente-iniziale').value = '';
         }
 
         function vaiAlMenu() {
@@ -1348,6 +1352,7 @@
             if (h1El) h1El.setAttribute('data-titolo-originale', h1El.innerText);
 
             resetFormAllenamento();
+            azzeraTuttiInput();
 
             const urlParams = new URLSearchParams(window.location.search);
             const dataParam = urlParams.get('data');
@@ -1373,6 +1378,9 @@
                 }
             }
         };
+
+        // Pulizia ad ogni uscita o cambio pagina
+        window.addEventListener('pagehide', azzeraTuttiInput);
 
         const observer = new MutationObserver(() => {
             const drawer = document.querySelector('netlify-drawer, #netlify-drawer-root');
