@@ -14,21 +14,21 @@
 
     <!-- 
       ==========================================================================
-       LEGENDA MAPPA CODICE (Usa CTRL+F o CMD+F per cercare le sezioni)
+      📖 LEGENDA MAPPA CODICE (Usa CTRL+F o CMD+F per cercare le sezioni)
       ==========================================================================
       [COLORI-TEMA]             -> Modifica i colori principali (sfondi, bottoni, testi)
       [LAYOUT-SPAZI]            -> Modifica margini, distanze titolo/card, padding
-      [TENDINA-ESERCIZI]       -> Lista degli esercizi suggeriti
-      [TENDINA-MUSCOLI]        -> Lista dei gruppi muscolari suggeriti
+      [TENDINA-ESERCIZI]        -> Lista degli esercizi suggeriti
+      [TENDINA-MUSCOLI]         -> Lista dei gruppi muscolari suggeriti
       
-       SCHERMATA 1: HOME      -> Selezione iniziale (Trainer / Atleta)
-       SCHERMATA 2: ACCESSO   -> Form di Login Trainer (Nome e PIN)
-       SCHERMATA 3: ADMIN     -> Pannello Amministratore (Gestione Staff)
-       SCHERMATA 4: DASHBOARD -> Inserimento Nome Atleta per la Scheda
-       SCHERMATA 5: ATLETA    -> Ricerca Scheda per l'Atleta
-       SCHERMATA 6: SERVIZI   -> Scelta Servizio (Scheda / Alimentazione)
-       SCHERMATA 7: FORM      -> Form di Creazione Scheda Allenamento
-       SCHERMATA 8: FINALE    -> Vista Scheda Finale e Condivisione
+      SCHERMATA 1: HOME         -> Selezione iniziale (Trainer / Atleta)
+      SCHERMATA 2: ACCESSO      -> Form di Login Trainer (Nome e PIN)
+      SCHERMATA 3: ADMIN        -> Pannello Amministratore (Gestione Staff)
+      SCHERMATA 4: DASHBOARD    -> Inserimento Nome Atleta per la Scheda
+      SCHERMATA 5: ATLETA       -> Ricerca Scheda per l'Atleta
+      SCHERMATA 6: SERVIZI      -> Scelta Servizio (Scheda / Alimentazione)
+      SCHERMATA 7: FORM         -> Form di Creazione Scheda Allenamento
+      SCHERMATA 8: FINALE       -> Vista Scheda Finale e Condivisione
       ==========================================================================
     -->
 
@@ -66,8 +66,6 @@
         /* ==========================================================================
             MAPPA 1B: ALTEZZE, SPAZIATURE E DIMENSIONI SCHERMATA - [LAYOUT-SPAZI]
            ========================================================================== */
-        
-
         body {
             font-family: 'Inter', system-ui, -apple-system, sans-serif;
             background-color: var(--bg-pagina);
@@ -81,32 +79,42 @@
             box-sizing: border-box;
         }
 
+        /* 🚫 RIMUOVE IL BADGE / DRAWER IN BASSO A DESTRA DI NETLIFY */
+        netlify-drawer,
+        #netlify-drawer-root,
+        [data-netlify-deploy-id],
+        iframe[src*="netlify"],
+        .netlify-badge {
+            display: none !important;
+            visibility: hidden !important;
+        }
+
         h1, h2, h3, h4 {
             font-family: 'Poppins', sans-serif;
             margin-top: 0;
         }
 
-        /*  REGOLAZIONE TITOLO PRINCIPALE ("Gestionale Fit") */
+        /* 🎯 REGOLAZIONE TITOLO PRINCIPALE ("Gestionale Fit") */
         h1 { 
             font-size: 2rem;
             color: var(--color-titoli);
             text-align: center;
-            margin-top: 10px;    /*  Spazio sopra il titolo principale */
-            margin-bottom: 25px; /*   DISTANZA TRA TITOLO PRINCIPALE E RIQUADRO (CARD) */
+            margin-top: 10px;    /* ⬅️ Spazio sopra il titolo principale */
+            margin-bottom: 25px; /* ⬅️ 🎯 DISTANZA TRA TITOLO PRINCIPALE E RIQUADRO (CARD) */
             letter-spacing: -0.5px;
         }
 
         h2 { font-size: 1.5rem; text-align: center; }
         h3 { font-size: 1.2rem; }
 
-        /*  REGOLAZIONE DEL RIQUADRO PRINCIPALE (CARD CONTENITORE) */
+        /* 🎯 REGOLAZIONE DEL RIQUADRO PRINCIPALE (CARD CONTENITORE) */
         .card {
             background-color: var(--bg-card);
-            padding: 20px 25px; /*  Spazio INTERNO del riquadro: (Alto/Basso) (Sinistra/Destra) */
+            padding: 20px 25px; /* ⬅️ Spazio INTERNO del riquadro: (Alto/Basso) (Sinistra/Destra) */
             border-radius: 16px;
             max-width: 650px;
             width: 100%;
-            margin: 0 auto;    /*  Centra la card orizzontalmente */
+            margin: 0 auto;    /* ⬅️ Centra la card orizzontalmente */
             border: 1px solid var(--color-bordi);
             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
             box-sizing: border-box;
@@ -786,6 +794,20 @@
             }
         }
 
+        function rimuoviGiorno(btn) {
+            const contenitore = document.getElementById('contenitore-giorni');
+            const giorniInTotale = contenitore.querySelectorAll('.giorno-box').length;
+
+            if (giorniInTotale > 1) {
+                if (confirm("Sei sicuro di voler eliminare questo intero giorno di allenamento?")) {
+                    const giornoBox = btn.closest('.giorno-box');
+                    giornoBox.remove();
+                }
+            } else {
+                alert("La scheda deve contenere almeno un giorno di allenamento!");
+            }
+        }
+
         function aggiungiEsercizio(btn) {
             const giornoBox = btn.closest('.giorno-box');
             const container = giornoBox.querySelector('.lista-esercizi-giorno');
@@ -826,8 +848,11 @@
             const nuovoGiorno = document.createElement('div');
             nuovoGiorno.className = 'giorno-box';
             nuovoGiorno.innerHTML = `
-                <label>Giorno / Sessione:</label>
-                <select class="giorno-select">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <label style="margin: 0;">Giorno / Sessione:</label>
+                    <button type="button" class="btn-remove-ex" style="float: none; margin: 0; padding: 6px 12px;" onclick="rimuoviGiorno(this)">Elimina Giorno</button>
+                </div>
+                <select class="giorno-select" style="margin-top: 8px;">
                     <option value="Giorno ${numeroGiorni}">Giorno ${numeroGiorni}</option>
                     <option value="Giorno 1">Giorno 1</option>
                     <option value="Giorno 2">Giorno 2</option>
@@ -1148,8 +1173,11 @@
                 });
 
                 nuovoGiorno.innerHTML = `
-                    <label>Giorno / Sessione:</label>
-                    <select class="giorno-select">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <label style="margin: 0;">Giorno / Sessione:</label>
+                        <button type="button" class="btn-remove-ex" style="float: none; margin: 0; padding: 6px 12px;" onclick="rimuoviGiorno(this)">Elimina Giorno</button>
+                    </div>
+                    <select class="giorno-select" style="margin-top: 8px;">
                         <option value="Giorno 1" ${giornoData.nome === 'Giorno 1' ? 'selected' : ''}>Giorno 1</option>
                         <option value="Giorno 2" ${giornoData.nome === 'Giorno 2' ? 'selected' : ''}>Giorno 2</option>
                         <option value="Giorno 3" ${giornoData.nome === 'Giorno 3' ? 'selected' : ''}>Giorno 3</option>
@@ -1244,6 +1272,15 @@
                 }
             }
         };
+
+        // Rimuove forzatamente l'elemento Netlify appena viene iniettato nel DOM
+        const observer = new MutationObserver(() => {
+            const drawer = document.querySelector('netlify-drawer, #netlify-drawer-root');
+            if (drawer) {
+                drawer.remove();
+            }
+        });
+        observer.observe(document.documentElement, { childList: true, subtree: true });
     </script>
 </body>
 </html>
