@@ -361,6 +361,7 @@
 
         footer strong { color: var(--btn-add-ex); }
 
+        #schermata-login-form-trainer,
         #schermata-admin-panel,
         #schermata-login-trainer,
         #schermata-login-atleta,
@@ -428,13 +429,28 @@
         <p style="text-align: center; color: var(--color-etichette);">Seleziona la modalità di accesso:</p>
         
         <div class="scelta-ruolo-grid">
-            <div class="ruolo-box" onclick="apriLoginTrainer()">
+            <div class="ruolo-box" onclick="mostraFormLoginTrainer()">
                 <h3>Area Personal Trainer</h3>
             </div>
             <div class="ruolo-box" onclick="apriLoginAtleta()">
                 <h3>Area Atleta</h3>
             </div>
         </div>
+    </div>
+
+    <!-- SCHERMATA LOGIN TRAINER (PROFESSIONALE CON NOME E PIN) -->
+    <div class="card" id="schermata-login-form-trainer">
+        <h2>Accredito Staff / Trainer</h2>
+        <p style="text-align: center; color: var(--color-etichette);">Inserisci le tue credenziali di accesso</p>
+        
+        <label for="login-trainer-nome">Nome Personal Trainer:</label>
+        <input type="text" id="login-trainer-nome" placeholder="es. Gaspare Napoli">
+
+        <label for="login-trainer-pin">PIN di Sicurezza:</label>
+        <input type="password" id="login-trainer-pin" placeholder="••••" maxlength="6">
+
+        <button class="btn-submit" onclick="eseguiLoginTrainer()">Accedi al Gestionale</button>
+        <button class="btn-back" onclick="tornaAllaHome()">Indietro</button>
     </div>
 
     <!-- SCHERMATA EXCLUSIVE ADMIN: PANNELLO DI GESTIONE STAFF -->
@@ -555,36 +571,48 @@
         }
 
         // ==========================================================================
-        // 🔐 LOGIN CON DIVISIONE NETTA: ADMIN vs TRAINER STANDARD
+        // 🔐 LOGIN CON FORM DEDICATO (NOME E PIN)
         // ==========================================================================
-        async function apriLoginTrainer() {
-            if (!currentTrainer) {
-                const pinInserito = prompt("Inserisci il tuo PIN di accesso:");
-                if (!pinInserito) return;
+        function mostraFormLoginTrainer() {
+            document.getElementById('schermata-scelta').style.display = 'none';
+            document.getElementById('schermata-login-form-trainer').style.display = 'block';
+        }
 
-                const { data: trainer, error } = await supabaseClient
-                    .from('trainers')
-                    .select('*')
-                    .eq('pin', pinInserito.trim())
-                    .single();
+        async function eseguiLoginTrainer() {
+            const nomeInserito = document.getElementById('login-trainer-nome').value.trim();
+            const pinInserito = document.getElementById('login-trainer-pin').value.trim();
 
-                if (error || !trainer) {
-                    alert("PIN non corretto! Accesso negato.");
-                    return;
-                }
-
-                currentTrainer = trainer;
+            if (!nomeInserito || !pinInserito) {
+                alert("Compila sia il Nome che il PIN!");
+                return;
             }
 
-            document.getElementById('schermata-scelta').style.display = 'none';
+            // Verifica su Supabase sia Nome che PIN
+            const { data: trainer, error } = await supabaseClient
+                .from('trainers')
+                .select('*')
+                .ilike('nome', nomeInserito)
+                .eq('pin', pinInserito)
+                .single();
 
-            // SE SEI ADMIN -> VAI DIRETTAMENTE AL PANNELLO AMMINISTRATORE
+            if (error || !trainer) {
+                alert("Credenziali non valide! Verifica Nome e PIN.");
+                return;
+            }
+
+            currentTrainer = trainer;
+            document.getElementById('schermata-login-form-trainer').style.display = 'none';
+
+            // Pulisce i campi login
+            document.getElementById('login-trainer-nome').value = '';
+            document.getElementById('login-trainer-pin').value = '';
+
+            // Smistamento in base al ruolo (Admin vs Trainer Standard)
             if (currentTrainer.is_admin) {
                 document.getElementById('schermata-admin-panel').style.display = 'block';
                 document.getElementById('menu-btn').style.display = 'none';
                 caricaListaStaff();
             } else {
-                // SE SEI UN TRAINER STANDARD -> VAI ALL'AREA OPERATIVA SCHEDE
                 document.getElementById('welcome-trainer-title').innerText = `Area Trainer (${currentTrainer.nome})`;
                 document.getElementById('schermata-login-trainer').style.display = 'block';
                 document.getElementById('menu-btn').style.display = 'block';
@@ -603,11 +631,12 @@
 
             // CHIUSURA FORZATA DEL MENU LATERALE QUANDO SI TORNA IN HOME
             document.getElementById('side-drawer').classList.remove('open');
-            
+
             const h1El = document.getElementById('titolo-principale');
             const titoloBase = h1El ? (h1El.getAttribute('data-titolo-originale') || "Gestionale Fit") : "Gestionale Fit";
             document.getElementById('titolo-principale').innerText = titoloBase;
             
+            document.getElementById('schermata-login-form-trainer').style.display = 'none';
             document.getElementById('schermata-admin-panel').style.display = 'none';
             document.getElementById('schermata-login-trainer').style.display = 'none';
             document.getElementById('schermata-login-atleta').style.display = 'none';
@@ -1007,14 +1036,12 @@
                     return;
                 }
 
-                // Elimina eventuali vecchie schede dello stesso cliente CREATE DA QUESTO SPECIFICO TRAINER
                 await supabaseClient
                     .from('schede')
                     .delete()
                     .eq('trainer_id', currentTrainer.id)
                     .ilike('cliente', scheda.cliente);
 
-                // Inserisce la nuova scheda associando l'ID del trainer corrente
                 const { error } = await supabaseClient
                     .from('schede')
                     .insert([{ 
@@ -1044,7 +1071,6 @@
                 return;
             }
 
-            // Carica solo le schede il cui trainer_id corrisponde a chi è attualmente loggato
             const { data: storico, error } = await supabaseClient
                 .from('schede')
                 .select('*')
@@ -1160,7 +1186,7 @@
         }
 
         // ==========================================================================
-        // 🗑️ ELIMINAZIONE DALLO STORICO (CORRETTO PUNTAMENTO COLONNA SUPABASE 'id')
+        // 🗑️ ELIMINAZIONE DALLO STORICO
         // ==========================================================================
         async function eliminaDaStorico(idRecord, index) {
             if (!confirm("Sei sicuro di voler eliminare questo atleta dallo storico?")) return;
@@ -1195,6 +1221,7 @@
                     
                     document.getElementById('menu-btn').style.display = 'none';
                     document.getElementById('schermata-scelta').style.display = 'none';
+                    document.getElementById('schermata-login-form-trainer').style.display = 'none';
                     document.getElementById('schermata-admin-panel').style.display = 'none';
                     document.getElementById('schermata-login-trainer').style.display = 'none';
                     document.getElementById('schermata-login-atleta').style.display = 'none';
