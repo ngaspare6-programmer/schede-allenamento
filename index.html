@@ -25,9 +25,9 @@
       SCHERMATA 2: ACCESSO      -> Form di Login Trainer (Nome e PIN)
       SCHERMATA 3: ADMIN        -> Pannello Amministratore (Gestione Staff)
       SCHERMATA 4: DASHBOARD    -> Inserimento Nome Atleta per la Scheda
-      SCHERMATA 5: ATLETA       -> Ricerca Scheda per l'Atleta
+      SCHERMATA 5: ATLETA       -> Ricerca Scheda per l'Atleta (Nome e PIN)
       SCHERMATA 6: SERVIZI      -> Scelta Servizio (Scheda / Alimentazione)
-      SCHERMATA 7: FORM         -> Form di Creazione Scheda Allenamento
+      SCHERMATA 7: FORM         -> Form di Creazione Scheda Allenamento + PIN
       SCHERMATA 8: FINALE       -> Vista Scheda Finale e Condivisione
       ==========================================================================
     -->
@@ -71,7 +71,7 @@
             background-color: var(--bg-pagina);
             color: var(--color-testo);
             margin: 0;
-            padding: 10px 15px; /* ⬅️ Modifica il primo valore (10px) per alzare/abbassare il contenuto in alto */
+            padding: 10px 15px; 
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -94,27 +94,25 @@
             margin-top: 0;
         }
 
-        /* 🎯 REGOLAZIONE TITOLO PRINCIPALE ("Gestionale Fit") */
         h1 { 
             font-size: 2rem;
             color: var(--color-titoli);
             text-align: center;
-            margin-top: 10px;    /* ⬅️ Spazio sopra il titolo principale */
-            margin-bottom: 25px; /* ⬅️ 🎯 DISTANZA TRA TITOLO PRINCIPALE E RIQUADRO (CARD) */
+            margin-top: 10px;    
+            margin-bottom: 25px; 
             letter-spacing: -0.5px;
         }
 
         h2 { font-size: 1.5rem; text-align: center; }
         h3 { font-size: 1.2rem; }
 
-        /* 🎯 REGOLAZIONE DEL RIQUADRO PRINCIPALE (CARD CONTENITORE) */
         .card {
             background-color: var(--bg-card);
-            padding: 20px 25px; /* ⬅️ Spazio INTERNO del riquadro: (Alto/Basso) (Sinistra/Destra) */
+            padding: 20px 25px; 
             border-radius: 16px;
             max-width: 650px;
             width: 100%;
-            margin: 0 auto;    /* ⬅️ Centra la card orizzontalmente */
+            margin: 0 auto;    
             border: 1px solid var(--color-bordi);
             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
             box-sizing: border-box;
@@ -243,27 +241,57 @@
 
         #side-drawer.open { left: 0; }
 
-        .atleta-item {
+        /* STILE SCHEDA ACCORDION ATLETA NEL MENU LATERALE */
+        .atleta-accordion-item {
             background-color: var(--bg-giorno-box);
             border: 1px solid var(--color-bordi);
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 10px;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            overflow: hidden;
+        }
+
+        .atleta-accordion-header {
+            padding: 12px 15px;
+            font-weight: bold;
+            color: var(--color-titoli);
+            cursor: pointer;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            background-color: rgba(255, 255, 255, 0.03);
         }
 
-        .atleta-item span { 
-            font-weight: bold;
-            cursor: pointer;
-            color: var(--btn-add-ex);
+        .atleta-accordion-body {
+            display: none;
+            padding: 12px 15px;
+            border-top: 1px solid var(--color-bordi);
+            background-color: var(--bg-card);
         }
 
-        .atleta-actions button { 
-            width: auto;
-            padding: 6px 10px;
-            margin: 0;
+        .atleta-accordion-item.active .atleta-accordion-body {
+            display: block;
+        }
+
+        .pin-badge {
+            display: inline-block;
+            background-color: var(--btn-add-ex);
+            color: #0f172a;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .atleta-actions-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .atleta-actions-grid button {
+            margin-top: 0;
+            padding: 8px;
             font-size: 0.8rem;
         }
 
@@ -440,7 +468,7 @@
 
     <div id="side-drawer">
         <h2 style="margin-top: 40px;">Miei Atleti</h2>
-        <p style="font-size: 0.85rem; color: var(--color-etichette);">Seleziona un tuo atleta per caricare la sua scheda:</p>
+        <p style="font-size: 0.85rem; color: var(--color-etichette);">Seleziona un tuo atleta per aprire la tendina e i suoi servizi:</p>
         <div id="lista-storico-atleti"></div>
     </div>
 
@@ -467,20 +495,18 @@
     <!--  SCHERMATA 2: FORM ACCESSO LOGIN TRAINER                                 -->
     <!-- ========================================================================== -->
     <div class="card" id="schermata-login-form-trainer">
-        <h2>Inserisci le tue credenziali di accesso</h2>
-        <p style="text-align: center; color: var(--color-etichette);"> </p>
+        <h2>Accredito Staff / Trainer</h2>
+        <p style="text-align: center; color: var(--color-etichette);">Inserisci le tue credenziali di accesso</p>
         
-    <form onsubmit="event.preventDefault(); eseguiLoginTrainer();">
+        <form onsubmit="event.preventDefault(); eseguiLoginTrainer();">
+            <label for="login-trainer-nome">Nome Personal Trainer:</label>
+            <input type="text" id="login-trainer-nome" placeholder="es. Gaspare Napoli" required>
 
-        <label for="login-trainer-nome">Nome Personal Trainer:</label>
-        <input type="text" id="login-trainer-nome" placeholder=" ">
+            <label for="login-trainer-pin">PIN di Sicurezza:</label>
+            <input type="password" inputmode="numeric" id="login-trainer-pin" placeholder="••••" maxlength="6" required>
 
-        <label for="login-trainer-pin">PIN di Sicurezza:</label>
-        <input type="password" id="login-trainer-pin" placeholder="••••" maxlength="6">
-
-        <button class="btn-submit" onclick="eseguiLoginTrainer()">Accedi al Gestionale</button>
-    </form>
-
+            <button type="submit" class="btn-submit">Accedi al Gestionale</button>
+        </form>
         <button class="btn-back" onclick="tornaAllaHome()">Indietro</button>
     </div>
 
@@ -496,7 +522,10 @@
             <label>Nome e Cognome Trainer:</label>
             <input type="text" id="new-trainer-nome" placeholder="es. Marco Rossi">
             <label>PIN Assegnato (4 cifre):</label>
-            <input type="text" id="new-trainer-pin" placeholder="es. 1234" maxlength="6">
+            <div style="display: flex; gap: 8px;">
+                <input type="text" id="new-trainer-pin" placeholder="es. 1234" maxlength="6">
+                <button type="button" class="btn-add" style="width: auto; padding: 0 15px; margin-top: 6px; white-space: nowrap;" onclick="generaPinCasualeInput('new-trainer-pin')">⚡ Genera</button>
+            </div>
             <button class="btn-add" onclick="aggiungiNuovoTrainer()">+ Aggiungi Trainer</button>
         </div>
 
@@ -525,6 +554,13 @@
             <h3 style="margin-top:0;">Gestione Schede Atleti</h3>
             <label for="nome-cliente-iniziale">Inserisci Nome del Cliente / Atleta:</label>
             <input type="text" id="nome-cliente-iniziale" placeholder="es. Mario Rossi">
+
+            <label for="pin-cliente-iniziale">PIN Assegnato all'Atleta (4 cifre):</label>
+            <div style="display: flex; gap: 8px;">
+                <input type="text" id="pin-cliente-iniziale" placeholder="es. 1234" maxlength="6">
+                <button type="button" class="btn-add" style="width: auto; padding: 0 15px; margin-top: 6px; white-space: nowrap;" onclick="generaPinCasualeInput('pin-cliente-iniziale')">⚡ Genera</button>
+            </div>
+
             <button class="btn-submit" onclick="vaiAlMenu()">Avanti alle Schede</button>
         </div>
 
@@ -532,13 +568,21 @@
     </div>
 
     <!-- ========================================================================== -->
-    <!--  SCHERMATA 5: AREA ATLETA (Ricerca Scheda)                              -->
+    <!--  SCHERMATA 5: AREA ATLETA (Ricerca Scheda con PIN)                       -->
     <!-- ========================================================================== -->
     <div class="card" id="schermata-login-atleta">
         <h2>Area Atleta</h2>
-        <label for="nome-atleta-cerca">Inserisci il tuo Nome e Cognome:</label>
-        <input type="text" id="nome-atleta-cerca" placeholder="es. Mario Rossi">
-        <button class="btn-submit" onclick="caricaSchedaAtletaDaInput()">Apri La Mia Scheda</button>
+        <p style="text-align: center; color: var(--color-etichette);">Inserisci il tuo nome e il PIN fornito dal tuo Trainer</p>
+        
+        <form onsubmit="event.preventDefault(); caricaSchedaAtletaDaInput();">
+            <label for="nome-atleta-cerca">Inserisci il tuo Nome e Cognome:</label>
+            <input type="text" id="nome-atleta-cerca" placeholder="es. Mario Rossi" required>
+
+            <label for="pin-atleta-cerca">Inserisci il tuo PIN:</label>
+            <input type="password" inputmode="numeric" id="pin-atleta-cerca" placeholder="••••" maxlength="6" required>
+
+            <button type="submit" class="btn-submit">Apri La Mia Scheda</button>
+        </form>
         <button class="btn-back" onclick="tornaAllaHome()">Indietro</button>
     </div>
 
@@ -601,12 +645,18 @@
 
         let datiSchedaAttuale = null;
         let nomeAtletaSalvato = "";
+        let pinAtletaSalvato = "";
         let isModalitaAtleta = false;
         let currentTrainer = null;
 
         function toggleDrawer() {
             document.getElementById('side-drawer').classList.toggle('open');
             aggiornaListaStorico();
+        }
+
+        function generaPinCasualeInput(inputId) {
+            const pinCasuale = Math.floor(1000 + Math.random() * 9000).toString();
+            document.getElementById(inputId).value = pinCasuale;
         }
 
         function mostraFormLoginTrainer() {
@@ -687,9 +737,16 @@
 
         function vaiAlMenu() {
             const inputNome = document.getElementById('nome-cliente-iniziale').value;
+            let inputPin = document.getElementById('pin-cliente-iniziale').value.trim();
+
             if (inputNome.trim() === "") {
                 alert("Per favore inserisci il nome del cliente!");
                 return;
+            }
+
+            if (!inputPin) {
+                inputPin = Math.floor(1000 + Math.random() * 9000).toString();
+                document.getElementById('pin-cliente-iniziale').value = inputPin;
             }
 
             if (nomeAtletaSalvato.toLowerCase() !== inputNome.trim().toLowerCase()) {
@@ -697,6 +754,7 @@
             }
 
             nomeAtletaSalvato = inputNome.trim();
+            pinAtletaSalvato = inputPin;
             document.getElementById('titolo-principale').innerText = "Atleta: " + nomeAtletaSalvato;
             
             document.getElementById('schermata-login-trainer').style.display = 'none';
@@ -907,6 +965,7 @@
             
             datiSchedaAttuale = {
                 cliente: nomeAtletaSalvato,
+                pin: pinAtletaSalvato,
                 giorni: []
             };
 
@@ -1023,8 +1082,10 @@
 
         async function caricaSchedaAtletaDaInput() {
             const nomeInput = document.getElementById('nome-atleta-cerca').value.trim();
-            if (!nomeInput) {
-                alert("Inserisci il tuo nome!");
+            const pinInput = document.getElementById('pin-atleta-cerca').value.trim();
+
+            if (!nomeInput || !pinInput) {
+                alert("Inserisci sia il Nome che il PIN!");
                 return;
             }
 
@@ -1032,6 +1093,7 @@
                 .from('schede')
                 .select('*')
                 .ilike('cliente', nomeInput)
+                .eq('pin_atleta', pinInput)
                 .order('created_at', { ascending: false })
                 .limit(1);
 
@@ -1050,7 +1112,7 @@
                 document.getElementById('scheda-finale').style.display = 'block';
                 document.getElementById('menu-btn').style.display = 'none';
             } else {
-                alert("Nessuna scheda trovata a questo nome nel database. Contatta il tuo Personal Trainer.");
+                alert("Nome o PIN non validi. Verifica le tue credenziali con il tuo Personal Trainer.");
             }
         }
 
@@ -1089,6 +1151,7 @@
                     .from('schede')
                     .insert([{ 
                         cliente: scheda.cliente, 
+                        pin_atleta: scheda.pin || pinAtletaSalvato,
                         dati_scheda: scheda,
                         trainer_id: currentTrainer.id 
                     }]);
@@ -1100,6 +1163,12 @@
             } catch (err) {
                 console.error("Errore di connessione a Supabase:", err);
             }
+        }
+
+        /* TENDINA ACCORDION PER IL MENU LATERALE STORICO ATLETI */
+        function toggleAccordionAtleta(element) {
+            const item = element.parentElement;
+            item.classList.toggle('active');
         }
 
         async function aggiornaListaStorico() {
@@ -1126,11 +1195,21 @@
 
             let html = "";
             storico.forEach((item, index) => {
+                const pinMostrato = item.pin_atleta || (item.dati_scheda ? item.dati_scheda.pin : '----') || '----';
+                
                 html += `
-                    <div class="atleta-item">
-                        <span onclick="caricaAtletaDaStorico(${index})">${item.cliente}</span>
-                        <div class="atleta-actions">
-                            <button class="btn-back" onclick="eliminaDaStorico('${item.id}', ${index})">Elimina</button>
+                    <div class="atleta-accordion-item">
+                        <div class="atleta-accordion-header" onclick="toggleAccordionAtleta(this)">
+                            <span>👤 ${item.cliente}</span>
+                            <span style="font-size: 0.8rem;">▼</span>
+                        </div>
+                        <div class="atleta-accordion-body">
+                            <div><span class="pin-badge">🔑 PIN Atleta: ${pinMostrato}</span></div>
+                            <div class="atleta-actions-grid">
+                                <button class="btn-submit" onclick="caricaAtletaDaStorico(${index})">📋 Scheda</button>
+                                <button class="btn-share" onclick="alert('Nutrizione per ${item.cliente} in arrivo!')">🥗 Nutrizione</button>
+                            </div>
+                            <button class="btn-back" style="width: 100%; margin-top: 8px; padding: 6px; font-size: 0.8rem;" onclick="eliminaDaStorico('${item.id}', ${index})">🗑️ Elimina Atleta</button>
                         </div>
                     </div>
                 `;
@@ -1211,7 +1290,10 @@
             isModalitaAtleta = false;
             datiSchedaAttuale = schedaSelezionata;
             nomeAtletaSalvato = schedaSelezionata.cliente;
+            pinAtletaSalvato = recordSelezionato.pin_atleta || schedaSelezionata.pin || "";
+
             document.getElementById('nome-cliente-iniziale').value = nomeAtletaSalvato;
+            document.getElementById('pin-cliente-iniziale').value = pinAtletaSalvato;
 
             popolaFormConDati(schedaSelezionata);
 
@@ -1277,7 +1359,6 @@
             }
         };
 
-        // Rimuove forzatamente l'elemento Netlify appena viene iniettato nel DOM
         const observer = new MutationObserver(() => {
             const drawer = document.querySelector('netlify-drawer, #netlify-drawer-root');
             if (drawer) {
