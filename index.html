@@ -368,6 +368,55 @@
             font-size: 0.85rem;
         }
 
+        .storico-box-tendina {
+            margin-top: 12px;
+            background-color: rgba(56, 189, 248, 0.05);
+            border: 1px solid var(--color-bordi);
+            border-radius: 8px;
+            padding: 10px;
+        }
+
+        .storico-box-tendina summary {
+            background: none;
+            padding: 4px 0;
+            font-size: 0.9rem;
+            color: var(--btn-add-ex);
+            cursor: pointer;
+        }
+
+        .storico-box-tendina summary::after {
+            content: "▼";
+            font-size: 0.7rem;
+        }
+
+        .storico-lista {
+            margin-top: 8px;
+            font-size: 0.85rem;
+            color: var(--color-etichette);
+            max-height: 120px;
+            overflow-y: auto;
+        }
+
+        .storico-riga {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            gap: 10px;
+        }
+
+        .btn-elimina-log {
+            background-color: var(--btn-delete-ex);
+            color: #ffffff;
+            border: none;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
         .staff-table {
             width: 100%;
             border-collapse: collapse;
@@ -590,6 +639,7 @@
         let pinAtletaSalvato = "";
         let isModalitaAtleta = false;
         let currentTrainer = null;
+        let storicoLogAtletaCache = [];
 
         function azzeraTuttiInput() {
             const inputs = document.querySelectorAll('input');
@@ -665,6 +715,7 @@
             currentTrainer = null;
             nomeAtletaSalvato = "";
             pinAtletaSalvato = "";
+            storicoLogAtletaCache = [];
 
             document.getElementById('side-drawer').classList.remove('open');
 
@@ -694,7 +745,7 @@
             document.getElementById('pin-cliente-iniziale').value = '';
         }
 
-        function vaiAlMenu() {
+        async function vaiAlMenu() {
             const inputNome = document.getElementById('nome-cliente-iniziale').value.trim();
             const inputPin = document.getElementById('pin-cliente-iniziale').value.trim();
 
@@ -747,7 +798,7 @@
             staff.forEach(t => {
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
-                    <td>${t.nome} ${t.is_admin ? '<small style="color:var(--btn-add-ex);">(Admin Master)</small>' : ''}</td>
+                    <td>${t.nome}${t.is_admin ? '<small style="color:var(--btn-add-ex);">(Admin Master)</small>' : ''}</td>
                     <td><code>${t.pin}</code></td>
                     <td>
                         ${!t.is_admin ? `<button class="btn-remove-ex" style="float:none; margin:0;" onclick="eliminaTrainer('${t.id}')">Rimuovi</button>` : '<i>Non Rimuovibile</i>'}
@@ -800,6 +851,7 @@
 
         function resetFormAllenamento() {
             datiSchedaAttuale = null;
+            storicoLogAtletaCache = [];
             const contenitore = document.getElementById('contenitore-giorni');
             contenitore.innerHTML = '';
             aggiungiGiorno();
@@ -957,10 +1009,43 @@
             });
 
             await salvaInStorico(datiSchedaAttuale);
+            await caricaStoricoLogAtleta(nomeAtletaSalvato);
             renderizzaScheda(datiSchedaAttuale);
             
             document.getElementById('form-creazione').style.display = 'none';
             document.getElementById('scheda-finale').style.display = 'block';
+        }
+
+        async function caricaStoricoLogAtleta(nomeCliente) {
+            if (!nomeCliente) return;
+            const { data, error } = await supabaseClient
+                .from('storico_allenamenti')
+                .select('*')
+                .ilike('cliente', nomeCliente)
+                .order('data_allenamento', { ascending: false });
+
+            if (!error && data) {
+                storicoLogAtletaCache = data;
+            } else {
+                storicoLogAtletaCache = [];
+            }
+        }
+
+        // FUNZIONE PER CANCELLARE UN SINGOLO RECORD DI STORICO DAL DB
+        async function eliminaSingoloLog(logId) {
+            if (!confirm("Sei sicuro di voler eliminare questa sessione dallo storico?")) return;
+
+            const { error } = await supabaseClient
+                .from('storico_allenamenti')
+                .delete()
+                .eq('id', logId);
+
+            if (error) {
+                alert("Errore durante l'eliminazione: " + error.message);
+            } else {
+                await caricaStoricoLogAtleta(nomeAtletaSalvato);
+                renderizzaScheda(datiSchedaAttuale);
+            }
         }
 
         function renderizzaScheda(data) {
@@ -989,6 +1074,37 @@
                 giorno.esercizi.forEach((ex, eIdx) => {
                     let mediaHtml = ex.immagine ? `<img src="${ex.immagine}" class="ex-img-preview" alt="${ex.nome}">` : '';
 
+                    const logEsercizio = storicoLogAtletaCache.filter(l => 
+                        l.nome_esercizio.toLowerCase().trim() === ex.nome.toLowerCase().trim()
+                    );
+
+                    let storicoHtml = "";
+                    if (logEsercizio.length > 0) {
+                        let righeStorico = "";
+                        logEsercizio.forEach(l => {
+                            // Se siamo in modalità trainer, mostriamo il tasto elimina a destra
+                            let azioneElimina = !isModalitaAtleta ? 
+                                `<button class="btn-elimina-log" onclick="eliminaSingoloLog(${l.id})">Elimina</button>` : 
+                                ``;
+
+                            righeStorico += `
+                                <div class="storico-riga">
+                                    <span><b>${l.data_allenamento}</b></span>
+                                    <span>Kg: <b>${l.kg_usati || '-'}</b> | Reps: <b>${l.reps_fatte || '-'}</b></span>
+                                    ${azioneElimina}
+                                </div>
+                            `;
+                        });
+                        storicoHtml = `
+                            <details class="storico-box-tendina">
+                                <summary>Visualizza Storico Precedenti (${logEsercizio.length})</summary>
+                                <div class="storico-lista">
+                                    ${righeStorico}
+                                </div>
+                            </details>
+                        `;
+                    }
+
                     let logHtml = isModalitaAtleta ? `
                         <div class="log-inputs">
                             <label style="color: var(--btn-add-ex);">Registra il tuo allenamento di oggi:</label>
@@ -1014,6 +1130,7 @@
                                 <span>Recupero: <b>${ex.recupero}</b></span>
                             </div>
                             ${mediaHtml}
+                            ${storicoHtml}
                             ${logHtml}
                         </div>
                     `;
@@ -1035,8 +1152,74 @@
             document.getElementById('res-lista-giorni').innerHTML = htmlSchedaFinale;
         }
 
-        function salvaLogAtleta() {
-            alert("Allenamento registrato con successo.");
+        async function salvaLogAtleta() {
+            if (!datiSchedaAttuale || !datiSchedaAttuale.giorni) {
+                alert("Errore: nessun dato della scheda caricato.");
+                return;
+            }
+
+            const dataOggi = new Date().toISOString().split('T')[0];
+            const nomeClienteCorrente = nomeAtletaSalvato || datiSchedaAttuale.cliente;
+            let logSalvatiTotali = 0;
+
+            for (let gIdx = 0; gIdx < datiSchedaAttuale.giorni.length; gIdx++) {
+                const giorno = datiSchedaAttuale.giorni[gIdx];
+                
+                for (let eIdx = 0; eIdx < giorno.esercizi.length; eIdx++) {
+                    const esercizio = giorno.esercizi[eIdx];
+                    
+                    const inputKg = document.getElementById(`log-kg-${gIdx}-${eIdx}`);
+                    const inputReps = document.getElementById(`log-reps-${gIdx}-${eIdx}`);
+
+                    if (inputKg && inputReps && (inputKg.value.trim() !== "" || inputReps.value.trim() !== "")) {
+                        const kgUsati = inputKg.value.trim();
+                        const repsFatte = inputReps.value.trim();
+
+                        const { data: esistente } = await supabaseClient
+                            .from('storico_allenamenti')
+                            .select('id')
+                            .ilike('cliente', nomeClienteCorrente)
+                            .eq('data_allenamento', dataOggi)
+                            .ilike('nome_esercizio', esercizio.nome)
+                            .maybeSingle();
+
+                        let error;
+                        if (esistente) {
+                            const res = await supabaseClient
+                                .from('storico_allenamenti')
+                                .update({ kg_usati: kgUsati, reps_fatte: repsFatte })
+                                .eq('id', esistente.id);
+                            error = res.error;
+                        } else {
+                            const res = await supabaseClient
+                                .from('storico_allenamenti')
+                                .insert([{
+                                    cliente: nomeClienteCorrente,
+                                    data_allenamento: dataOggi,
+                                    giorno_nome: giorno.nome,
+                                    nome_esercizio: esercizio.nome,
+                                    kg_usati: kgUsati,
+                                    reps_fatte: repsFatte
+                                }]);
+                            error = res.error;
+                        }
+
+                        if (!error) {
+                            logSalvatiTotali++;
+                        } else {
+                            console.error("Errore salvataggio log esercizio:", error);
+                        }
+                    }
+                }
+            }
+
+            if (logSalvatiTotali > 0) {
+                alert("Allenamento e carichi registrati con successo nel Cloud!");
+                await caricaStoricoLogAtleta(nomeAtletaSalvato);
+                renderizzaScheda(datiSchedaAttuale);
+            } else {
+                alert("Compila almeno un campo tra Kg e Reps prima di salvare.");
+            }
         }
 
         async function caricaSchedaAtletaDaInput() {
@@ -1066,6 +1249,10 @@
                 const trovata = data[0].dati_scheda;
                 isModalitaAtleta = true;
                 datiSchedaAttuale = trovata;
+                nomeAtletaSalvato = trovata.cliente;
+                
+                await caricaStoricoLogAtleta(nomeAtletaSalvato);
+
                 document.getElementById('schermata-login-atleta').style.display = 'none';
                 renderizzaScheda(trovata);
                 document.getElementById('scheda-finale').style.display = 'block';
@@ -1239,7 +1426,7 @@
             });
         }
 
-        function caricaAtletaDaStorico(index) {
+        async function caricaAtletaDaStorico(index) {
             if (!window.storicoCloud || !window.storicoCloud[index]) return;
             
             const recordSelezionato = window.storicoCloud[index];
@@ -1252,6 +1439,8 @@
 
             document.getElementById('nome-cliente-iniziale').value = nomeAtletaSalvato;
             document.getElementById('pin-cliente-iniziale').value = pinAtletaSalvato;
+
+            await caricaStoricoLogAtleta(nomeAtletaSalvato);
 
             popolaFormConDati(schedaSelezionata);
 
@@ -1300,6 +1489,7 @@
                 try {
                     const data = JSON.parse(decodeURIComponent(dataParam));
                     isModalitaAtleta = true;
+                    nomeAtletaSalvato = data.cliente || "";
                     
                     document.getElementById('menu-btn').style.display = 'none';
                     document.getElementById('schermata-scelta').style.display = 'none';
@@ -1310,8 +1500,10 @@
                     document.getElementById('schermata-menu').style.display = 'none';
                     document.getElementById('form-creazione').style.display = 'none';
                     
-                    renderizzaScheda(data);
-                    document.getElementById('scheda-finale').style.display = 'block';
+                    caricaStoricoLogAtleta(nomeAtletaSalvato).then(() => {
+                        renderizzaScheda(data);
+                        document.getElementById('scheda-finale').style.display = 'block';
+                    });
                 } catch (e) {
                     console.error("Errore nel caricamento dei dati", e);
                 }
