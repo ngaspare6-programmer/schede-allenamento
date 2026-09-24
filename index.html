@@ -15,7 +15,6 @@
     <style>
         /* ==========================================================================
            🎨 MAPPA 1: PERSONALIZZA COLORI E TEMA GRAFICO
-           🔍 CHIAVE DI RICERCA: [COLORI-TEMA]
            ========================================================================== */
         :root {
             --bg-pagina: #0f172a;        
@@ -44,10 +43,6 @@
             --tag-muscolo-text: #38bdf8; 
         }
 
-        /* ==========================================================================
-           📐 MAPPA 1B: ALTEZZE, SPAZIATURE E DIMENSIONI SCHERMATA
-           🔍 CHIAVE DI RICERCA: [LAYOUT-SPAZI]
-           ========================================================================== */
         body {
             font-family: 'Inter', system-ui, -apple-system, sans-serif;
             background-color: var(--bg-pagina);
@@ -61,7 +56,7 @@
             box-sizing: border-box;
         }
 
-        h1, h2, h3 {
+        h1, h2, h3, h4 {
             font-family: 'Poppins', sans-serif;
             margin-top: 0;
         }
@@ -71,7 +66,7 @@
             color: var(--color-titoli);
             text-align: center;
             margin-top: 10px;
-            margin-bottom: 15px; /* Distanza tra il titolo principale e la scheda centrale */
+            margin-bottom: 15px;
             letter-spacing: -0.5px;
         }
 
@@ -177,26 +172,6 @@
             color: var(--color-titoli);
         }
 
-        .testo-opzione {
-            background: transparent;
-            border: none;
-            padding: 20px 10px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .testo-opzione:hover h3 {
-            color: var(--btn-add-ex);
-        }
-
-        .testo-opzione h3 {
-            margin: 0;
-            font-size: 1.2rem;
-            color: var(--color-titoli);
-        }
-
-        /* TASTO MENU FISSATO MA NASCOSTO IN HOME PER PRIVACY */
         #menu-btn {
             position: fixed;
             top: 15px;
@@ -212,7 +187,7 @@
             width: auto;
             margin: 0;
             font-family: inherit;
-            display: none; /* PRIVACY FIX: Nascosto all'avvio */
+            display: none;
         }
 
         #side-drawer {
@@ -358,6 +333,19 @@
             font-size: 0.85rem;
         }
 
+        /* STILI PER LA TABELLA STAFF ADMIN */
+        .staff-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .staff-table th, .staff-table td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid var(--color-bordi);
+        }
+
         footer {
             padding-top: 15px;
             padding-bottom: 10px;
@@ -372,44 +360,33 @@
         #schermata-login-atleta,
         #schermata-menu,
         #form-creazione,
-        #scheda-finale { display: none; }
+        #scheda-finale,
+        #sezione-gestione-staff { display: none; }
     </style>
 </head>
 <body>
 
-    <!-- ==========================================================================
-       🏋️ MAPPA 2: TENDINA SUGGERIMENTI ESERCIZI
-       🔍 CHIAVE DI RICERCA: [TENDINA-ESERCIZI]
-       ========================================================================== -->
     <datalist id="lista-esercizi-suggeriti">
-        <!-- PETTO -->
         <option value="Panca Piana Bilanciere"></option>
         <option value="Panca Inclinata Manubri"></option>
         <option value="Croci ai Cavi"></option>
         <option value="Dip alle Parallele"></option>
-        <!-- DORSO -->
         <option value="Trazioni alla Sbarra"></option>
         <option value="Lat Machine Avanti"></option>
         <option value="Rematore con Bilanciere"></option>
         <option value="Pulley Basso"></option>
         <option value="Stacco da Terra"></option>
-        <!-- GAMBE -->
         <option value="Squat con Bilanciere"></option>
         <option value="Leg Press 45°"></option>
         <option value="Affondi con Manubri"></option>
         <option value="Leg Extension"></option>
         <option value="Leg Curl da Seduto"></option>
-        <!-- SPALLE & BRACCIA -->
         <option value="Military Press Bilanciere"></option>
         <option value="Alzate Laterali Manubri"></option>
         <option value="Curl con Bilanciere Sagomato"></option>
         <option value="Pushdown Cavo Alto"></option>
     </datalist>
 
-    <!-- ==========================================================================
-       🏋️ MAPPA 3: TENDINA SUGGERIMENTI GRUPPI MUSCOLARI
-       🔍 CHIAVE DI RICERCA: [TENDINA-MUSCOLI]
-       ========================================================================== -->
     <datalist id="lista-muscoli-suggeriti">
         <option value="Petto"></option>
         <option value="Dorso"></option>
@@ -421,7 +398,6 @@
         <option value="Full Body"></option>
     </datalist>
 
-    <!-- PRIVACY FIX: Il pulsante MENU parte nascosto (display: none) -->
     <button id="menu-btn" onclick="toggleDrawer()">MENU</button>
 
     <div id="side-drawer">
@@ -430,13 +406,12 @@
         <div id="lista-storico-atleti"></div>
     </div>
 
-    <!-- 🏷️ MAPPA 4A: TITOLO IN ALTO -->
     <h1 id="titolo-principale">Gestionale Fit</h1>
 
     <!-- SCHERMATA 1: PORTALE INIZIALE -->
     <div class="card" id="schermata-scelta">
         <h2>Benvenuto</h2>
-        <p style="text-align: center; color: var(--color-etichette);">Seleziona la modalita di accesso:</p>
+        <p style="text-align: center; color: var(--color-etichette);">Seleziona la modalità di accesso:</p>
         
         <div class="scelta-ruolo-grid">
             <div class="ruolo-box" onclick="apriLoginTrainer()">
@@ -450,11 +425,11 @@
 
     <!-- SCHERMATA 1B: NOMINATIVO TRAINER -->
     <div class="card" id="schermata-login-trainer">
-        <h2>Area Personal Trainer</h2>
+        <h2 id="welcome-trainer-title">Area Personal Trainer</h2>
         <label for="nome-cliente-iniziale">Nome del Cliente / Atleta:</label>
         <input type="text" id="nome-cliente-iniziale" placeholder="es. Mario Rossi">
         <button class="btn-submit" onclick="vaiAlMenu()">Avanti</button>
-        <button class="btn-back" onclick="tornaAllaHome()">Indietro</button>
+        <button class="btn-back" onclick="tornaAllaHome()">Indietro / Esci</button>
     </div>
 
     <!-- SCHERMATA 1C: ACCESSO DIRETTO ATLETA -->
@@ -466,10 +441,7 @@
         <button class="btn-back" onclick="tornaAllaHome()">Indietro</button>
     </div>
 
-    <!-- ==========================================================================
-       🔘 MAPPA 5: SERVIZI NEL MENU TRAINER
-       🔍 CHIAVE DI RICERCA: [MENU-SERVIZI]
-       ========================================================================== -->
+    <!-- SCHERMATA 2: MENU SERVIZI E GESTIONE STAFF (ADMIN) -->
     <div class="card" id="schermata-menu">
         <h2 id="sottotitolo-menu">Seleziona Servizio</h2>
         <div class="scelta-ruolo-grid">
@@ -477,11 +449,36 @@
                 <h3>Scheda Allenamento</h3>
             </div>
             
-            <div class="ruolo-box" style="opacity: 0.5; cursor: not-allowed;" onclick="alert('La sezione Alimentazione sara disponibile a breve!')">
+            <div class="ruolo-box" style="opacity: 0.5; cursor: not-allowed;" onclick="alert('La sezione Alimentazione sarà disponibile a breve!')">
                 <h3>Alimentazione</h3>
                 <span style="font-size: 0.75rem; color: var(--color-etichette);">(In arrivo)</span>
             </div>
         </div>
+
+        <!-- SEZIONE GESTIONE STAFF (COMPARE SOLO SE SEI ADMIN) -->
+        <div id="sezione-gestione-staff" style="margin-top: 30px; border-top: 1px solid var(--color-bordi); padding-top: 20px;">
+            <h3 style="color: var(--btn-add-ex);">Pannello Admin: Gestione Staff</h3>
+            
+            <label>Aggiungi Nuovo Personal Trainer:</label>
+            <div class="grid-2">
+                <input type="text" id="new-trainer-nome" placeholder="Nome Trainer">
+                <input type="text" id="new-trainer-pin" placeholder="PIN (es. 1234)" maxlength="6">
+            </div>
+            <button class="btn-add" onclick="aggiungiNuovoTrainer()">+ Aggiungi Trainer</button>
+
+            <h4 style="margin-top: 20px; margin-bottom: 5px;">Staff Attivo:</h4>
+            <table class="staff-table">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>PIN</th>
+                        <th>Azione</th>
+                    </tr>
+                </thead>
+                <tbody id="lista-staff-body"></tbody>
+            </table>
+        </div>
+
         <button class="btn-back" onclick="tornaAlLoginTrainer()">Cambia Atleta</button>
     </div>
 
@@ -508,7 +505,6 @@
         <button class="btn-back" id="btn-esci-atleta" style="display:none;" onclick="tornaAllaHome()">Esci</button>
     </div>
 
-    <!-- 🏷️ MAPPA 4B: BRANDING IN BASSO -->
     <footer>
         Powered by <strong>GPN Tech</strong> &bull; Fitness Management Solution
     </footer>
@@ -523,26 +519,57 @@
         let datiSchedaAttuale = null;
         let nomeAtletaSalvato = "";
         let isModalitaAtleta = false;
+        let currentTrainer = null; // Memorizza il trainer loggato
 
         function toggleDrawer() {
             document.getElementById('side-drawer').classList.toggle('open');
             aggiornaListaStorico();
         }
 
-        function apriLoginTrainer() {
+        // ACCESSO CON VERIFICA PIN TRAINER
+        async function apriLoginTrainer() {
+            if (!currentTrainer) {
+                const pinInserito = prompt("Inserisci il tuo PIN Personal Trainer:");
+                if (!pinInserito) return;
+
+                // Controllo PIN su Supabase nella tabella 'trainers'
+                const { data: trainer, error } = await supabaseClient
+                    .from('trainers')
+                    .select('*')
+                    .eq('pin', pinInserito.trim())
+                    .single();
+
+                if (error || !trainer) {
+                    alert("PIN non corretto! Accesso negato.");
+                    return;
+                }
+
+                currentTrainer = trainer;
+            }
+
+            document.getElementById('welcome-trainer-title').innerText = `Area Trainer (${currentTrainer.nome})`;
             document.getElementById('schermata-scelta').style.display = 'none';
             document.getElementById('schermata-login-trainer').style.display = 'block';
-            document.getElementById('menu-btn').style.display = 'block'; /* VISIBILE SUBITO NELL'AREA TRAINER */
+            document.getElementById('menu-btn').style.display = 'block';
+
+            // Mostra il pannello Gestione Staff solo se il Trainer è Admin
+            if (currentTrainer.is_admin) {
+                document.getElementById('sezione-gestione-staff').style.display = 'block';
+                caricaListaStaff();
+            } else {
+                document.getElementById('sezione-gestione-staff').style.display = 'none';
+            }
         }
 
         function apriLoginAtleta() {
             document.getElementById('schermata-scelta').style.display = 'none';
             document.getElementById('schermata-login-atleta').style.display = 'block';
-            document.getElementById('menu-btn').style.display = 'none'; /* HIDDEN PER L'ATLETA */
+            document.getElementById('menu-btn').style.display = 'none';
         }
 
         function tornaAllaHome() {
             isModalitaAtleta = false;
+            currentTrainer = null; // Logout
             const h1El = document.getElementById('titolo-principale');
             const titoloBase = h1El ? (h1El.getAttribute('data-titolo-originale') || "Gestionale Fit") : "Gestionale Fit";
             document.getElementById('titolo-principale').innerText = titoloBase;
@@ -552,14 +579,14 @@
             document.getElementById('schermata-menu').style.display = 'none';
             document.getElementById('form-creazione').style.display = 'none';
             document.getElementById('scheda-finale').style.display = 'none';
-            document.getElementById('menu-btn').style.display = 'none'; /* HIDDEN IN HOME */
+            document.getElementById('menu-btn').style.display = 'none';
             document.getElementById('schermata-scelta').style.display = 'block';
         }
 
         function tornaAlLoginTrainer() {
             document.getElementById('schermata-menu').style.display = 'none';
             document.getElementById('schermata-login-trainer').style.display = 'block';
-            document.getElementById('menu-btn').style.display = 'block'; /* VISIBILE NEL LOGIN TRAINER */
+            document.getElementById('menu-btn').style.display = 'block';
         }
 
         function vaiAlMenu() {
@@ -591,6 +618,72 @@
             document.getElementById('scheda-finale').style.display = 'none';
             document.getElementById('schermata-menu').style.display = 'block';
             document.getElementById('menu-btn').style.display = 'block';
+        }
+
+        // === FUNZIONI ADMIN: GESTIONE STAFF ===
+        async function caricaListaStaff() {
+            const { data: staff, error } = await supabaseClient
+                .from('trainers')
+                .select('*')
+                .order('created_at', { ascending: true });
+
+            if (error) return;
+
+            const tbody = document.getElementById('lista-staff-body');
+            tbody.innerHTML = '';
+
+            staff.forEach(t => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${t.nome} ${t.is_admin ? '<small style="color:var(--btn-add-ex);">(Admin)</small>' : ''}</td>
+                    <td><code>${t.pin}</code></td>
+                    <td>
+                        ${!t.is_admin ? `<button class="btn-remove-ex" style="float:none; margin:0;" onclick="eliminaTrainer('${t.id}')">Rimuovi</button>` : '<i>-</i>'}
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        async function aggiungiNuovoTrainer() {
+            const nomeEl = document.getElementById('new-trainer-nome');
+            const pinEl = document.getElementById('new-trainer-pin');
+
+            const nome = nomeEl.value.trim();
+            const pin = pinEl.value.trim();
+
+            if (!nome || !pin) {
+                alert("Inserisci sia il nome che il PIN per il nuovo trainer!");
+                return;
+            }
+
+            const { error } = await supabaseClient
+                .from('trainers')
+                .insert([{ nome: nome, pin: pin, is_admin: false }]);
+
+            if (error) {
+                alert("Errore nell'inserimento: " + error.message);
+            } else {
+                alert(`Trainer ${nome} aggiunto con successo!`);
+                nomeEl.value = '';
+                pinEl.value = '';
+                caricaListaStaff();
+            }
+        }
+
+        async function eliminaTrainer(id) {
+            if (!confirm("Sei sicuro di voler rimuovere questo trainer dallo staff?")) return;
+
+            const { error } = await supabaseClient
+                .from('trainers')
+                .delete()
+                .eq('id', id);
+
+            if (error) {
+                alert("Errore durante l'eliminazione: " + error.message);
+            } else {
+                caricaListaStaff();
+            }
         }
 
         function resetFormAllenamento() {
@@ -880,7 +973,7 @@
 
                 if (error) {
                     console.error("Errore salvataggio Supabase:", error);
-                    alert("Si e verificato un errore durante il salvataggio nel Cloud.");
+                    alert("Si è verificato un errore durante il salvataggio nel Cloud.");
                 }
             } catch (err) {
                 console.error("Errore di connessione a Supabase:", err);
