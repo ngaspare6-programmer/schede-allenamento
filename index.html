@@ -459,8 +459,6 @@
 
     <div class="card" id="schermata-login-form-trainer">
         <h2>Inserisci le tue credenziali di accesso</h2>
-        <p style="text-align: center; color: var(--color-etichette);"> </p>
-        
         <form onsubmit="event.preventDefault(); eseguiLoginTrainer();" autocomplete="off">
             <label for="login-trainer-nome">Nome Personal Trainer:</label>
             <input type="text" id="login-trainer-nome" name="no_autofill_trainer_nome" placeholder=" " autocomplete="new-password" required>
@@ -597,7 +595,6 @@
             const inputs = document.querySelectorAll('input');
             inputs.forEach(input => {
                 input.value = '';
-                input.removeAttribute('data-testo-precedente');
             });
         }
 
@@ -609,25 +606,6 @@
         function generaPinCasualeInput(inputId) {
             const pinCasuale = Math.floor(1000 + Math.random() * 9000).toString();
             document.getElementById(inputId).value = pinCasuale;
-        }
-
-        function gestisciSelezioneMuscolo(inputElement) {
-            const valoreScelto = inputElement.value.trim();
-            if (!valoreScelto) return;
-
-            let testoAttuale = inputElement.getAttribute('data-testo-precedente') || "";
-            
-            if (testoAttuale && testoAttuale !== valoreScelto && !testoAttuale.includes(valoreScelto)) {
-                inputElement.value = testoAttuale + " - " + valoreScelto;
-            } else if (!testoAttuale) {
-                inputElement.value = valoreScelto;
-            }
-            
-            inputElement.setAttribute('data-testo-precedente', inputElement.value);
-        }
-
-        function gestisciFocusMuscolo(inputElement) {
-            inputElement.setAttribute('data-testo-precedente', inputElement.value);
         }
 
         function mostraFormLoginTrainer() {
@@ -864,7 +842,7 @@
                 <div class="grid-2">
                     <div>
                         <label>Muscolo (opzionale):</label>
-                        <input type="text" class="ex-muscolo" list="lista-muscoli-suggeriti" placeholder="es. Spalle" onfocus="gestisciFocusMuscolo(this)" onchange="gestisciSelezioneMuscolo(this); this.blur();">
+                        <input type="text" class="ex-muscolo" list="lista-muscoli-suggeriti" placeholder="es. Spalle" onfocus="this.value=''" onchange="this.blur()">
                     </div>
                     <div>
                         <label>Serie x Reps:</label>
@@ -906,7 +884,7 @@
                 </select>
 
                 <label>Muscoli Coinvolti:</label>
-                <input type="text" class="muscoli-input" list="lista-muscoli-suggeriti" placeholder="es. Petto e Bicipiti" onfocus="gestisciFocusMuscolo(this)" onchange="gestisciSelezioneMuscolo(this); this.blur();">
+                <input type="text" class="muscoli-input" list="lista-muscoli-suggeriti" placeholder="es. Petto e Bicipiti" onfocus="this.value=''" onchange="this.blur()">
 
                 <h3 style="margin-top: 20px;">Esercizi</h3>
                 <div class="lista-esercizi-giorno">
@@ -917,7 +895,7 @@
                         <div class="grid-2">
                             <div>
                                 <label>Muscolo (opzionale):</label>
-                                <input type="text" class="ex-muscolo" list="lista-muscoli-suggeriti" placeholder="es. Petto" onfocus="gestisciFocusMuscolo(this)" onchange="gestisciSelezioneMuscolo(this); this.blur();">
+                                <input type="text" class="ex-muscolo" list="lista-muscoli-suggeriti" placeholder="es. Petto" onfocus="this.value=''" onchange="this.blur()">
                             </div>
                             <div>
                                 <label>Serie x Reps:</label>
@@ -1215,7 +1193,7 @@
                             <div class="grid-2">
                                 <div>
                                     <label>Muscolo (opzionale):</label>
-                                    <input type="text" class="ex-muscolo" list="lista-muscoli-suggeriti" value="${ex.muscolo || ''}" onfocus="gestisciFocusMuscolo(this)" onchange="gestisciSelezioneMuscolo(this); this.blur();">
+                                    <input type="text" class="ex-muscolo" list="lista-muscoli-suggeriti" value="${ex.muscolo || ''}" onfocus="this.value=''" onchange="this.blur()">
                                 </div>
                                 <div>
                                     <label>Serie x Reps:</label>
@@ -1250,7 +1228,7 @@
                     </select>
 
                     <label>Muscoli Coinvolti:</label>
-                    <input type="text" class="muscoli-input" list="lista-muscoli-suggeriti" value="${giornoData.muscoli}" onfocus="gestisciFocusMuscolo(this)" onchange="gestisciSelezioneMuscolo(this); this.blur();">
+                    <input type="text" class="muscoli-input" list="lista-muscoli-suggeriti" value="${giornoData.muscoli}" onfocus="this.value=''" onchange="this.blur()">
 
                     <h3 style="margin-top: 20px;">Esercizi</h3>
                     <div class="lista-esercizi-giorno">${eserciziHtml}</div>
