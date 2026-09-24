@@ -14,23 +14,27 @@
 
     <!-- 
       ==========================================================================
-      📖 LEGENDA MAPPA CODICE (Usa CTRL+F o CMD+F per cercare le sezioni)
+       LEGENDA MAPPA CODICE (Usa CTRL+F o CMD+F per cercare le sezioni)
       ==========================================================================
-      [COLORI-TEMA]         -> Modifica i colori principali (sfondi, bottoni, testi)
-      [TEXT-PORTALE-HOME]   -> Testi della schermata iniziale "Benvenuto"
-      [TEXT-LOGIN-TRAINER]  -> Testi della schermata di login Trainer (Titolo, Subtitle, Label)
-      [TEXT-PANNELLO-ADMIN] -> Testi della sezione riservata all'Amministratore
-      [TEXT-DASHBOARD-FIT]  -> Testi della schermata "Gestione Schede Atleti"
-      [TEXT-AREA-ATLETA]    -> Testi della schermata di ricerca Atleta
-      [TENDINA-ESERCIZI]   -> Lista degli esercizi suggeriti
-      [TENDINA-MUSCOLI]    -> Lista dei gruppi muscolari suggeriti
+      [COLORI-TEMA]             -> Modifica i colori principali (sfondi, bottoni, testi)
+      [LAYOUT-SPAZI]            -> Modifica margini, distanze titolo/card, padding
+      [TENDINA-ESERCIZI]       -> Lista degli esercizi suggeriti
+      [TENDINA-MUSCOLI]        -> Lista dei gruppi muscolari suggeriti
+      
+       SCHERMATA 1: HOME      -> Selezione iniziale (Trainer / Atleta)
+       SCHERMATA 2: ACCESSO   -> Form di Login Trainer (Nome e PIN)
+       SCHERMATA 3: ADMIN     -> Pannello Amministratore (Gestione Staff)
+       SCHERMATA 4: DASHBOARD -> Inserimento Nome Atleta per la Scheda
+       SCHERMATA 5: ATLETA    -> Ricerca Scheda per l'Atleta
+       SCHERMATA 6: SERVIZI   -> Scelta Servizio (Scheda / Alimentazione)
+       SCHERMATA 7: FORM      -> Form di Creazione Scheda Allenamento
+       SCHERMATA 8: FINALE    -> Vista Scheda Finale e Condivisione
       ==========================================================================
     -->
 
     <style>
         /* ==========================================================================
-           🎨 MAPPA 1: PERSONALIZZA COLORI E TEMA GRAFICO
-           🔍 CHIAVE DI RICERCA: [COLORI-TEMA]
+            MAPPA COLORI E TEMA GRAFICO - [COLORI-TEMA]
            ========================================================================== */
         :root {
             --bg-pagina: #0f172a;        
@@ -59,12 +63,15 @@
             --tag-muscolo-text: #38bdf8; 
         }
 
+        /* ==========================================================================
+            MAPPA 1B: ALTEZZE, SPAZIATURE E DIMENSIONI SCHERMATA - [LAYOUT-SPAZI]
+           ========================================================================== */
         body {
             font-family: 'Inter', system-ui, -apple-system, sans-serif;
             background-color: var(--bg-pagina);
             color: var(--color-testo);
             margin: 0;
-            padding: 10px 15px; 
+            padding: 10px 15px; /* ⬅️ Modifica il primo valore (10px) per alzare/abbassare il contenuto in alto */
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -77,25 +84,27 @@
             margin-top: 0;
         }
 
+        /*  REGOLAZIONE TITOLO PRINCIPALE ("Gestionale Fit") */
         h1 { 
             font-size: 2rem;
             color: var(--color-titoli);
             text-align: center;
-            margin-top: 10px;
-            margin-bottom: 15px;
+            margin-top: 10px;    /*  Spazio sopra il titolo principale */
+            margin-bottom: 25px; /*   DISTANZA TRA TITOLO PRINCIPALE E RIQUADRO (CARD) */
             letter-spacing: -0.5px;
         }
 
         h2 { font-size: 1.5rem; text-align: center; }
         h3 { font-size: 1.2rem; }
 
+        /*  REGOLAZIONE DEL RIQUADRO PRINCIPALE (CARD CONTENITORE) */
         .card {
             background-color: var(--bg-card);
-            padding: 20px 25px; 
+            padding: 20px 25px; /*  Spazio INTERNO del riquadro: (Alto/Basso) (Sinistra/Destra) */
             border-radius: 16px;
             max-width: 650px;
             width: 100%;
-            margin: 0 auto;
+            margin: 0 auto;    /*  Centra la card orizzontalmente */
             border: 1px solid var(--color-bordi);
             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
             box-sizing: border-box;
@@ -371,6 +380,7 @@
 
         footer strong { color: var(--btn-add-ex); }
 
+        /* NASCONDE TUTTE LE SCHERMATE ALL'AVVIO */
         #schermata-login-form-trainer,
         #schermata-admin-panel,
         #schermata-login-trainer,
@@ -382,7 +392,7 @@
 </head>
 <body>
 
-    <!-- 🔍 CHIAVE DI RICERCA: [TENDINA-ESERCIZI] -->
+    <!--  CHIAVE DI RICERCA: [TENDINA-ESERCIZI] -->
     <datalist id="lista-esercizi-suggeriti">
         <option value="Panca Piana Bilanciere"></option>
         <option value="Panca Inclinata Manubri"></option>
@@ -404,7 +414,7 @@
         <option value="Pushdown Cavo Alto"></option>
     </datalist>
 
-    <!-- 🔍 CHIAVE DI RICERCA: [TENDINA-MUSCOLI] -->
+    <!--  CHIAVE DI RICERCA: [TENDINA-MUSCOLI] -->
     <datalist id="lista-muscoli-suggeriti">
         <option value="Petto"></option>
         <option value="Dorso"></option>
@@ -426,7 +436,9 @@
 
     <h1 id="titolo-principale">Gestionale Fit</h1>
 
-    <!-- 🔑 MAPPA: [TEXT-PORTALE-HOME] - SCHERMATA INIZIALE -->
+    <!-- ========================================================================== -->
+    <!--  SCHERMATA 1: PORTALE HOME PRINCIPALE                                    -->
+    <!-- ========================================================================== -->
     <div class="card" id="schermata-scelta">
         <h2>Benvenuto</h2>
         <p style="text-align: center; color: var(--color-etichette);">Seleziona la modalità di accesso:</p>
@@ -441,10 +453,12 @@
         </div>
     </div>
 
-    <!-- 🔑 MAPPA: [TEXT-LOGIN-TRAINER] - TESTI SCHERMATA LOGIN TRAINER -->
+    <!-- ========================================================================== -->
+    <!--  SCHERMATA 2: FORM ACCESSO LOGIN TRAINER                                 -->
+    <!-- ========================================================================== -->
     <div class="card" id="schermata-login-form-trainer">
-        <h2>Inserisci le tue credenziali di accesso</h2>
-        <p style="text-align: center; color: var(--color-etichette);"> </p>
+        <h2>Accredito Staff / Trainer</h2>
+        <p style="text-align: center; color: var(--color-etichette);">Inserisci le tue credenziali di accesso</p>
         
         <label for="login-trainer-nome">Nome Personal Trainer:</label>
         <input type="text" id="login-trainer-nome" placeholder="es. Gaspare Napoli">
@@ -456,7 +470,9 @@
         <button class="btn-back" onclick="tornaAllaHome()">Indietro</button>
     </div>
 
-    <!-- 🔑 MAPPA: [TEXT-PANNELLO-ADMIN] - SCHERMATA AMMINISTRATORE MASTER -->
+    <!-- ========================================================================== -->
+    <!--  SCHERMATA 3: PANNELLO ADMIN MASTER (Gestione Staff)                     -->
+    <!-- ========================================================================== -->
     <div class="card" id="schermata-admin-panel">
         <h2 style="color: var(--btn-add-ex);">Pannello Amministratore</h2>
         <p style="text-align: center; color: var(--color-etichette);">Gestione autorizzazioni e Staff Personal Trainer</p>
@@ -485,7 +501,9 @@
         <button class="btn-back" onclick="tornaAllaHome()">Logout Admin</button>
     </div>
 
-    <!-- 🔑 MAPPA: [TEXT-DASHBOARD-FIT] - DASHBOARD OPERATIVA TRAINER -->
+    <!-- ========================================================================== -->
+    <!--  SCHERMATA 4: DASHBOARD OPERATIVA TRAINER (Inserimento Nome Atleta)        -->
+    <!-- ========================================================================== -->
     <div class="card" id="schermata-login-trainer">
         <h2 id="welcome-trainer-title">Area Personal Trainer</h2>
         
@@ -499,7 +517,9 @@
         <button class="btn-back" onclick="tornaAllaHome()">Indietro / Logout</button>
     </div>
 
-    <!-- 🔑 MAPPA: [TEXT-AREA-ATLETA] - SEARCH ATLETA -->
+    <!-- ========================================================================== -->
+    <!--  SCHERMATA 5: AREA ATLETA (Ricerca Scheda)                              -->
+    <!-- ========================================================================== -->
     <div class="card" id="schermata-login-atleta">
         <h2>Area Atleta</h2>
         <label for="nome-atleta-cerca">Inserisci il tuo Nome e Cognome:</label>
@@ -508,6 +528,9 @@
         <button class="btn-back" onclick="tornaAllaHome()">Indietro</button>
     </div>
 
+    <!-- ========================================================================== -->
+    <!--  SCHERMATA 6: SELEZIONE SERVIZI MENU TRAINER                            -->
+    <!-- ========================================================================== -->
     <div class="card" id="schermata-menu">
         <h2 id="sottotitolo-menu">Seleziona Servizio</h2>
         <div class="scelta-ruolo-grid">
@@ -524,6 +547,9 @@
         <button class="btn-back" onclick="tornaAlLoginTrainer()">Cambia Atleta</button>
     </div>
 
+    <!-- ========================================================================== -->
+    <!--  SCHERMATA 7: FORM DI CREAZIONE SCHEDA ALLENAMENTO                       -->
+    <!-- ========================================================================== -->
     <div class="card" id="form-creazione">
         <h2>Crea Scheda Allenamento</h2>
         
@@ -534,6 +560,9 @@
         <button class="btn-back" onclick="tornaAlMenu()">Torna al Menu</button>
     </div>
 
+    <!-- ========================================================================== -->
+    <!--  SCHERMATA 8: VISTA SCHEDA FINALE                                       -->
+    <!-- ========================================================================== -->
     <div class="card" id="scheda-finale">
         <div id="res-lista-giorni"></div>
 
@@ -546,7 +575,7 @@
     </div>
 
     <footer>
-        Powered by <strong>GPN Lab</strong> &bull; Innovative Management Solution
+        Powered by <strong>GPN Lab</strong> &bull; Innovative Management Solutions
     </footer>
 
     <script>
