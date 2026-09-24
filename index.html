@@ -15,6 +15,7 @@
     <style>
         /* ==========================================================================
            🎨 MAPPA 1: PERSONALIZZA COLORI E TEMA GRAFICO
+           🔍 CHIAVE DI RICERCA: [COLORI-TEMA]
            ========================================================================== */
         :root {
             --bg-pagina: #0f172a;        
@@ -43,6 +44,10 @@
             --tag-muscolo-text: #38bdf8; 
         }
 
+        /* ==========================================================================
+           📐 MAPPA 1B: ALTEZZE, SPAZIATURE E DIMENSIONI SCHERMATA
+           🔍 CHIAVE DI RICERCA: [LAYOUT-SPAZI]
+           ========================================================================== */
         body {
             font-family: 'Inter', system-ui, -apple-system, sans-serif;
             background-color: var(--bg-pagina);
@@ -333,7 +338,7 @@
             font-size: 0.85rem;
         }
 
-        /* STILI PER LA TABELLA STAFF ADMIN */
+        /* STILI TABELLA GESTIONE STAFF ADMIN */
         .staff-table {
             width: 100%;
             border-collapse: collapse;
@@ -366,6 +371,10 @@
 </head>
 <body>
 
+    <!-- ==========================================================================
+       🏋️ MAPPA 2: TENDINA SUGGERIMENTI ESERCIZI
+       🔍 CHIAVE DI RICERCA: [TENDINA-ESERCIZI]
+       ========================================================================== -->
     <datalist id="lista-esercizi-suggeriti">
         <option value="Panca Piana Bilanciere"></option>
         <option value="Panca Inclinata Manubri"></option>
@@ -387,6 +396,10 @@
         <option value="Pushdown Cavo Alto"></option>
     </datalist>
 
+    <!-- ==========================================================================
+       🏋️ MAPPA 3: TENDINA SUGGERIMENTI GRUPPI MUSCOLARI
+       🔍 CHIAVE DI RICERCA: [TENDINA-MUSCOLI]
+       ========================================================================== -->
     <datalist id="lista-muscoli-suggeriti">
         <option value="Petto"></option>
         <option value="Dorso"></option>
@@ -406,6 +419,7 @@
         <div id="lista-storico-atleti"></div>
     </div>
 
+    <!-- 🏷️ MAPPA 4A: TITOLO IN ALTO -->
     <h1 id="titolo-principale">Gestionale Fit</h1>
 
     <!-- SCHERMATA 1: PORTALE INIZIALE -->
@@ -423,40 +437,20 @@
         </div>
     </div>
 
-    <!-- SCHERMATA 1B: NOMINATIVO TRAINER -->
+    <!-- SCHERMATA 1B: DASHBOARD TRAINER (MOSTRA SUBITO NOME ATLETA + GESTIONE STAFF SE ADMIN) -->
     <div class="card" id="schermata-login-trainer">
         <h2 id="welcome-trainer-title">Area Personal Trainer</h2>
-        <label for="nome-cliente-iniziale">Nome del Cliente / Atleta:</label>
-        <input type="text" id="nome-cliente-iniziale" placeholder="es. Mario Rossi">
-        <button class="btn-submit" onclick="vaiAlMenu()">Avanti</button>
-        <button class="btn-back" onclick="tornaAllaHome()">Indietro / Esci</button>
-    </div>
-
-    <!-- SCHERMATA 1C: ACCESSO DIRETTO ATLETA -->
-    <div class="card" id="schermata-login-atleta">
-        <h2>Area Atleta</h2>
-        <label for="nome-atleta-cerca">Inserisci il tuo Nome e Cognome:</label>
-        <input type="text" id="nome-atleta-cerca" placeholder="es. Mario Rossi">
-        <button class="btn-submit" onclick="caricaSchedaAtletaDaInput()">Apri La Mia Scheda</button>
-        <button class="btn-back" onclick="tornaAllaHome()">Indietro</button>
-    </div>
-
-    <!-- SCHERMATA 2: MENU SERVIZI E GESTIONE STAFF (ADMIN) -->
-    <div class="card" id="schermata-menu">
-        <h2 id="sottotitolo-menu">Seleziona Servizio</h2>
-        <div class="scelta-ruolo-grid">
-            <div class="ruolo-box" onclick="apriSchedaAllenamento()">
-                <h3>Scheda Allenamento</h3>
-            </div>
-            
-            <div class="ruolo-box" style="opacity: 0.5; cursor: not-allowed;" onclick="alert('La sezione Alimentazione sarà disponibile a breve!')">
-                <h3>Alimentazione</h3>
-                <span style="font-size: 0.75rem; color: var(--color-etichette);">(In arrivo)</span>
-            </div>
+        
+        <!-- SEZIONE LENTI E SCHEDE ATLETA -->
+        <div style="background-color: var(--bg-giorno-box); padding: 15px; border-radius: 10px; border: 1px solid var(--color-bordi);">
+            <h3 style="margin-top:0;">Gestione Schede Atleti</h3>
+            <label for="nome-cliente-iniziale">Inserisci Nome del Cliente / Atleta:</label>
+            <input type="text" id="nome-cliente-iniziale" placeholder="es. Mario Rossi">
+            <button class="btn-submit" onclick="vaiAlMenu()">Avanti alle Schede</button>
         </div>
 
-        <!-- SEZIONE GESTIONE STAFF (COMPARE SOLO SE SEI ADMIN) -->
-        <div id="sezione-gestione-staff" style="margin-top: 30px; border-top: 1px solid var(--color-bordi); padding-top: 20px;">
+        <!-- SEZIONE GESTIONE STAFF (IMMEDIATA SE ADMIN) -->
+        <div id="sezione-gestione-staff" style="margin-top: 25px; border-top: 1px solid var(--color-bordi); padding-top: 20px;">
             <h3 style="color: var(--btn-add-ex);">Pannello Admin: Gestione Staff</h3>
             
             <label>Aggiungi Nuovo Personal Trainer:</label>
@@ -477,6 +471,35 @@
                 </thead>
                 <tbody id="lista-staff-body"></tbody>
             </table>
+        </div>
+
+        <button class="btn-back" onclick="tornaAllaHome()">Indietro / Logout</button>
+    </div>
+
+    <!-- SCHERMATA 1C: ACCESSO DIRETTO ATLETA -->
+    <div class="card" id="schermata-login-atleta">
+        <h2>Area Atleta</h2>
+        <label for="nome-atleta-cerca">Inserisci il tuo Nome e Cognome:</label>
+        <input type="text" id="nome-atleta-cerca" placeholder="es. Mario Rossi">
+        <button class="btn-submit" onclick="caricaSchedaAtletaDaInput()">Apri La Mia Scheda</button>
+        <button class="btn-back" onclick="tornaAllaHome()">Indietro</button>
+    </div>
+
+    <!-- ==========================================================================
+       🔘 MAPPA 5: SERVIZI NEL MENU TRAINER
+       🔍 CHIAVE DI RICERCA: [MENU-SERVIZI]
+       ========================================================================== -->
+    <div class="card" id="schermata-menu">
+        <h2 id="sottotitolo-menu">Seleziona Servizio</h2>
+        <div class="scelta-ruolo-grid">
+            <div class="ruolo-box" onclick="apriSchedaAllenamento()">
+                <h3>Scheda Allenamento</h3>
+            </div>
+            
+            <div class="ruolo-box" style="opacity: 0.5; cursor: not-allowed;" onclick="alert('La sezione Alimentazione sarà disponibile a breve!')">
+                <h3>Alimentazione</h3>
+                <span style="font-size: 0.75rem; color: var(--color-etichette);">(In arrivo)</span>
+            </div>
         </div>
 
         <button class="btn-back" onclick="tornaAlLoginTrainer()">Cambia Atleta</button>
@@ -505,6 +528,7 @@
         <button class="btn-back" id="btn-esci-atleta" style="display:none;" onclick="tornaAllaHome()">Esci</button>
     </div>
 
+    <!-- 🏷️ MAPPA 4B: BRANDING IN BASSO -->
     <footer>
         Powered by <strong>GPN Tech</strong> &bull; Fitness Management Solution
     </footer>
@@ -519,20 +543,22 @@
         let datiSchedaAttuale = null;
         let nomeAtletaSalvato = "";
         let isModalitaAtleta = false;
-        let currentTrainer = null; // Memorizza il trainer loggato
+        let currentTrainer = null; // Memorizza la sessione corrente del trainer
 
         function toggleDrawer() {
             document.getElementById('side-drawer').classList.toggle('open');
             aggiornaListaStorico();
         }
 
-        // ACCESSO CON VERIFICA PIN TRAINER
+        // ==========================================================================
+        // 🔐 LOGIN TRAINER E VERIFICA PIN DALLA TABELLA TRAINERS SUPABASE
+        // ==========================================================================
         async function apriLoginTrainer() {
             if (!currentTrainer) {
                 const pinInserito = prompt("Inserisci il tuo PIN Personal Trainer:");
                 if (!pinInserito) return;
 
-                // Controllo PIN su Supabase nella tabella 'trainers'
+                // Chiamata a Supabase per verificare se il PIN esiste
                 const { data: trainer, error } = await supabaseClient
                     .from('trainers')
                     .select('*')
@@ -552,7 +578,7 @@
             document.getElementById('schermata-login-trainer').style.display = 'block';
             document.getElementById('menu-btn').style.display = 'block';
 
-            // Mostra il pannello Gestione Staff solo se il Trainer è Admin
+            // Mostra SUBITO la sezione Gestione Staff se il trainer loggato è Admin
             if (currentTrainer.is_admin) {
                 document.getElementById('sezione-gestione-staff').style.display = 'block';
                 caricaListaStaff();
@@ -569,7 +595,7 @@
 
         function tornaAllaHome() {
             isModalitaAtleta = false;
-            currentTrainer = null; // Logout
+            currentTrainer = null; // Reset sessione al logout
             const h1El = document.getElementById('titolo-principale');
             const titoloBase = h1El ? (h1El.getAttribute('data-titolo-originale') || "Gestionale Fit") : "Gestionale Fit";
             document.getElementById('titolo-principale').innerText = titoloBase;
@@ -620,7 +646,9 @@
             document.getElementById('menu-btn').style.display = 'block';
         }
 
-        // === FUNZIONI ADMIN: GESTIONE STAFF ===
+        // ==========================================================================
+        // 👑 FUNZIONI AMMINISTRATORE: GESTIONE STAFF TRAINER DALLA TABELLA SUPABASE
+        // ==========================================================================
         async function caricaListaStaff() {
             const { data: staff, error } = await supabaseClient
                 .from('trainers')
