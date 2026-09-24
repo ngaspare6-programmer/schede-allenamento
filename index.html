@@ -12,30 +12,7 @@
     <!-- LIBRERIA UFFICIALE SUPABASE (CLIENT SDK) -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <!-- 
-      ==========================================================================
-      LEGENDA MAPPA CODICE (Usa CTRL+F o CMD+F per cercare le sezioni)
-      ==========================================================================
-      [COLORI-TEMA]             -> Modifica i colori principali (sfondi, bottoni, testi)
-      [LAYOUT-SPAZI]            -> Modifica margini, distanze titolo/card, padding
-      [TENDINA-ESERCIZI]        -> Lista degli esercizi suggeriti
-      [TENDINA-MUSCOLI]         -> Lista dei gruppi muscolari suggeriti
-      
-      SCHERMATA 1: HOME         -> Selezione iniziale (Trainer / Atleta)
-      SCHERMATA 2: ACCESSO      -> Form di Login Trainer (Nome e PIN)
-      SCHERMATA 3: ADMIN        -> Pannello Amministratore (Gestione Staff)
-      SCHERMATA 4: DASHBOARD    -> Inserimento Nome Atleta per la Scheda
-      SCHERMATA 5: ATLETA       -> Ricerca Scheda per l'Atleta (Nome e PIN)
-      SCHERMATA 6: SERVIZI      -> Scelta Servizio (Scheda / Alimentazione)
-      SCHERMATA 7: FORM         -> Form di Creazione Scheda Allenamento + PIN
-      SCHERMATA 8: FINALE       -> Vista Scheda Finale e Condivisione
-      ==========================================================================
-    -->
-
     <style>
-        /* ==========================================================================
-            MAPPA COLORI E TEMA GRAFICO - [COLORI-TEMA]
-           ========================================================================== */
         :root {
             --bg-pagina: #0f172a;        
             --bg-card: #1e293b;          
@@ -63,9 +40,6 @@
             --tag-muscolo-text: #38bdf8; 
         }
 
-        /* ==========================================================================
-            MAPPA 1B: ALTEZZE, SPAZIATURE E DIMENSIONI SCHERMATA - [LAYOUT-SPAZI]
-           ========================================================================== */
         body {
             font-family: 'Inter', system-ui, -apple-system, sans-serif;
             background-color: var(--bg-pagina);
@@ -79,7 +53,6 @@
             box-sizing: border-box;
         }
 
-        /* RIMUOVE IL BADGE / DRAWER IN BASSO A DESTRA DI NETLIFY */
         netlify-drawer,
         #netlify-drawer-root,
         [data-netlify-deploy-id],
@@ -241,7 +214,6 @@
 
         #side-drawer.open { left: 0; }
 
-        /* STILE SCHEDA ACCORDION ATLETA NEL MENU LATERALE */
         .atleta-accordion-item {
             background-color: var(--bg-giorno-box);
             border: 1px solid var(--color-bordi);
@@ -418,7 +390,6 @@
 
         footer strong { color: var(--btn-add-ex); }
 
-        /* NASCONDE TUTTE LE SCHERMATE ALL'AVVIO */
         #schermata-login-form-trainer,
         #schermata-admin-panel,
         #schermata-login-trainer,
@@ -430,7 +401,6 @@
 </head>
 <body>
 
-    <!-- CHIAVE DI RICERCA: [TENDINA-ESERCIZI] -->
     <datalist id="lista-esercizi-suggeriti">
         <option value="Panca Piana Bilanciere"></option>
         <option value="Panca Inclinata Manubri"></option>
@@ -452,7 +422,6 @@
         <option value="Pushdown Cavo Alto"></option>
     </datalist>
 
-    <!-- CHIAVE DI RICERCA: [TENDINA-MUSCOLI] -->
     <datalist id="lista-muscoli-suggeriti">
         <option value="Petto"></option>
         <option value="Dorso"></option>
@@ -474,9 +443,6 @@
 
     <h1 id="titolo-principale">Gestionale Fit</h1>
 
-    <!-- ========================================================================== -->
-    <!-- SCHERMATA 1: PORTALE HOME PRINCIPALE                                    -->
-    <!-- ========================================================================== -->
     <div class="card" id="schermata-scelta">
         <h2>Benvenuto</h2>
         <p style="text-align: center; color: var(--color-etichette);">Seleziona la modalità di accesso:</p>
@@ -491,9 +457,6 @@
         </div>
     </div>
 
-    <!-- ========================================================================== -->
-    <!-- SCHERMATA 2: FORM ACCESSO LOGIN TRAINER                                 -->
-    <!-- ========================================================================== -->
     <div class="card" id="schermata-login-form-trainer">
         <h2>Inserisci le tue credenziali di accesso</h2>
         <p style="text-align: center; color: var(--color-etichette);"> </p>
@@ -510,9 +473,6 @@
         <button class="btn-back" onclick="tornaAllaHome()">Indietro</button>
     </div>
 
-    <!-- ========================================================================== -->
-    <!-- SCHERMATA 3: PANNELLO ADMIN MASTER (Gestione Staff)                     -->
-    <!-- ========================================================================== -->
     <div class="card" id="schermata-admin-panel">
         <h2 style="color: var(--btn-add-ex);">Pannello Amministratore</h2>
         <p style="text-align: center; color: var(--color-etichette);">Gestione autorizzazioni e Staff Personal Trainer</p>
@@ -544,9 +504,6 @@
         <button class="btn-back" onclick="tornaAllaHome()">Logout Admin</button>
     </div>
 
-    <!-- ========================================================================== -->
-    <!-- SCHERMATA 4: DASHBOARD OPERATIVA TRAINER (Inserimento Nome Atleta)        -->
-    <!-- ========================================================================== -->
     <div class="card" id="schermata-login-trainer">
         <h2 id="welcome-trainer-title">Area Personal Trainer</h2>
         
@@ -567,9 +524,6 @@
         <button class="btn-back" onclick="tornaAllaHome()">Indietro / Logout</button>
     </div>
 
-    <!-- ========================================================================== -->
-    <!-- SCHERMATA 5: AREA ATLETA (Ricerca Scheda con PIN)                       -->
-    <!-- ========================================================================== -->
     <div class="card" id="schermata-login-atleta">
         <h2>Area Atleta</h2>
         <p style="text-align: center; color: var(--color-etichette);">Inserisci il tuo nome e il PIN fornito dal tuo Trainer</p>
@@ -586,9 +540,6 @@
         <button class="btn-back" onclick="tornaAllaHome()">Indietro</button>
     </div>
 
-    <!-- ========================================================================== -->
-    <!-- SCHERMATA 6: SELEZIONE SERVIZI MENU TRAINER                            -->
-    <!-- ========================================================================== -->
     <div class="card" id="schermata-menu">
         <h2 id="sottotitolo-menu">Seleziona Servizio</h2>
         <div class="scelta-ruolo-grid">
@@ -605,9 +556,6 @@
         <button class="btn-back" onclick="tornaAlLoginTrainer()">Cambia Atleta</button>
     </div>
 
-    <!-- ========================================================================== -->
-    <!-- SCHERMATA 7: FORM DI CREAZIONE SCHEDA ALLENAMENTO                       -->
-    <!-- ========================================================================== -->
     <div class="card" id="form-creazione">
         <h2>Crea Scheda Allenamento</h2>
         
@@ -618,9 +566,6 @@
         <button class="btn-back" onclick="tornaAlMenu()">Torna al Menu</button>
     </div>
 
-    <!-- ========================================================================== -->
-    <!-- SCHERMATA 8: VISTA SCHEDA FINALE                                       -->
-    <!-- ========================================================================== -->
     <div class="card" id="scheda-finale">
         <div id="res-lista-giorni"></div>
 
@@ -637,7 +582,6 @@
     </footer>
 
     <script>
-        // === CONFIGURAZIONE SUPABASE CLOUD ===
         const SUPABASE_URL = 'https://zkrsyltlvrlpjsfawsmk.supabase.co';
         const SUPABASE_ANON_KEY = 'sb_publishable_5qQg44naV2ocZjWX_2HyPA_JiZx1GyI';
 
@@ -653,6 +597,7 @@
             const inputs = document.querySelectorAll('input');
             inputs.forEach(input => {
                 input.value = '';
+                input.removeAttribute('data-testo-precedente');
             });
         }
 
@@ -664,6 +609,25 @@
         function generaPinCasualeInput(inputId) {
             const pinCasuale = Math.floor(1000 + Math.random() * 9000).toString();
             document.getElementById(inputId).value = pinCasuale;
+        }
+
+        function gestisciSelezioneMuscolo(inputElement) {
+            const valoreScelto = inputElement.value.trim();
+            if (!valoreScelto) return;
+
+            let testoAttuale = inputElement.getAttribute('data-testo-precedente') || "";
+            
+            if (testoAttuale && testoAttuale !== valoreScelto && !testoAttuale.includes(valoreScelto)) {
+                inputElement.value = testoAttuale + " - " + valoreScelto;
+            } else if (!testoAttuale) {
+                inputElement.value = valoreScelto;
+            }
+            
+            inputElement.setAttribute('data-testo-precedente', inputElement.value);
+        }
+
+        function gestisciFocusMuscolo(inputElement) {
+            inputElement.setAttribute('data-testo-precedente', inputElement.value);
         }
 
         function mostraFormLoginTrainer() {
@@ -696,7 +660,6 @@
             currentTrainer = trainer;
             document.getElementById('schermata-login-form-trainer').style.display = 'none';
 
-            // Pulizia totale degli input
             azzeraTuttiInput();
             nomeAtletaSalvato = "";
             pinAtletaSalvato = "";
@@ -731,7 +694,6 @@
             const titoloBase = h1El ? (h1El.getAttribute('data-titolo-originale') || "Gestionale Fit") : "Gestionale Fit";
             document.getElementById('titolo-principale').innerText = titoloBase;
             
-            // Svuota in modo assoluto ogni campo di testo
             azzeraTuttiInput();
             
             document.getElementById('schermata-login-form-trainer').style.display = 'none';
@@ -763,7 +725,6 @@
                 return;
             }
 
-            // CONTROLLO OBBLIGATORIO: Impedisce di andare avanti se il PIN è vuoto (ma permette di scriverlo/modificarlo a mano)
             if (inputPin === "") {
                 alert("Inserisci un PIN o clicca su 'Genera PIN' prima di proseguire!");
                 return;
@@ -903,7 +864,7 @@
                 <div class="grid-2">
                     <div>
                         <label>Muscolo (opzionale):</label>
-                        <input type="text" class="ex-muscolo" list="lista-muscoli-suggeriti" placeholder="es. Spalle" onfocus="this.value=''" onchange="this.blur()">
+                        <input type="text" class="ex-muscolo" list="lista-muscoli-suggeriti" placeholder="es. Spalle" onfocus="gestisciFocusMuscolo(this)" onchange="gestisciSelezioneMuscolo(this); this.blur();">
                     </div>
                     <div>
                         <label>Serie x Reps:</label>
@@ -945,7 +906,7 @@
                 </select>
 
                 <label>Muscoli Coinvolti:</label>
-                <input type="text" class="muscoli-input" list="lista-muscoli-suggeriti" placeholder="es. Petto e Bicipiti" onfocus="this.value=''" onchange="this.blur()">
+                <input type="text" class="muscoli-input" list="lista-muscoli-suggeriti" placeholder="es. Petto e Bicipiti" onfocus="gestisciFocusMuscolo(this)" onchange="gestisciSelezioneMuscolo(this); this.blur();">
 
                 <h3 style="margin-top: 20px;">Esercizi</h3>
                 <div class="lista-esercizi-giorno">
@@ -956,7 +917,7 @@
                         <div class="grid-2">
                             <div>
                                 <label>Muscolo (opzionale):</label>
-                                <input type="text" class="ex-muscolo" list="lista-muscoli-suggeriti" placeholder="es. Petto" onfocus="this.value=''" onchange="this.blur()">
+                                <input type="text" class="ex-muscolo" list="lista-muscoli-suggeriti" placeholder="es. Petto" onfocus="gestisciFocusMuscolo(this)" onchange="gestisciSelezioneMuscolo(this); this.blur();">
                             </div>
                             <div>
                                 <label>Serie x Reps:</label>
@@ -1185,7 +1146,6 @@
             }
         }
 
-        /* TENDINA ACCORDION PER IL MENU LATERALE STORICO ATLETI */
         function toggleAccordionAtleta(element) {
             const item = element.parentElement;
             item.classList.toggle('active');
@@ -1255,7 +1215,7 @@
                             <div class="grid-2">
                                 <div>
                                     <label>Muscolo (opzionale):</label>
-                                    <input type="text" class="ex-muscolo" list="lista-muscoli-suggeriti" value="${ex.muscolo || ''}" onfocus="this.value=''" onchange="this.blur()">
+                                    <input type="text" class="ex-muscolo" list="lista-muscoli-suggeriti" value="${ex.muscolo || ''}" onfocus="gestisciFocusMuscolo(this)" onchange="gestisciSelezioneMuscolo(this); this.blur();">
                                 </div>
                                 <div>
                                     <label>Serie x Reps:</label>
@@ -1290,7 +1250,7 @@
                     </select>
 
                     <label>Muscoli Coinvolti:</label>
-                    <input type="text" class="muscoli-input" list="lista-muscoli-suggeriti" value="${giornoData.muscoli}" onfocus="this.value=''" onchange="this.blur()">
+                    <input type="text" class="muscoli-input" list="lista-muscoli-suggeriti" value="${giornoData.muscoli}" onfocus="gestisciFocusMuscolo(this)" onchange="gestisciSelezioneMuscolo(this); this.blur();">
 
                     <h3 style="margin-top: 20px;">Esercizi</h3>
                     <div class="lista-esercizi-giorno">${eserciziHtml}</div>
@@ -1380,7 +1340,6 @@
             }
         };
 
-        // Pulizia ad ogni uscita o cambio pagina
         window.addEventListener('pagehide', azzeraTuttiInput);
 
         const observer = new MutationObserver(() => {
