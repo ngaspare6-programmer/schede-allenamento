@@ -414,8 +414,8 @@
     <button id="menu-btn" onclick="toggleDrawer()">MENU</button>
 
     <div id="side-drawer">
-        <h2 style="margin-top: 40px;">Storico Atleti</h2>
-        <p style="font-size: 0.85rem; color: var(--color-etichette);">Seleziona un atleta per caricare la sua scheda:</p>
+        <h2 style="margin-top: 40px;">Miei Atleti</h2>
+        <p style="font-size: 0.85rem; color: var(--color-etichette);">Seleziona un tuo atleta per caricare la sua scheda:</p>
         <div id="lista-storico-atleti"></div>
     </div>
 
@@ -626,7 +626,7 @@
                 alert("Per favore inserisci il nome del cliente!");
                 return;
             }
-            
+
             if (nomeAtletaSalvato.toLowerCase() !== inputNome.trim().toLowerCase()) {
                 resetFormAllenamento();
             }
@@ -993,16 +993,31 @@
             document.getElementById('scheda-finale').style.display = 'none';
         }
 
+        // ==========================================================================
+        // 🏋️ SALVATAGGIO ISOLATO PER SINGOLO TRAINER
+        // ==========================================================================
         async function salvaInStorico(scheda) {
             try {
+                if (!currentTrainer) {
+                    alert("Errore: nessuna sessione trainer attiva.");
+                    return;
+                }
+
+                // Elimina eventuali vecchie schede dello stesso cliente CREATE DA QUESTO SPECIFICO TRAINER
                 await supabaseClient
                     .from('schede')
                     .delete()
+                    .eq('trainer_id', currentTrainer.id)
                     .ilike('cliente', scheda.cliente);
 
+                // Inserisce la nuova scheda associando l'ID del trainer corrente
                 const { error } = await supabaseClient
                     .from('schede')
-                    .insert([{ cliente: scheda.cliente, dati_scheda: scheda }]);
+                    .insert([{ 
+                        cliente: scheda.cliente, 
+                        dati_scheda: scheda,
+                        trainer_id: currentTrainer.id 
+                    }]);
 
                 if (error) {
                     console.error("Errore salvataggio Supabase:", error);
@@ -1013,17 +1028,27 @@
             }
         }
 
+        // ==========================================================================
+        // 📜 CARICAMENTO STORICO FILTRATO PER TRAINER LOGGATO
+        // ==========================================================================
         async function aggiornaListaStorico() {
             const container = document.getElementById('lista-storico-atleti');
             container.innerHTML = "<p style='color: var(--color-etichette);'>Caricamento dal Cloud...</p>";
 
+            if (!currentTrainer) {
+                container.innerHTML = "<p style='color: var(--color-etichette);'>Effettua il login come Trainer.</p>";
+                return;
+            }
+
+            // Carica solo le schede il cui trainer_id corrisponde a chi è attualmente loggato
             const { data: storico, error } = await supabaseClient
                 .from('schede')
                 .select('*')
+                .eq('trainer_id', currentTrainer.id)
                 .order('created_at', { ascending: false });
 
             if (error || !storico || storico.length === 0) {
-                container.innerHTML = "<p style='color: var(--color-etichette);'>Nessun atleta salvato nel Cloud.</p>";
+                container.innerHTML = "<p style='color: var(--color-etichette);'>Nessun atleta presente nel tuo storico.</p>";
                 return;
             }
 
@@ -1134,7 +1159,7 @@
             const { error } = await supabaseClient
                 .from('schede')
                 .delete()
-                .eq('idRecord', idRecord);
+                .eq('id', idRecord);
 
             if (error) {
                 alert("Errore durante l'eliminazione dal Cloud.");
