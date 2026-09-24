@@ -14,7 +14,7 @@
 
     <!-- 
       ==========================================================================
-      📖 LEGENDA MAPPA CODICE (Usa CTRL+F o CMD+F per cercare le sezioni)
+      LEGENDA MAPPA CODICE (Usa CTRL+F o CMD+F per cercare le sezioni)
       ==========================================================================
       [COLORI-TEMA]             -> Modifica i colori principali (sfondi, bottoni, testi)
       [LAYOUT-SPAZI]            -> Modifica margini, distanze titolo/card, padding
@@ -79,7 +79,7 @@
             box-sizing: border-box;
         }
 
-        /* 🚫 RIMUOVE IL BADGE / DRAWER IN BASSO A DESTRA DI NETLIFY */
+        /* RIMUOVE IL BADGE / DRAWER IN BASSO A DESTRA DI NETLIFY */
         netlify-drawer,
         #netlify-drawer-root,
         [data-netlify-deploy-id],
@@ -430,7 +430,7 @@
 </head>
 <body>
 
-    <!--  CHIAVE DI RICERCA: [TENDINA-ESERCIZI] -->
+    <!-- CHIAVE DI RICERCA: [TENDINA-ESERCIZI] -->
     <datalist id="lista-esercizi-suggeriti">
         <option value="Panca Piana Bilanciere"></option>
         <option value="Panca Inclinata Manubri"></option>
@@ -452,7 +452,7 @@
         <option value="Pushdown Cavo Alto"></option>
     </datalist>
 
-    <!--  CHIAVE DI RICERCA: [TENDINA-MUSCOLI] -->
+    <!-- CHIAVE DI RICERCA: [TENDINA-MUSCOLI] -->
     <datalist id="lista-muscoli-suggeriti">
         <option value="Petto"></option>
         <option value="Dorso"></option>
@@ -475,7 +475,7 @@
     <h1 id="titolo-principale">Gestionale Fit</h1>
 
     <!-- ========================================================================== -->
-    <!--  SCHERMATA 1: PORTALE HOME PRINCIPALE                                    -->
+    <!-- SCHERMATA 1: PORTALE HOME PRINCIPALE                                    -->
     <!-- ========================================================================== -->
     <div class="card" id="schermata-scelta">
         <h2>Benvenuto</h2>
@@ -492,7 +492,7 @@
     </div>
 
     <!-- ========================================================================== -->
-    <!--  SCHERMATA 2: FORM ACCESSO LOGIN TRAINER                                 -->
+    <!-- SCHERMATA 2: FORM ACCESSO LOGIN TRAINER                                 -->
     <!-- ========================================================================== -->
     <div class="card" id="schermata-login-form-trainer">
         <h2>Accredito Staff / Trainer</h2>
@@ -500,10 +500,10 @@
         
         <form onsubmit="event.preventDefault(); eseguiLoginTrainer();">
             <label for="login-trainer-nome">Nome Personal Trainer:</label>
-            <input type="text" id="login-trainer-nome" placeholder="es. Gaspare Napoli" required>
+            <input type="text" id="login-trainer-nome" placeholder="es. Gaspare Napoli" autocomplete="off" required>
 
             <label for="login-trainer-pin">PIN di Sicurezza:</label>
-            <input type="password" inputmode="numeric" id="login-trainer-pin" placeholder="••••" maxlength="6" required>
+            <input type="password" inputmode="numeric" id="login-trainer-pin" placeholder="••••" maxlength="6" autocomplete="off" required>
 
             <button type="submit" class="btn-submit">Accedi al Gestionale</button>
         </form>
@@ -511,7 +511,7 @@
     </div>
 
     <!-- ========================================================================== -->
-    <!--  SCHERMATA 3: PANNELLO ADMIN MASTER (Gestione Staff)                     -->
+    <!-- SCHERMATA 3: PANNELLO ADMIN MASTER (Gestione Staff)                     -->
     <!-- ========================================================================== -->
     <div class="card" id="schermata-admin-panel">
         <h2 style="color: var(--btn-add-ex);">Pannello Amministratore</h2>
@@ -520,11 +520,11 @@
         <div style="background-color: var(--bg-giorno-box); padding: 15px; border-radius: 10px; border: 1px solid var(--color-bordi); margin-top: 15px;">
             <h3>Aggiungi Nuovo Personal Trainer</h3>
             <label>Nome e Cognome Trainer:</label>
-            <input type="text" id="new-trainer-nome" placeholder="es. Marco Rossi">
+            <input type="text" id="new-trainer-nome" placeholder="es. Marco Rossi" autocomplete="off">
             <label>PIN Assegnato (4 cifre):</label>
             <div style="display: flex; gap: 8px;">
-                <input type="text" id="new-trainer-pin" placeholder="es. 1234" maxlength="6">
-                <button type="button" class="btn-add" style="width: auto; padding: 0 15px; margin-top: 6px; white-space: nowrap;" onclick="generaPinCasualeInput('new-trainer-pin')">⚡ Genera</button>
+                <input type="text" id="new-trainer-pin" placeholder="es. 1234" maxlength="6" autocomplete="off">
+                <button type="button" class="btn-add" style="width: auto; padding: 0 15px; margin-top: 6px; white-space: nowrap;" onclick="generaPinCasualeInput('new-trainer-pin')">Genera PIN</button>
             </div>
             <button class="btn-add" onclick="aggiungiNuovoTrainer()">+ Aggiungi Trainer</button>
         </div>
@@ -545,7 +545,7 @@
     </div>
 
     <!-- ========================================================================== -->
-    <!--  SCHERMATA 4: DASHBOARD OPERATIVA TRAINER (Inserimento Nome Atleta)        -->
+    <!-- SCHERMATA 4: DASHBOARD OPERATIVA TRAINER (Inserimento Nome Atleta)        -->
     <!-- ========================================================================== -->
     <div class="card" id="schermata-login-trainer">
         <h2 id="welcome-trainer-title">Area Personal Trainer</h2>
@@ -553,12 +553,12 @@
         <div style="background-color: var(--bg-giorno-box); padding: 15px; border-radius: 10px; border: 1px solid var(--color-bordi);">
             <h3 style="margin-top:0;">Gestione Schede Atleti</h3>
             <label for="nome-cliente-iniziale">Inserisci Nome del Cliente / Atleta:</label>
-            <input type="text" id="nome-cliente-iniziale" placeholder="es. Mario Rossi">
+            <input type="text" id="nome-cliente-iniziale" placeholder="es. Mario Rossi" autocomplete="off">
 
             <label for="pin-cliente-iniziale">PIN Assegnato all'Atleta (4 cifre):</label>
             <div style="display: flex; gap: 8px;">
-                <input type="text" id="pin-cliente-iniziale" placeholder="es. 1234" maxlength="6">
-                <button type="button" class="btn-add" style="width: auto; padding: 0 15px; margin-top: 6px; white-space: nowrap;" onclick="generaPinCasualeInput('pin-cliente-iniziale')">⚡ Genera</button>
+                <input type="text" id="pin-cliente-iniziale" placeholder="es. 1234" maxlength="6" autocomplete="off">
+                <button type="button" class="btn-add" style="width: auto; padding: 0 15px; margin-top: 6px; white-space: nowrap;" onclick="generaPinCasualeInput('pin-cliente-iniziale')">Genera PIN</button>
             </div>
 
             <button class="btn-submit" onclick="vaiAlMenu()">Avanti alle Schede</button>
@@ -568,7 +568,7 @@
     </div>
 
     <!-- ========================================================================== -->
-    <!--  SCHERMATA 5: AREA ATLETA (Ricerca Scheda con PIN)                       -->
+    <!-- SCHERMATA 5: AREA ATLETA (Ricerca Scheda con PIN)                       -->
     <!-- ========================================================================== -->
     <div class="card" id="schermata-login-atleta">
         <h2>Area Atleta</h2>
@@ -576,10 +576,10 @@
         
         <form onsubmit="event.preventDefault(); caricaSchedaAtletaDaInput();">
             <label for="nome-atleta-cerca">Inserisci il tuo Nome e Cognome:</label>
-            <input type="text" id="nome-atleta-cerca" placeholder="es. Mario Rossi" required>
+            <input type="text" id="nome-atleta-cerca" placeholder="es. Mario Rossi" autocomplete="off" required>
 
             <label for="pin-atleta-cerca">Inserisci il tuo PIN:</label>
-            <input type="password" inputmode="numeric" id="pin-atleta-cerca" placeholder="••••" maxlength="6" required>
+            <input type="password" inputmode="numeric" id="pin-atleta-cerca" placeholder="••••" maxlength="6" autocomplete="off" required>
 
             <button type="submit" class="btn-submit">Apri La Mia Scheda</button>
         </form>
@@ -587,7 +587,7 @@
     </div>
 
     <!-- ========================================================================== -->
-    <!--  SCHERMATA 6: SELEZIONE SERVIZI MENU TRAINER                            -->
+    <!-- SCHERMATA 6: SELEZIONE SERVIZI MENU TRAINER                            -->
     <!-- ========================================================================== -->
     <div class="card" id="schermata-menu">
         <h2 id="sottotitolo-menu">Seleziona Servizio</h2>
@@ -606,7 +606,7 @@
     </div>
 
     <!-- ========================================================================== -->
-    <!--  SCHERMATA 7: FORM DI CREAZIONE SCHEDA ALLENAMENTO                       -->
+    <!-- SCHERMATA 7: FORM DI CREAZIONE SCHEDA ALLENAMENTO                       -->
     <!-- ========================================================================== -->
     <div class="card" id="form-creazione">
         <h2>Crea Scheda Allenamento</h2>
@@ -619,7 +619,7 @@
     </div>
 
     <!-- ========================================================================== -->
-    <!--  SCHERMATA 8: VISTA SCHEDA FINALE                                       -->
+    <!-- SCHERMATA 8: VISTA SCHEDA FINALE                                       -->
     <!-- ========================================================================== -->
     <div class="card" id="scheda-finale">
         <div id="res-lista-giorni"></div>
@@ -688,8 +688,13 @@
             currentTrainer = trainer;
             document.getElementById('schermata-login-form-trainer').style.display = 'none';
 
+            // Pulizia e reset totale per un'interfaccia pulita
             document.getElementById('login-trainer-nome').value = '';
             document.getElementById('login-trainer-pin').value = '';
+            document.getElementById('nome-cliente-iniziale').value = '';
+            document.getElementById('pin-cliente-iniziale').value = '';
+            nomeAtletaSalvato = "";
+            pinAtletaSalvato = "";
 
             if (currentTrainer.is_admin) {
                 document.getElementById('schermata-admin-panel').style.display = 'block';
@@ -711,12 +716,22 @@
         function tornaAllaHome() {
             isModalitaAtleta = false;
             currentTrainer = null;
+            nomeAtletaSalvato = "";
+            pinAtletaSalvato = "";
 
             document.getElementById('side-drawer').classList.remove('open');
 
             const h1El = document.getElementById('titolo-principale');
             const titoloBase = h1El ? (h1El.getAttribute('data-titolo-originale') || "Gestionale Fit") : "Gestionale Fit";
             document.getElementById('titolo-principale').innerText = titoloBase;
+            
+            // Reset di tutti gli input di testo
+            document.getElementById('login-trainer-nome').value = '';
+            document.getElementById('login-trainer-pin').value = '';
+            document.getElementById('nome-cliente-iniziale').value = '';
+            document.getElementById('pin-cliente-iniziale').value = '';
+            document.getElementById('nome-atleta-cerca').value = '';
+            document.getElementById('pin-atleta-cerca').value = '';
             
             document.getElementById('schermata-login-form-trainer').style.display = 'none';
             document.getElementById('schermata-admin-panel').style.display = 'none';
@@ -1200,16 +1215,16 @@
                 html += `
                     <div class="atleta-accordion-item">
                         <div class="atleta-accordion-header" onclick="toggleAccordionAtleta(this)">
-                            <span>👤 ${item.cliente}</span>
+                            <span>${item.cliente}</span>
                             <span style="font-size: 0.8rem;">▼</span>
                         </div>
                         <div class="atleta-accordion-body">
-                            <div><span class="pin-badge">🔑 PIN Atleta: ${pinMostrato}</span></div>
+                            <div><span class="pin-badge">PIN Atleta: ${pinMostrato}</span></div>
                             <div class="atleta-actions-grid">
-                                <button class="btn-submit" onclick="caricaAtletaDaStorico(${index})">📋 Scheda</button>
-                                <button class="btn-share" onclick="alert('Nutrizione per ${item.cliente} in arrivo!')">🥗 Nutrizione</button>
+                                <button class="btn-submit" onclick="caricaAtletaDaStorico(${index})">Scheda</button>
+                                <button class="btn-share" onclick="alert('Nutrizione per ${item.cliente} in arrivo!')">Nutrizione</button>
                             </div>
-                            <button class="btn-back" style="width: 100%; margin-top: 8px; padding: 6px; font-size: 0.8rem;" onclick="eliminaDaStorico('${item.id}', ${index})">🗑️ Elimina Atleta</button>
+                            <button class="btn-back" style="width: 100%; margin-top: 8px; padding: 6px; font-size: 0.8rem;" onclick="eliminaDaStorico('${item.id}', ${index})">Elimina Atleta</button>
                         </div>
                     </div>
                 `;
