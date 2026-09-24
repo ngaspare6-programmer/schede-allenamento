@@ -600,6 +600,10 @@
         function tornaAllaHome() {
             isModalitaAtleta = false;
             currentTrainer = null;
+
+            // CHIUSURA FORZATA DEL MENU LATERALE QUANDO SI TORNA IN HOME
+            document.getElementById('side-drawer').classList.remove('open');
+            
             const h1El = document.getElementById('titolo-principale');
             const titoloBase = h1El ? (h1El.getAttribute('data-titolo-originale') || "Gestionale Fit") : "Gestionale Fit";
             document.getElementById('titolo-principale').innerText = titoloBase;
