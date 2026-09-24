@@ -467,16 +467,20 @@
     <!--  SCHERMATA 2: FORM ACCESSO LOGIN TRAINER                                 -->
     <!-- ========================================================================== -->
     <div class="card" id="schermata-login-form-trainer">
-        <h2>Accredito Staff / Trainer</h2>
-        <p style="text-align: center; color: var(--color-etichette);">Inserisci le tue credenziali di accesso</p>
+        <h2>Inserisci le tue credenziali di accesso</h2>
+        <p style="text-align: center; color: var(--color-etichette);"> </p>
         
+    <form onsubmit="event.preventDefault(); eseguiLoginTrainer();">
+
         <label for="login-trainer-nome">Nome Personal Trainer:</label>
-        <input type="text" id="login-trainer-nome" placeholder="es. Gaspare Napoli">
+        <input type="text" id="login-trainer-nome" placeholder=" ">
 
         <label for="login-trainer-pin">PIN di Sicurezza:</label>
         <input type="password" id="login-trainer-pin" placeholder="••••" maxlength="6">
 
         <button class="btn-submit" onclick="eseguiLoginTrainer()">Accedi al Gestionale</button>
+    </form>
+
         <button class="btn-back" onclick="tornaAllaHome()">Indietro</button>
     </div>
 
