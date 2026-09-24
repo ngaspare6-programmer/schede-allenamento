@@ -66,6 +66,17 @@
         /* ==========================================================================
             MAPPA 1B: ALTEZZE, SPAZIATURE E DIMENSIONI SCHERMATA - [LAYOUT-SPAZI]
            ========================================================================== */
+
+        /* 🚫 RIMUOOVE IL BADGE / DRAWER IN BASSO A DESTRA DI NETLIFY */
+        netlify-drawer,
+        #netlify-drawer-root,
+        [data-netlify-deploy-id],
+        iframe[src*="netlify"],
+        .netlify-badge {
+        display: none !important;
+        visibility: hidden !important;
+}
+
         body {
             font-family: 'Inter', system-ui, -apple-system, sans-serif;
             background-color: var(--bg-pagina);
