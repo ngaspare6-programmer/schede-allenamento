@@ -557,7 +557,7 @@
 
             <label for="pin-cliente-iniziale">PIN Assegnato all'Atleta (4 cifre):</label>
             <div style="display: flex; gap: 8px;">
-                <input type="text" id="pin-cliente-iniziale" name="no_autofill_cliente_pin" placeholder="Clicca su 'Genera PIN'" maxlength="6" autocomplete="new-password" readonly style="background-color: var(--bg-card); cursor: not-allowed;">
+                <input type="text" id="pin-cliente-iniziale" name="no_autofill_cliente_pin" placeholder="es. 1234 o genera" maxlength="6" autocomplete="new-password">
                 <button type="button" class="btn-add" style="width: auto; padding: 0 15px; margin-top: 6px; white-space: nowrap;" onclick="generaPinCasualeInput('pin-cliente-iniziale')">Genera PIN</button>
             </div>
 
@@ -763,9 +763,9 @@
                 return;
             }
 
-            // BLOCCO OBBLIGATORIO: Impedisce di andare avanti se il PIN non è stato generato
+            // CONTROLLO OBBLIGATORIO: Impedisce di andare avanti se il PIN è vuoto (ma permette di scriverlo/modificarlo a mano)
             if (inputPin === "") {
-                alert("Devi generare un PIN per l'atleta prima di proseguire!");
+                alert("Inserisci un PIN o clicca su 'Genera PIN' prima di proseguire!");
                 return;
             }
 
