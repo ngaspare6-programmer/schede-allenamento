@@ -548,24 +548,24 @@
     <!-- SCHERMATA 4: DASHBOARD OPERATIVA TRAINER (Inserimento Nome Atleta)        -->
     <!-- ========================================================================== -->
     <div class="card" id="schermata-login-trainer">
-        <h2 id="welcome-trainer-title">Area Personal Trainer</h2>
-        
-        <div style="background-color: var(--bg-giorno-box); padding: 15px; border-radius: 10px; border: 1px solid var(--color-bordi);">
-            <h3 style="margin-top:0;">Gestione Schede Atleti</h3>
-            <label for="nome-cliente-iniziale">Inserisci Nome del Cliente / Atleta:</label>
-            <input type="text" id="nome-cliente-iniziale" name="no_autofill_cliente_nome" placeholder="es. Mario Rossi" autocomplete="new-password">
+    <h2 id="welcome-trainer-title">Area Personal Trainer</h2>
+    
+    <div style="background-color: var(--bg-giorno-box); padding: 15px; border-radius: 10px; border: 1px solid var(--color-bordi);">
+        <h3 style="margin-top:0;">Gestione Schede Atleti</h3>
+        <label for="nome-cliente-iniziale">Inserisci Nome del Cliente / Atleta:</label>
+        <input type="text" id="nome-cliente-iniziale" name="no_autofill_cliente_nome" placeholder="es. Mario Rossi" autocomplete="new-password" required>
 
-            <label for="pin-cliente-iniziale">PIN Assegnato all'Atleta (4 cifre):</label>
-            <div style="display: flex; gap: 8px;">
-                <input type="text" id="pin-cliente-iniziale" name="no_autofill_cliente_pin" placeholder="es. 1234" maxlength="6" autocomplete="new-password">
-                <button type="button" class="btn-add" style="width: auto; padding: 0 15px; margin-top: 6px; white-space: nowrap;" onclick="generaPinCasualeInput('pin-cliente-iniziale')">Genera PIN</button>
-            </div>
-
-            <button class="btn-submit" onclick="vaiAlMenu()">Avanti alle Schede</button>
+        <label for="pin-cliente-iniziale">PIN Assegnato all'Atleta (4 cifre):</label>
+        <div style="display: flex; gap: 8px;">
+            <input type="text" id="pin-cliente-iniziale" name="no_autofill_cliente_pin" placeholder="Clicca su 'Genera PIN'" maxlength="6" autocomplete="new-password" readonly style="background-color: var(--bg-card); cursor: not-allowed;">
+            <button type="button" class="btn-add" style="width: auto; padding: 0 15px; margin-top: 6px; white-space: nowrap;" onclick="generaPinCasualeInput('pin-cliente-iniziale')">Genera PIN</button>
         </div>
 
-        <button class="btn-back" onclick="tornaAllaHome()">Indietro / Logout</button>
+        <button class="btn-submit" onclick="vaiAlMenu()">Avanti alle Schede</button>
     </div>
+
+    <button class="btn-back" onclick="tornaAllaHome()">Indietro / Logout</button>
+</div>
 
     <!-- ========================================================================== -->
     <!-- SCHERMATA 5: AREA ATLETA (Ricerca Scheda con PIN)                       -->
@@ -633,7 +633,7 @@
     </div>
 
     <footer>
-        Powered by <strong>GPN fhfhfhfh Lab</strong> &bull; Innovative Management Solutions
+        Powered by <strong>GPN Lab</strong> &bull; Innovative Management Solutions
     </footer>
 
     <script>
