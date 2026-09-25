@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestionale Fit</title>
     
+    <!-- Google Fonts: Inter e Poppins -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Poppins:wght@500;700&display=swap" rel="stylesheet">
@@ -429,11 +430,14 @@
             background-color: var(--btn-delete-ex);
             color: #ffffff;
             border: none;
-            padding: 3px 8px;
+            padding: 4px 10px;
             border-radius: 4px;
             font-size: 0.75rem;
             cursor: pointer;
             font-weight: 600;
+            width: auto;
+            margin: 0;
+            flex-shrink: 0;
         }
 
         .staff-table {
@@ -469,38 +473,6 @@
 </head>
 <body>
 
-    <datalist id="lista-esercizi-suggeriti">
-        <option value="Panca Piana Bilanciere"></option>
-        <option value="Panca Inclinata Manubri"></option>
-        <option value="Croci ai Cavi"></option>
-        <option value="Dip alle Parallele"></option>
-        <option value="Trazioni alla Sbarra"></option>
-        <option value="Lat Machine Avanti"></option>
-        <option value="Rematore con Bilanciere"></option>
-        <option value="Pulley Basso"></option>
-        <option value="Stacco da Terra"></option>
-        <option value="Squat con Bilanciere"></option>
-        <option value="Leg Press 45°"></option>
-        <option value="Affondi con Manubri"></option>
-        <option value="Leg Extension"></option>
-        <option value="Leg Curl da Seduto"></option>
-        <option value="Military Press Bilanciere"></option>
-        <option value="Alzate Laterali Manubri"></option>
-        <option value="Curl con Bilanciere Sagomato"></option>
-        <option value="Pushdown Cavo Alto"></option>
-    </datalist>
-
-    <datalist id="lista-muscoli-suggeriti">
-        <option value="Petto"></option>
-        <option value="Dorso"></option>
-        <option value="Gambe"></option>
-        <option value="Spalle"></option>
-        <option value="Bicipiti"></option>
-        <option value="Tricipiti"></option>
-        <option value="Addome"></option>
-        <option value="Full Body"></option>
-    </datalist>
-
     <button id="menu-btn" onclick="toggleDrawer()">MENU</button>
     <button id="logout-btn" onclick="tornaAllaHome()">LOGOUT</button>
 
@@ -530,10 +502,10 @@
         <h2>Inserisci le tue credenziali di accesso</h2>
         <form onsubmit="event.preventDefault(); eseguiLoginTrainer();" autocomplete="off">
             <label for="login-trainer-nome">Nome Personal Trainer:</label>
-            <input type="text" id="login-trainer-nome" name="no_autofill_trainer_nome" placeholder=" " autocomplete="new-password" required>
+            <input type="text" id="login-trainer-nome" name="no_autofill_trainer_nome" placeholder="es. Marco" autocomplete="off" required>
 
             <label for="login-trainer-pin">PIN di Sicurezza:</label>
-            <input type="password" inputmode="numeric" id="login-trainer-pin" name="no_autofill_trainer_pin" placeholder="••••" maxlength="6" autocomplete="new-password" required>
+            <input type="password" inputmode="numeric" id="login-trainer-pin" name="no_autofill_trainer_pin" placeholder="••••" maxlength="6" autocomplete="off" required>
 
             <button type="submit" class="btn-submit">Accedi al Gestionale</button>
         </form>
@@ -547,10 +519,10 @@
         <div style="background-color: var(--bg-giorno-box); padding: 15px; border-radius: 10px; border: 1px solid var(--color-bordi); margin-top: 15px;">
             <h3>Aggiungi Nuovo Personal Trainer</h3>
             <label>Nome e Cognome Trainer:</label>
-            <input type="text" id="new-trainer-nome" name="no_autofill_new_trainer_nome" placeholder="es. Marco Rossi" autocomplete="new-password">
+            <input type="text" id="new-trainer-nome" name="no_autofill_new_trainer_nome" placeholder="es. Marco Rossi" autocomplete="off">
             <label>PIN Assegnato (4 cifre):</label>
             <div style="display: flex; gap: 8px;">
-                <input type="text" id="new-trainer-pin" name="no_autofill_new_trainer_pin" placeholder="es. 1234" maxlength="6" autocomplete="new-password">
+                <input type="text" id="new-trainer-pin" name="no_autofill_new_trainer_pin" placeholder="es. 1234" maxlength="6" autocomplete="off">
                 <button type="button" class="btn-add" style="width: auto; padding: 0 15px; margin-top: 6px; white-space: nowrap;" onclick="generaPinCasualeInput('new-trainer-pin')">Genera PIN</button>
             </div>
             <button class="btn-add" onclick="aggiungiNuovoTrainer()">+ Aggiungi Trainer</button>
@@ -577,11 +549,11 @@
         <div style="background-color: var(--bg-giorno-box); padding: 15px; border-radius: 10px; border: 1px solid var(--color-bordi);">
             <h3 style="margin-top:0;">Gestione Schede Atleti</h3>
             <label for="nome-cliente-iniziale">Inserisci Nome del Cliente / Atleta:</label>
-            <input type="text" id="nome-cliente-iniziale" name="no_autofill_cliente_nome" placeholder="es. Mario Rossi" autocomplete="new-password" required>
+            <input type="text" id="nome-cliente-iniziale" name="no_autofill_cliente_nome" placeholder="es. Mario Rossi" autocomplete="off" required>
 
             <label for="pin-cliente-iniziale">PIN Assegnato all'Atleta (4 cifre):</label>
             <div style="display: flex; gap: 8px;">
-                <input type="text" id="pin-cliente-iniziale" name="no_autofill_cliente_pin" placeholder="es. 1234 o genera" maxlength="6" autocomplete="new-password">
+                <input type="text" id="pin-cliente-iniziale" name="no_autofill_cliente_pin" placeholder="es. 1234 o genera" maxlength="6" autocomplete="off">
                 <button type="button" class="btn-add" style="width: auto; padding: 0 15px; margin-top: 6px; white-space: nowrap;" onclick="generaPinCasualeInput('pin-cliente-iniziale')">Genera PIN</button>
             </div>
 
@@ -597,10 +569,10 @@
         
         <form onsubmit="event.preventDefault(); caricaSchedaAtletaDaInput();" autocomplete="off">
             <label for="nome-atleta-cerca">Inserisci il tuo Nome e Cognome:</label>
-            <input type="text" id="nome-atleta-cerca" name="no_autofill_cerca_atleta_nome" placeholder="es. Mario Rossi" autocomplete="new-password" required>
+            <input type="text" id="nome-atleta-cerca" name="no_autofill_cerca_atleta_nome" placeholder="es. Mario Rossi" autocomplete="off" required>
 
             <label for="pin-atleta-cerca">Inserisci il tuo PIN:</label>
-            <input type="password" inputmode="numeric" id="pin-atleta-cerca" name="no_autofill_cerca_atleta_pin" placeholder="••••" maxlength="6" autocomplete="new-password" required>
+            <input type="password" inputmode="numeric" id="pin-atleta-cerca" name="no_autofill_cerca_atleta_pin" placeholder="••••" maxlength="6" autocomplete="off" required>
 
             <button type="submit" class="btn-submit">Apri La Mia Scheda</button>
         </form>
@@ -661,6 +633,58 @@
         let currentTrainer = null;
         let storicoLogAtletaCache = [];
 
+        // Liste fisse per i menu a tendina
+        const elencoEserciziConsigliati = [
+            "Panca Piana Bilanciere",
+            "Panca Inclinata Manubri",
+            "Croci ai Cavi",
+            "Dip alle Parallele",
+            "Trazioni alla Sbarra",
+            "Lat Machine Avanti",
+            "Rematore con Bilanciere",
+            "Pulley Basso",
+            "Stacco da Terra",
+            "Squat con Bilanciere",
+            "Leg Press 45°",
+            "Affondi con Manubri",
+            "Leg Extension",
+            "Leg Curl da Seduto",
+            "Military Press Bilanciere",
+            "Alzate Laterali Manubri",
+            "Curl con Bilanciere Sagomato",
+            "Pushdown Cavo Alto"
+        ];
+
+        const elencoMuscoliConsigliati = [
+            "Petto",
+            "Dorso",
+            "Gambe",
+            "Spalle",
+            "Bicipiti",
+            "Tricipiti",
+            "Addome",
+            "Full Body"
+        ];
+
+        // Generatore di opzioni per le tendine (gestisce anche valori personalizzati salvati)
+        function generaOpzioniSelect(lista, valoreSelezionato = "") {
+            let html = `<option value="">Seleziona...</option>`;
+            let trovato = false;
+
+            lista.forEach(item => {
+                const selected = (item === valoreSelezionato) ? 'selected' : '';
+                if (selected) trovato = true;
+                html += `<option value="${item}" ${selected}>${item}</option>`;
+            });
+
+            // Se l'elemento salvato in precedenza non è nella lista standard, lo aggiunge al volo
+            if (valoreSelezionato && !trovato) {
+                html = `<option value="${valoreSelezionato}" selected>${valoreSelezionato}</option>` + html;
+            }
+
+            return html;
+        }
+
         function azzeraTuttiInput() {
             const inputs = document.querySelectorAll('input');
             inputs.forEach(input => {
@@ -682,7 +706,7 @@
             azzeraTuttiInput();
             document.getElementById('schermata-scelta').style.display = 'none';
             document.getElementById('schermata-login-form-trainer').style.display = 'block';
-            document.getElementById('logout-btn').style.display = 'none'; // Nascosto nella schermata credenziali
+            document.getElementById('logout-btn').style.display = 'none';
         }
 
         async function eseguiLoginTrainer() {
@@ -730,7 +754,7 @@
             azzeraTuttiInput();
             document.getElementById('schermata-scelta').style.display = 'none';
             document.getElementById('schermata-login-atleta').style.display = 'block';
-            document.getElementById('logout-btn').style.display = 'none'; // Nascosto nella schermata credenziali
+            document.getElementById('logout-btn').style.display = 'none';
             document.getElementById('menu-btn').style.display = 'none';
         }
 
@@ -910,7 +934,7 @@
             }
         }
 
-        function aggiungiEsercizio(btn) {
+        function aggiungiEsercizio(btn, esSelezionato = "", muscoloSelezionato = "", serieVal = "", recuperoVal = "", imgVal = "") {
             const giornoBox = btn.closest('.giorno-box');
             const container = giornoBox.querySelector('.lista-esercizi-giorno');
             
@@ -918,24 +942,28 @@
             nuovoEsercizio.className = 'esercizio-box';
             nuovoEsercizio.innerHTML = `
                 <label>Nome Esercizio:</label>
-                <input type="text" class="ex-nome" list="lista-esercizi-suggeriti" placeholder="Seleziona dalla lista o scrivi..." onfocus="this.value=''" onchange="this.blur()">
+                <select class="ex-nome">
+                    ${generaOpzioniSelect(elencoEserciziConsigliati, esSelezionato)}
+                </select>
 
                 <div class="grid-2">
                     <div>
                         <label>Muscolo (opzionale):</label>
-                        <input type="text" class="ex-muscolo" list="lista-muscoli-suggeriti" placeholder="es. Spalle" onfocus="this.value=''" onchange="this.blur()">
+                        <select class="ex-muscolo">
+                            ${generaOpzioniSelect(elencoMuscoliConsigliati, muscoloSelezionato)}
+                        </select>
                     </div>
                     <div>
                         <label>Serie x Reps:</label>
-                        <input type="text" class="ex-serie" placeholder="es. 3x12">
+                        <input type="text" class="ex-serie" placeholder="es. 3x12" value="${serieVal}">
                     </div>
                 </div>
 
                 <label>Tempo di Recupero:</label>
-                <input type="text" class="ex-recupero" placeholder="es. 60 secondi">
+                <input type="text" class="ex-recupero" placeholder="es. 60 secondi" value="${recuperoVal}">
 
                 <label>Link Foto/GIF Esercizio (opzionale):</label>
-                <input type="url" class="ex-img" placeholder="https://esempio.it/foto.gif">
+                <input type="url" class="ex-img" placeholder="https://esempio.it/foto.gif" value="${imgVal}">
 
                 <button type="button" class="btn-remove-ex" onclick="rimuoviEsercizio(this)">Elimina Esercizio</button>
                 <div style="clear: both;"></div>
@@ -943,10 +971,26 @@
             container.appendChild(nuovoEsercizio);
         }
 
-        function aggiungiGiorno() {
+        function aggiungiGiorno(giornoSelezionato = "", muscoliSelezionati = "") {
             const contenitore = document.getElementById('contenitore-giorni');
             const numeroGiorni = contenitore.querySelectorAll('.giorno-box').length + 1;
             
+            const opzioniGiorni = [
+                `Giorno ${numeroGiorni}`,
+                "Giorno 1",
+                "Giorno 2",
+                "Giorno 3",
+                "Giorno 4",
+                "Giorno 5",
+                "Richiamo / Extra"
+            ];
+
+            let htmlOpzioniGiorni = "";
+            opzioniGiorni.forEach(g => {
+                const sel = (g === giornoSelezionato) ? 'selected' : '';
+                htmlOpzioniGiorni += `<option value="${g}" ${sel}>${g}</option>`;
+            });
+
             const nuovoGiorno = document.createElement('div');
             nuovoGiorno.className = 'giorno-box';
             nuovoGiorno.innerHTML = `
@@ -955,49 +999,24 @@
                     <button type="button" class="btn-remove-ex" style="float: none; margin: 0; padding: 6px 12px;" onclick="rimuoviGiorno(this)">Elimina Giorno</button>
                 </div>
                 <select class="giorno-select" style="margin-top: 8px;">
-                    <option value="Giorno ${numeroGiorni}">Giorno ${numeroGiorni}</option>
-                    <option value="Giorno 1">Giorno 1</option>
-                    <option value="Giorno 2">Giorno 2</option>
-                    <option value="Giorno 3">Giorno 3</option>
-                    <option value="Giorno 4">Giorno 4</option>
-                    <option value="Giorno 5">Giorno 5</option>
-                    <option value="Richiamo / Extra">Richiamo / Extra</option>
+                    ${htmlOpzioniGiorni}
                 </select>
 
                 <label>Muscoli Coinvolti:</label>
-                <input type="text" class="muscoli-input" list="lista-muscoli-suggeriti" placeholder="es. Petto e Bicipiti" onfocus="this.value=''" onchange="this.blur()">
+                <select class="muscoli-input">
+                    ${generaOpzioniSelect(elencoMuscoliConsigliati, muscoliSelezionati)}
+                </select>
 
                 <h3 style="margin-top: 20px;">Esercizi</h3>
-                <div class="lista-esercizi-giorno">
-                    <div class="esercizio-box">
-                        <label>Nome Esercizio:</label>
-                        <input type="text" class="ex-nome" list="lista-esercizi-suggeriti" placeholder="Seleziona dalla lista o scrivi..." onfocus="this.value=''" onchange="this.blur()">
-
-                        <div class="grid-2">
-                            <div>
-                                <label>Muscolo (opzionale):</label>
-                                <input type="text" class="ex-muscolo" list="lista-muscoli-suggeriti" placeholder="es. Petto" onfocus="this.value=''" onchange="this.blur()">
-                            </div>
-                            <div>
-                                <label>Serie x Reps:</label>
-                                <input type="text" class="ex-serie" placeholder="es. 4x8">
-                            </div>
-                        </div>
-
-                        <label>Tempo di Recupero:</label>
-                        <input type="text" class="ex-recupero" placeholder="es. 2 minuti">
-
-                        <label>Link Foto/GIF Esercizio (opzionale):</label>
-                        <input type="url" class="ex-img" placeholder="https://esempio.it/foto.gif">
-
-                        <button type="button" class="btn-remove-ex" onclick="rimuoviEsercizio(this)">Elimina Esercizio</button>
-                        <div style="clear: both;"></div>
-                    </div>
-                </div>
+                <div class="lista-esercizi-giorno"></div>
 
                 <button class="btn-add" onclick="aggiungiEsercizio(this)">+ Aggiungi un altro esercizio</button>
             `;
             contenitore.appendChild(nuovoGiorno);
+
+            if (!giornoSelezionato) {
+                aggiungiEsercizio(nuovoGiorno.querySelector('.btn-add'));
+            }
         }
 
         async function generaSchedaFinale() {
@@ -1402,34 +1421,14 @@
                 const nuovoGiorno = document.createElement('div');
                 nuovoGiorno.className = 'giorno-box';
                 
-                let eserciziHtml = '';
-                giornoData.esercizi.forEach((ex) => {
-                    eserciziHtml += `
-                        <div class="esercizio-box">
-                            <label>Nome Esercizio:</label>
-                            <input type="text" class="ex-nome" list="lista-esercizi-suggeriti" value="${ex.nome}" onfocus="this.value=''" onchange="this.blur()">
+                const opzioniGiorni = [
+                    "Giorno 1", "Giorno 2", "Giorno 3", "Giorno 4", "Giorno 5", "Richiamo / Extra"
+                ];
 
-                            <div class="grid-2">
-                                <div>
-                                    <label>Muscolo (opzionale):</label>
-                                    <input type="text" class="ex-muscolo" list="lista-muscoli-suggeriti" value="${ex.muscolo || ''}" onfocus="this.value=''" onchange="this.blur()">
-                                </div>
-                                <div>
-                                    <label>Serie x Reps:</label>
-                                    <input type="text" class="ex-serie" value="${ex.serie}">
-                                </div>
-                            </div>
-
-                            <label>Tempo di Recupero:</label>
-                            <input type="text" class="ex-recupero" value="${ex.recupero}">
-
-                            <label>Link Foto/GIF Esercizio (opzionale):</label>
-                            <input type="url" class="ex-img" value="${ex.immagine || ''}">
-
-                            <button type="button" class="btn-remove-ex" onclick="rimuoviEsercizio(this)">Elimina Esercizio</button>
-                            <div style="clear: both;"></div>
-                        </div>
-                    `;
+                let htmlOpzioniGiorni = "";
+                opzioniGiorni.forEach(g => {
+                    const sel = (g === giornoData.nome) ? 'selected' : '';
+                    htmlOpzioniGiorni += `<option value="${g}" ${sel}>${g}</option>`;
                 });
 
                 nuovoGiorno.innerHTML = `
@@ -1438,23 +1437,25 @@
                         <button type="button" class="btn-remove-ex" style="float: none; margin: 0; padding: 6px 12px;" onclick="rimuoviGiorno(this)">Elimina Giorno</button>
                     </div>
                     <select class="giorno-select" style="margin-top: 8px;">
-                        <option value="Giorno 1" ${giornoData.nome === 'Giorno 1' ? 'selected' : ''}>Giorno 1</option>
-                        <option value="Giorno 2" ${giornoData.nome === 'Giorno 2' ? 'selected' : ''}>Giorno 2</option>
-                        <option value="Giorno 3" ${giornoData.nome === 'Giorno 3' ? 'selected' : ''}>Giorno 3</option>
-                        <option value="Giorno 4" ${giornoData.nome === 'Giorno 4' ? 'selected' : ''}>Giorno 4</option>
-                        <option value="Giorno 5" ${giornoData.nome === 'Giorno 5' ? 'selected' : ''}>Giorno 5</option>
-                        <option value="Richiamo / Extra" ${giornoData.nome === 'Richiamo / Extra' ? 'selected' : ''}>Richiamo / Extra</option>
+                        ${htmlOpzioniGiorni}
                     </select>
 
                     <label>Muscoli Coinvolti:</label>
-                    <input type="text" class="muscoli-input" list="lista-muscoli-suggeriti" value="${giornoData.muscoli}" onfocus="this.value=''" onchange="this.blur()">
+                    <select class="muscoli-input">
+                        ${generaOpzioniSelect(elencoMuscoliConsigliati, giornoData.muscoli)}
+                    </select>
 
                     <h3 style="margin-top: 20px;">Esercizi</h3>
-                    <div class="lista-esercizi-giorno">${eserciziHtml}</div>
+                    <div class="lista-esercizi-giorno"></div>
 
                     <button class="btn-add" onclick="aggiungiEsercizio(this)">+ Aggiungi un altro esercizio</button>
                 `;
                 contenitore.appendChild(nuovoGiorno);
+
+                const containerEsercizi = nuovoGiorno.querySelector('.lista-esercizi-giorno');
+                giornoData.esercizi.forEach((ex) => {
+                    aggiungiEsercizio(nuovoGiorno.querySelector('.btn-add'), ex.nome, ex.muscolo, ex.serie, ex.recupero, ex.immagine);
+                });
             });
         }
 
