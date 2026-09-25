@@ -24,7 +24,7 @@
             --bg-card: #1e293b;          
             --bg-input: #0f172a;         
             --bg-giorno-box: #1a2332;    
-            --bg-esercizio-box: #0f172a; 
+            --bg-esercizio-box: #000000; 
 
             --color-titoli: #ffffff;     
             --color-testo: #f8fafc;      
@@ -156,11 +156,10 @@
         .btn-remove-ex {
             background-color: var(--btn-delete-ex);
             color: #ffffff;
-            padding: 8px 14px;
-            font-size: 0.85rem;
-            margin-top: 12px;
+            padding: 6px 10px;
+            font-size: 0.75rem;
             width: auto;
-            float: right;
+            margin: 0;
         }
 
         /* Griglia a due colonne simmetriche */
@@ -330,16 +329,49 @@
             border: 1px solid var(--color-bordi);
         }
 
-        /* Contenitore grafico per la configurazione di un singolo esercizio nel form */
-        .esercizio-box {
-            background-color: var(--bg-esercizio-box);
-            padding: 18px;
-            border-radius: 8px;
-            margin-top: 18px;
+        /* --- STILE NERO PULITO PER LA TENDINA DEGLI ESERCIZI --- */
+        .esercizio-box details {
+            background-color: #1a2332;
             border: 1px solid var(--color-bordi);
+            border-radius: 8px;
+            margin-top: 15px;
+            overflow: hidden;
         }
 
-        /* Stile dei tag details per creare sezioni comprimibili */
+        .esercizio-box summary {
+            background-color: #1a2332 !important; /* Sfondo scelta esercizio */
+            background-image: none !important;    /* Rimuove eventuali gradienti ereditati */
+            padding: 12px 15px;
+            font-size: 0.95rem;
+            color: var(--color-testo);
+            font-weight: 600;
+            cursor: pointer;
+            list-style: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .esercizio-box summary::-webkit-details-marker { display: none; }
+        .esercizio-box summary::after {
+            content: "▼";
+            font-size: 0.75rem;
+            color: var(--color-etichette);
+            transition: transform 0.2s ease;
+        }
+
+        .esercizio-box details[open] summary::after {
+            transform: rotate(180deg);
+        }
+
+        .dettagli-esercizio-content {
+            padding: 15px;
+            background-color: #000000;
+            border-top: 1px solid var(--color-bordi);
+        }
+        /* ---------------------------------------------------- */
+
+        /* Stile dei tag details per creare sezioni comprimibili generali (giorni) */
         details {
             background-color: var(--bg-card);
             border-radius: 10px;
@@ -348,7 +380,6 @@
             overflow: hidden;
         }
 
-        /* Stile delle intestazioni riassuntive dei tag details */
         summary {
             background: linear-gradient(135deg, var(--header-giorno-1), var(--header-giorno-2));
             padding: 15px 20px;
@@ -361,17 +392,14 @@
             align-items: center;
         }
 
-        /* Icona freccia indicatrice per i tag summary */
         summary::after { 
             content: "▼";
             font-size: 0.8rem;
             transition: transform 0.2s ease;
         }
 
-        /* Rotazione della freccia quando il blocco details è aperto */
         details[open] summary::after { transform: rotate(180deg); }
 
-        /* Spaziatura interna del contenuto all'interno del details */
         .dettagli-giorno-content { padding: 15px; }
 
         /* Scheda grafica finale in cui viene visualizzato l'esercizio */
@@ -430,7 +458,6 @@
             margin-top: 12px;
         }
 
-        /* Stile delle etichette interne al box di inserimento log */
         .log-inputs label { 
             margin-top: 4px;
             font-size: 0.85rem;
@@ -445,22 +472,20 @@
             padding: 10px;
         }
 
-        /* Stile dell'intestazione del box storico */
         .storico-box-tendina summary {
-            background: none;
+            background: none !important;
+            background-image: none !important;
             padding: 4px 0;
             font-size: 0.9rem;
             color: var(--btn-add-ex);
             cursor: pointer;
         }
 
-        /* Freccia di controllo per la tendina dello storico */
         .storico-box-tendina summary::after {
             content: "▼";
             font-size: 0.7rem;
         }
 
-        /* Contenitore scrollabile dell'elenco delle sessioni precedenti */
         .storico-lista {
             margin-top: 8px;
             font-size: 0.85rem;
@@ -469,7 +494,6 @@
             overflow-y: auto;
         }
 
-        /* Riga singola dello storico contenente data, chili e ripetizioni */
         .storico-riga {
             display: flex;
             justify-content: space-between;
@@ -479,7 +503,6 @@
             gap: 10px;
         }
 
-        /* Stile compatto del pulsante di eliminazione riga nello storico */
         .btn-elimina-log {
             background-color: var(--btn-delete-ex);
             color: #ffffff;
@@ -494,21 +517,18 @@
             flex-shrink: 0;
         }
 
-        /* Stile della tabella riassuntiva dello staff nel pannello admin */
         .staff-table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 15px;
         }
 
-        /* Celle della tabella dello staff */
         .staff-table th, .staff-table td {
             padding: 10px;
             text-align: left;
             border-bottom: 1px solid var(--color-bordi);
         }
 
-        /* Stile del piè di pagina (Footer) */
         footer {
             padding-top: 15px;
             padding-bottom: 10px;
@@ -517,10 +537,8 @@
             color: var(--color-etichette);
         }
 
-        /* Evidenziazione testuale del marchio nel footer */
         footer strong { color: var(--btn-add-ex); }
 
-        /* Regola CSS per mantenere nascoste di default tutte le schermate operative */
         #schermata-login-form-trainer,
         #schermata-admin-panel,
         #schermata-login-trainer,
@@ -532,22 +550,17 @@
 </head>
 <body>
 
-    <!-- Pulsante fisso in alto a sinistra per aprire il menu laterale -->
     <button id="menu-btn" onclick="toggleDrawer()">MENU</button>
-    <!-- Pulsante fisso in alto a destra per eseguire il logout -->
     <button id="logout-btn" onclick="tornaAllaHome()">LOGOUT</button>
 
-    <!-- Pannello laterale a scomparsa per la gestione degli atleti del trainer -->
     <div id="side-drawer">
         <h2 style="margin-top: 40px;">Miei Atleti</h2>
         <p style="font-size: 0.85rem; color: var(--color-etichette);">Seleziona un tuo atleta per aprire la tendina e i suoi servizi:</p>
         <div id="lista-storico-atleti"></div>
     </div>
 
-    <!-- Intestazione principale dinamica dell'applicazione -->
     <h1 id="titolo-principale">Gestionale Fit</h1>
 
-    <!-- 1. Schermata iniziale per la scelta della modalità di accesso -->
     <div class="card" id="schermata-scelta">
         <h2>Benvenuto</h2>
         <p style="text-align: center; color: var(--color-etichette);">Seleziona la modalità di accesso:</p>
@@ -562,7 +575,6 @@
         </div>
     </div>
 
-    <!-- 2. Modulo di inserimento credenziali per il Personal Trainer -->
     <div class="card" id="schermata-login-form-trainer">
         <h2>Inserisci le tue credenziali di accesso</h2>
         <form onsubmit="event.preventDefault(); eseguiLoginTrainer();" autocomplete="off">
@@ -577,7 +589,6 @@
         <button class="btn-back" onclick="tornaAllaHome()">Indietro</button>
     </div>
 
-    <!-- 3. Pannello di controllo riservato all'Amministratore Master -->
     <div class="card" id="schermata-admin-panel">
         <h2 style="color: var(--btn-add-ex);">Pannello Amministratore</h2>
         <p style="text-align: center; color: var(--color-etichette);">Gestione autorizzazioni e Staff Personal Trainer</p>
@@ -609,7 +620,6 @@
         <button class="btn-back" onclick="tornaAllaHome()">Logout Admin</button>
     </div>
 
-    <!-- 4. Area operativa del Personal Trainer per selezionare l'atleta -->
     <div class="card" id="schermata-login-trainer">
         <h2 id="welcome-trainer-title">Area Personal Trainer</h2>
         
@@ -630,7 +640,6 @@
         <button class="btn-back" onclick="tornaAllaHome()">Indietro / Logout</button>
     </div>
 
-    <!-- 5. Modulo di accesso riservato all'Atleta tramite nome e PIN -->
     <div class="card" id="schermata-login-atleta">
         <h2>Area Atleta</h2>
         <p style="text-align: center; color: var(--color-etichette);">Inserisci il tuo nome e il PIN fornito dal tuo Trainer</p>
@@ -647,7 +656,6 @@
         <button class="btn-back" onclick="tornaAllaHome()">Indietro</button>
     </div>
 
-    <!-- 6. Menu intermedio per la scelta dei servizi disponibili per l'atleta -->
     <div class="card" id="schermata-menu">
         <h2 id="sottotitolo-menu">Seleziona Servizio</h2>
         <div class="scelta-ruolo-grid">
@@ -664,7 +672,6 @@
         <button class="btn-back" onclick="tornaAlLoginTrainer()">Cambia Atleta</button>
     </div>
 
-    <!-- 7. Modulo dinamico per la creazione e la modifica della scheda di allenamento -->
     <div class="card" id="form-creazione">
         <h2>Crea Scheda Allenamento</h2>
         
@@ -675,7 +682,6 @@
         <button class="btn-back" onclick="tornaAlMenu()">Torna al Menu</button>
     </div>
 
-    <!-- 8. Schermata di visualizzazione della scheda finale e registrazione log -->
     <div class="card" id="scheda-finale">
         <div id="res-lista-giorni"></div>
 
@@ -687,21 +693,16 @@
         <button class="btn-back" id="btn-esci-atleta" style="display:none;" onclick="tornaAllaHome()">Esci</button>
     </div>
 
-    <!-- Piè di pagina informativo dell'applicazione -->
     <footer>
         Powered by <strong>GPN Lab</strong> &bull; Innovative Management Solutions
     </footer>
 
     <script>
-        // Costante di configurazione dell'URL del progetto Supabase
         const SUPABASE_URL = 'https://zkrsyltlvrlpjsfawsmk.supabase.co';
-        // Costante di configurazione della chiave pubblica anonima di Supabase
         const SUPABASE_ANON_KEY = 'sb_publishable_5qQg44naV2ocZjWX_2HyPA_JiZx1GyI';
 
-        // Inizializzazione del client di connessione a Supabase
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        // Definizione delle variabili globali di stato dell'applicazione
         let datiSchedaAttuale = null;
         let nomeAtletaSalvato = "";
         let pinAtletaSalvato = "";
@@ -709,80 +710,163 @@
         let currentTrainer = null;
         let storicoLogAtletaCache = [];
 
-        // Array contenente l'elenco predefinito degli esercizi consigliati per le tendine
-        const elencoEserciziConsigliati = [
-            "Panca Piana Bilanciere", "Panca Inclinata Manubri", "Croci ai Cavi", "Dip alle Parallele",
-            "Trazioni alla Sbarra", "Lat Machine Avanti", "Rematore con Bilanciere", "Pulley Basso",
-            "Stacco da Terra", "Squat con Bilanciere", "Leg Press 45°", "Affondi con Manubri",
-            "Leg Extension", "Leg Curl da Seduto", "Military Press Bilanciere", "Alzate Laterali Manubri",
-            "Curl con Bilanciere Sagomato", "Pushdown Cavo Alto"
-        ];
+        const eserciziPerMuscolo = {
+            "Petto": [
+                "Panca Piana Bilanciere", 
+                "Panca Inclinata Manubri", 
+                "Croci ai Cavi", 
+                "Dip alle Parallele"
+            ],
+            "Dorso": [
+                "Trazioni alla Sbarra", 
+                "Lat Machine Avanti", 
+                "Rematore con Bilanciere", 
+                "Pulley Basso"
+            ],
+            "Gambe": [
+                "Stacco da Terra", 
+                "Squat con Bilanciere", 
+                "Leg Press 45°", 
+                "Affondi con Manubri", 
+                "Leg Extension", 
+                "Leg Curl da Seduto"
+            ],
+            "Spalle": [
+                "Military Press Bilanciere", 
+                "Alzate Laterali Manubri"
+            ],
+            "Bicipiti": [
+                "Curl con Bilanciere Sagomato"
+            ],
+            "Tricipiti": [
+                "Pushdown Cavo Alto"
+            ],
+            "Addome": [
+                "Crunch alla Panca", 
+                "Plank", 
+                "Leg Raise alle Parallele"
+            ]
+        };
 
-        // Array contenente l'elenco predefinito dei gruppi muscolari per le tendine
         const elencoMuscoliConsigliati = [
             "Petto", "Dorso", "Gambe", "Spalle", "Bicipiti", "Tricipiti", "Addome", "Full Body"
         ];
 
-        // Funzione per generare le opzioni HTML dei menu a tendina gestendo anche valori personalizzati
-        function generaOpzioniSelect(lista, valoreSelezionato = "") {
-            let html = `<option value="">Seleziona...</option>`; // Opzione predefinita iniziale vuota
-            let trovato = false; // Variabile di controllo per verificare se il valore esiste nella lista
+        function ottieniTuttiGliEsercizi() {
+            let tutti = [];
+            Object.values(eserciziPerMuscolo).forEach(lista => {
+                tutti = tutti.concat(lista);
+            });
+            return [...new Set(tutti)];
+        }
 
-            // Ciclo attraverso tutti gli elementi della lista standard
+        function generaOpzioniSelect(lista, valoreSelezionato = "") {
+            let html = `<option value="">Seleziona...</option>`;
+            let trovato = false;
+
             lista.forEach(item => {
-                const selected = (item === valoreSelezionato) ? 'selected' : ''; // Controlla se l'elemento corrisponde a quello salvato
-                if (selected) trovato = true; // Imposta true se trova la corrispondenza
-                html += `<option value="${item}" ${selected}>${item}</option>`; // Aggiunge l'opzione HTML
+                const selected = (item === valoreSelezionato) ? 'selected' : '';
+                if (selected) trovato = true;
+                html += `<option value="${item}" ${selected}>${item}</option>`;
             });
 
-            // Controllo di sicurezza: se il valore salvato in precedenza non è nella lista standard, lo aggiunge al volo
             if (valoreSelezionato && !trovato) {
                 html = `<option value="${valoreSelezionato}" selected>${valoreSelezionato}</option>` + html;
             }
 
-            return html; // Restituisce il codice HTML completo delle opzioni
+            return html;
         }
 
-        // Funzione per azzerare e pulire il valore di tutti i campi input presenti nella pagina
-        function azzeraTuttiInput() {
-            const inputs = document.querySelectorAll('input'); // Seleziona tutti i campi input
-            inputs.forEach(input => {
-                input.value = ''; // Pulisce il valore di ciascun input
+        function generaOpzioniSelectMultipla(lista, valoriSelezionati = []) {
+            let html = "";
+            let arraySelezionati = Array.isArray(valoriSelezionati) ? valoriSelezionati : [valoriSelezionati];
+            
+            lista.forEach(item => {
+                const isSelected = arraySelezionati.includes(item) ? 'selected' : '';
+                html += `<option value="${item}" ${isSelected}>${item}</option>`;
+            });
+
+            arraySelezionati.forEach(val => {
+                if (val && !lista.includes(val)) {
+                    html += `<option value="${val}" selected>${val}</option>`;
+                }
+            });
+
+            return html;
+        }
+
+        function aggiornaEserciziDelGiorno(selectMuscoloEl) {
+            const giornoBox = selectMuscoloEl.closest('.giorno-box');
+            const opzioniSelezionate = Array.from(selectMuscoloEl.selectedOptions).map(opt => opt.value.toLowerCase());
+            const selectEsercizi = giornoBox.querySelectorAll('.ex-nome');
+
+            let eserciziTrovati = [];
+
+            if (opzioniSelezionate.length === 0 || opzioniSelezionate.includes("full body") || opzioniSelezionate.includes("")) {
+                eserciziTrovati = ottieniTuttiGliEsercizi();
+            } else {
+                opzioniSelezionate.forEach(muscoloScelto => {
+                    Object.keys(eserciziPerMuscolo).forEach(categoria => {
+                        if (muscoloScelto.includes(categoria.toLowerCase())) {
+                            eserciziTrovati = eserciziTrovati.concat(eserciziPerMuscolo[categoria]);
+                        }
+                    });
+                });
+
+                if (eserciziTrovati.length === 0) {
+                    eserciziTrovati = ottieniTuttiGliEsercizi();
+                } else {
+                    eserciziTrovati = [...new Set(eserciziTrovati)];
+                }
+            }
+
+            selectEsercizi.forEach(selectEx => {
+                const valoreCorrente = selectEx.value;
+                selectEx.innerHTML = generaOpzioniSelect(eserciziTrovati, valoreCorrente);
             });
         }
 
-        // Funzione per aprire o chiudere il pannello laterale (Drawer) degli atleti
+        function aggiornaTitoloEsercizio(selectExEl) {
+            const titoloSpan = selectExEl.closest('.esercizio-box').querySelector('.titolo-esercizio-span');
+            const nomeScelto = selectExEl.value;
+            if (titoloSpan) {
+                titoloSpan.innerText = nomeScelto ? nomeScelto : "Seleziona esercizio...";
+            }
+        }
+
+        function azzeraTuttiInput() {
+            const inputs = document.querySelectorAll('input');
+            inputs.forEach(input => {
+                input.value = '';
+            });
+        }
+
         function toggleDrawer() {
-            document.getElementById('side-drawer').classList.toggle('open'); // Aggiunge o rimuove la classe 'open'
-            aggiornaListaStorico(); // Aggiorna i dati mostrati nel drawer
+            document.getElementById('side-drawer').classList.toggle('open');
+            aggiornaListaStorico();
         }
 
-        // Funzione per generare un codice PIN numerico casuale di 4 cifre
         function generaPinCasualeInput(inputId) {
-            const pinCasuale = Math.floor(1000 + Math.random() * 9000).toString(); // Genera numero tra 1000 e 9999
-            document.getElementById(inputId).value = pinCasuale; // Inserisce il PIN generato nel campo corrispondente
+            const pinCasuale = Math.floor(1000 + Math.random() * 9000).toString();
+            document.getElementById(inputId).value = pinCasuale;
         }
 
-        // Funzione per mostrare la schermata di inserimento credenziali del Personal Trainer
         function mostraFormLoginTrainer() {
-            azzeraTuttiInput(); // Pulisce i campi di input
-            document.getElementById('schermata-scelta').style.display = 'none'; // Nasconde la home di scelta ruolo
-            document.getElementById('schermata-login-form-trainer').style.display = 'block'; // Mostra il form di login trainer
-            document.getElementById('logout-btn').style.display = 'none'; // Nasconde il tasto logout
+            azzeraTuttiInput();
+            document.getElementById('schermata-scelta').style.display = 'none';
+            document.getElementById('schermata-login-form-trainer').style.display = 'block';
+            document.getElementById('logout-btn').style.display = 'none';
         }
 
-        // Funzione asincrona per eseguire il login del Personal Trainer verificando su Supabase
         async function eseguiLoginTrainer() {
-            const nomeInserito = document.getElementById('login-trainer-nome').value.trim(); // Legge il nome inserito
-            const pinInserito = document.getElementById('login-trainer-pin').value.trim(); // Legge il PIN inserito
+            const nomeInserito = document.getElementById('login-trainer-nome').value.trim();
+            const pinInserito = document.getElementById('login-trainer-pin').value.trim();
 
-            // Controllo preliminare di compilazione campi
             if (!nomeInserito || !pinInserito) {
                 alert("Compila sia il Nome che il PIN!");
                 return;
             }
 
-            // Interrogazione al database Supabase per trovare il trainer corrispondente
             const { data: trainer, error } = await supabaseClient
                 .from('trainers')
                 .select('*')
@@ -790,59 +874,54 @@
                 .eq('pin', pinInserito)
                 .single();
 
-            // Gestione dell'errore di autenticazione fallita
             if (error || !trainer) {
                 alert("Credenziali non valide! Verifica Nome e PIN.");
                 return;
             }
 
-            currentTrainer = trainer; // Memorizza i dati del trainer loggato
-            document.getElementById('schermata-login-form-trainer').style.display = 'none'; // Nasconde il form di login
+            currentTrainer = trainer;
+            document.getElementById('schermata-login-form-trainer').style.display = 'none';
 
-            azzeraTuttiInput(); // Pulisce i moduli
-            nomeAtletaSalvato = ""; // Resetta l'atleta in memoria
-            pinAtletaSalvato = ""; // Resetta il PIN atleta in memoria
+            azzeraTuttiInput();
+            nomeAtletaSalvato = "";
+            pinAtletaSalvato = "";
 
-            document.getElementById('logout-btn').style.display = 'block'; // Mostra il tasto logout
+            document.getElementById('logout-btn').style.display = 'block';
 
-            // Verifica se il trainer loggato possiede i privilegi di amministratore master
             if (currentTrainer.is_admin) {
-                document.getElementById('schermata-admin-panel').style.display = 'block'; // Mostra pannello admin
-                document.getElementById('menu-btn').style.display = 'none'; // Nasconde tasto menu laterale
-                caricaListaStaff(); // Carica l'elenco dello staff
+                document.getElementById('schermata-admin-panel').style.display = 'block';
+                document.getElementById('menu-btn').style.display = 'none';
+                caricaListaStaff();
             } else {
-                document.getElementById('welcome-trainer-title').innerText = `Area Trainer (${currentTrainer.nome})`; // Imposta titolo area trainer
-                document.getElementById('schermata-login-trainer').style.display = 'block'; // Mostra schermata gestione atleti
-                document.getElementById('menu-btn').style.display = 'block'; // Mostra tasto menu laterale
+                document.getElementById('welcome-trainer-title').innerText = `Area Trainer (${currentTrainer.nome})`;
+                document.getElementById('schermata-login-trainer').style.display = 'block';
+                document.getElementById('menu-btn').style.display = 'block';
             }
         }
 
-        // Funzione per aprire la schermata di autenticazione dell'atleta
         function apriLoginAtleta() {
-            azzeraTuttiInput(); // Pulisce i campi
-            document.getElementById('schermata-scelta').style.display = 'none'; // Nasconde la home
-            document.getElementById('schermata-login-atleta').style.display = 'block'; // Mostra login atleta
-            document.getElementById('logout-btn').style.display = 'none'; // Nasconde logout
-            document.getElementById('menu-btn').style.display = 'none'; // Nasconde menu
+            azzeraTuttiInput();
+            document.getElementById('schermata-scelta').style.display = 'none';
+            document.getElementById('schermata-login-atleta').style.display = 'block';
+            document.getElementById('logout-btn').style.display = 'none';
+            document.getElementById('menu-btn').style.display = 'none';
         }
 
-        // Funzione per riportare l'applicazione allo stato iniziale (Home) azzerando tutto
         function tornaAllaHome() {
-            isModalitaAtleta = false; // Disattiva modalità atleta
-            currentTrainer = null; // Azzera il trainer attivo
-            nomeAtletaSalvato = ""; // Resetta nome atleta
-            pinAtletaSalvato = ""; // Resetta pin atleta
-            storicoLogAtletaCache = []; // Svuota la cache dei log
+            isModalitaAtleta = false;
+            currentTrainer = null;
+            nomeAtletaSalvato = "";
+            pinAtletaSalvato = "";
+            storicoLogAtletaCache = [];
 
-            document.getElementById('side-drawer').classList.remove('open'); // Chiude il pannello laterale
+            document.getElementById('side-drawer').classList.remove('open');
 
             const h1El = document.getElementById('titolo-principale');
             const titoloBase = h1El ? (h1El.getAttribute('data-titolo-originale') || "Gestionale Fit") : "Gestionale Fit";
-            document.getElementById('titolo-principale').innerText = titoloBase; // Ripristina il titolo principale
+            document.getElementById('titolo-principale').innerText = titoloBase;
             
-            azzeraTuttiInput(); // Pulisce tutti gli input
+            azzeraTuttiInput();
             
-            // Nasconde tutte le schermate operative
             document.getElementById('schermata-login-form-trainer').style.display = 'none';
             document.getElementById('schermata-admin-panel').style.display = 'none';
             document.getElementById('schermata-login-trainer').style.display = 'none';
@@ -852,81 +931,72 @@
             document.getElementById('scheda-finale').style.display = 'none';
             document.getElementById('menu-btn').style.display = 'none';
             document.getElementById('logout-btn').style.display = 'none';
-            document.getElementById('schermata-scelta').style.display = 'block'; // Mostra la schermata di scelta ruolo
+            document.getElementById('schermata-scelta').style.display = 'block';
         }
 
-        // Funzione per riportare il trainer alla schermata di inserimento cliente per cambiare rapidamente atleta
         function tornaAlLoginTrainer() {
-            document.getElementById('schermata-menu').style.display = 'none'; // Nasconde il menu
-            document.getElementById('schermata-login-trainer').style.display = 'block'; // Mostra login trainer
-            document.getElementById('menu-btn').style.display = 'block'; // Mostra menu laterale
-            document.getElementById('logout-btn').style.display = 'block'; // Mostra logout
+            document.getElementById('schermata-menu').style.display = 'none';
+            document.getElementById('schermata-login-trainer').style.display = 'block';
+            document.getElementById('menu-btn').style.display = 'block';
+            document.getElementById('logout-btn').style.display = 'block';
             
-            document.getElementById('nome-cliente-iniziale').value = ''; // Pulisce input nome cliente
-            document.getElementById('pin-cliente-iniziale').value = ''; // Pulisce input pin cliente
+            document.getElementById('nome-cliente-iniziale').value = '';
+            document.getElementById('pin-cliente-iniziale').value = '';
         }
 
-        // Funzione asincrona per validare l'atleta e avanzare al menu dei servizi
         async function vaiAlMenu() {
-            const inputNome = document.getElementById('nome-cliente-iniziale').value.trim(); // Legge nome cliente
-            const inputPin = document.getElementById('pin-cliente-iniziale').value.trim(); // Legge pin cliente
+            const inputNome = document.getElementById('nome-cliente-iniziale').value.trim();
+            const inputPin = document.getElementById('pin-cliente-iniziale').value.trim();
 
-            // Controllo validità nome inserito
             if (inputNome === "") {
                 alert("Per favore inserisci il nome del cliente!");
                 return;
             }
 
-            // Controllo validità pin inserito
             if (inputPin === "") {
                 alert("Inserisci un PIN o clicca su 'Genera PIN' prima di proseguire!");
                 return;
             }
 
-            // Se cambia il nome del cliente, resetta il form di allenamento
             if (nomeAtletaSalvato.toLowerCase() !== inputNome.toLowerCase()) {
                 resetFormAllenamento();
             }
 
-            nomeAtletaSalvato = inputNome; // Salva nome atleta
-            pinAtletaSalvato = inputPin; // Salva pin atleta
-            document.getElementById('titolo-principale').innerText = "Atleta: " + nomeAtletaSalvato; // Aggiorna intestazione
+            nomeAtletaSalvato = inputNome;
+            pinAtletaSalvato = inputPin;
+            document.getElementById('titolo-principale').innerText = "Atleta: " + nomeAtletaSalvato;
             
-            document.getElementById('schermata-login-trainer').style.display = 'none'; // Nasconde login trainer
-            document.getElementById('schermata-menu').style.display = 'block'; // Mostra menu servizi
-            document.getElementById('menu-btn').style.display = 'block'; // Mostra menu laterale
-            document.getElementById('logout-btn').style.display = 'block'; // Mostra logout
+            document.getElementById('schermata-login-trainer').style.display = 'none';
+            document.getElementById('schermata-menu').style.display = 'block';
+            document.getElementById('menu-btn').style.display = 'block';
+            document.getElementById('logout-btn').style.display = 'block';
         }
 
-        // Funzione per passare dal menu dei servizi al form di creazione della scheda
         function apriSchedaAllenamento() {
-            document.getElementById('schermata-menu').style.display = 'none'; // Nasconde menu
-            document.getElementById('form-creazione').style.display = 'block'; // Mostra form creazione
-            document.getElementById('logout-btn').style.display = 'block'; // Mostra logout
+            document.getElementById('schermata-menu').style.display = 'none';
+            document.getElementById('form-creazione').style.display = 'block';
+            document.getElementById('logout-btn').style.display = 'block';
         }
 
-        // Funzione per tornare al menu principale di selezione servizi
         function tornaAlMenu() {
-            document.getElementById('form-creazione').style.display = 'none'; // Nasconde form
-            document.getElementById('scheda-finale').style.display = 'none'; // Nasconde scheda finale
-            document.getElementById('schermata-menu').style.display = 'block'; // Mostra menu
-            document.getElementById('menu-btn').style.display = 'block'; // Mostra menu laterale
-            document.getElementById('logout-btn').style.display = 'block'; // Mostra logout
+            document.getElementById('form-creazione').style.display = 'none';
+            document.getElementById('scheda-finale').style.display = 'none';
+            document.getElementById('schermata-menu').style.display = 'block';
+            document.getElementById('menu-btn').style.display = 'block';
+            document.getElementById('logout-btn').style.display = 'block';
         }
 
-        // Funzione asincrona per caricare l'elenco dello staff nel pannello amministratore
         async function caricaListaStaff() {
             const { data: staff, error } = await supabaseClient
                 .from('trainers')
                 .select('*')
-                .order('created_at', { ascending: true }); // Scarica tutti i trainer ordinati per data
+                .order('created_at', { ascending: true });
 
-            if (error) return; // Esce in caso di errore
+            if (error) return;
 
-            const tbody = document.getElementById('lista-staff-body'); // Seleziona il corpo della tabella staff
-            tbody.innerHTML = ''; // Pulisce la tabella
+            const tbody = document.getElementById('lista-staff-body');
+            tbody.innerHTML = '';
 
-            // Ciclo per creare le righe della tabella staff
             staff.forEach(t => {
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
@@ -940,21 +1010,18 @@
             });
         }
 
-        // Funzione asincrona per aggiungere un nuovo trainer autorizzato dal pannello admin
         async function aggiungiNuovoTrainer() {
-            const nomeEl = document.getElementById('new-trainer-nome'); // Input nome nuovo trainer
-            const pinEl = document.getElementById('new-trainer-pin'); // Input pin nuovo trainer
+            const nomeEl = document.getElementById('new-trainer-nome');
+            const pinEl = document.getElementById('new-trainer-pin');
 
             const nome = nomeEl.value.trim();
             const pin = pinEl.value.trim();
 
-            // Controllo compilazione campi
             if (!nome || !pin) {
                 alert("Inserisci sia il nome che il PIN per il nuovo trainer!");
                 return;
             }
 
-            // Inserimento del nuovo record nella tabella trainers su Supabase
             const { error } = await supabaseClient
                 .from('trainers')
                 .insert([{ nome: nome, pin: pin, is_admin: false }]);
@@ -963,17 +1030,15 @@
                 alert("Errore nell'inserimento: " + error.message);
             } else {
                 alert(`Trainer ${nome} aggiunto con successo!`);
-                nomeEl.value = ''; // Pulisce input nome
-                pinEl.value = ''; // Pulisce input pin
-                caricaListaStaff(); // Ricarica la tabella dello staff
+                nomeEl.value = '';
+                pinEl.value = '';
+                caricaListaStaff();
             }
         }
 
-        // Funzione asincrona per eliminare un trainer dallo staff
         async function eliminaTrainer(id) {
-            if (!confirm("Sei sicuro di voler rimuovere questo trainer dallo staff?")) return; // Richiesta di conferma
+            if (!confirm("Sei sicuro di voler rimuovere questo trainer dallo staff?")) return;
 
-            // Eliminazione del record da Supabase tramite ID
             const { error } = await supabaseClient
                 .from('trainers')
                 .delete()
@@ -982,24 +1047,21 @@
             if (error) {
                 alert("Errore durante l'eliminazione: " + error.message);
             } else {
-                caricaListaStaff(); // Ricarica la tabella dello staff
+                caricaListaStaff();
             }
         }
 
-        // Funzione per azzerare e inizializzare il form di creazione della scheda
         function resetFormAllenamento() {
-            datiSchedaAttuale = null; // Resetta i dati della scheda
-            storicoLogAtletaCache = []; // Svuota la cache dei log
+            datiSchedaAttuale = null;
+            storicoLogAtletaCache = [];
             const contenitore = document.getElementById('contenitore-giorni');
-            contenitore.innerHTML = ''; // Pulisce il contenitore dei giorni
-            aggiungiGiorno(); // Aggiunge il primo giorno di default
+            contenitore.innerHTML = '';
+            aggiungiGiorno();
         }
 
-        // Funzione per rimuovere un singolo esercizio dal form di creazione
         function rimuoviEsercizio(btn) {
-            const esercizioBox = btn.closest('.esercizio-box'); // Trova il box dell'esercizio
+            const esercizioBox = btn.closest('.esercizio-box');
             const container = esercizioBox.parentElement;
-            // Controlla che rimanga almeno un esercizio nel giorno
             if (container.querySelectorAll('.esercizio-box').length > 1) {
                 esercizioBox.remove();
             } else {
@@ -1007,12 +1069,10 @@
             }
         }
 
-        // Funzione per rimuovere un intero giorno di allenamento dal form
         function rimuoviGiorno(btn) {
             const contenitore = document.getElementById('contenitore-giorni');
             const giorniInTotale = contenitore.querySelectorAll('.giorno-box').length;
 
-            // Controlla che rimanga almeno un giorno nella scheda
             if (giorniInTotale > 1) {
                 if (confirm("Sei sicuro di voler eliminare questo intero giorno di allenamento?")) {
                     const giornoBox = btn.closest('.giorno-box');
@@ -1023,46 +1083,75 @@
             }
         }
 
-        // Funzione per aggiungere un nuovo blocco di campi esercizio all'interno di un giorno
         function aggiungiEsercizio(btn, esSelezionato = "", muscoloSelezionato = "", serieVal = "", recuperoVal = "", imgVal = "") {
             const giornoBox = btn.closest('.giorno-box');
             const container = giornoBox.querySelector('.lista-esercizi-giorno');
+            const muscoloSelect = giornoBox.querySelector('.muscoli-input');
             
+            let listaFiltro = ottieniTuttiGliEsercizi();
+            if (muscoloSelect) {
+                const opzioniSelezionate = Array.from(muscoloSelect.selectedOptions).map(opt => opt.value.toLowerCase());
+                let eserciziTrovati = [];
+                if (opzioniSelezionate.length === 0 || opzioniSelezionate.includes("full body") || opzioniSelezionate.includes("")) {
+                    eserciziTrovati = ottieniTuttiGliEsercizi();
+                } else {
+                    opzioniSelezionate.forEach(muscoloScelto => {
+                        Object.keys(eserciziPerMuscolo).forEach(categoria => {
+                            if (muscoloScelto.includes(categoria.toLowerCase())) {
+                                eserciziTrovati = eserciziTrovati.concat(eserciziPerMuscolo[categoria]);
+                            }
+                        });
+                    });
+                    if (eserciziTrovati.length === 0) {
+                        eserciziTrovati = ottieniTuttiGliEsercizi();
+                    } else {
+                        eserciziTrovati = [...new Set(eserciziTrovati)];
+                    }
+                }
+                listaFiltro = eserciziTrovati;
+            }
+
             const nuovoEsercizio = document.createElement('div');
             nuovoEsercizio.className = 'esercizio-box';
             nuovoEsercizio.innerHTML = `
-                <label>Nome Esercizio:</label>
-                <select class="ex-nome">
-                    ${generaOpzioniSelect(elencoEserciziConsigliati, esSelezionato)}
-                </select>
-
-                <div class="grid-2">
-                    <div>
-                        <label>Muscolo (opzionale):</label>
-                        <select class="ex-muscolo">
-                            ${generaOpzioniSelect(elencoMuscoliConsigliati, muscoloSelezionato)}
+                <details open>
+                    <summary>
+                        <span class="titolo-esercizio-span">${esSelezionato || 'Seleziona esercizio...'}</span>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <button type="button" class="btn-remove-ex" onclick="rimuoviEsercizio(this)">Elimina</button>
+                        </div>
+                    </summary>
+                    <div class="dettagli-esercizio-content">
+                        <label>Nome Esercizio:</label>
+                        <select class="ex-nome" onchange="aggiornaTitoloEsercizio(this)">
+                            ${generaOpzioniSelect(listaFiltro, esSelezionato)}
                         </select>
+
+                        <div class="grid-2">
+                            <div>
+                                <label>Muscolo (opzionale):</label>
+                                <select class="ex-muscolo">
+                                    ${generaOpzioniSelect(elencoMuscoliConsigliati, muscoloSelezionato)}
+                                </select>
+                            </div>
+                            <div>
+                                <label>Serie x Reps:</label>
+                                <input type="text" class="ex-serie" placeholder="es. 3x12" value="${serieVal}">
+                            </div>
+                        </div>
+
+                        <label>Tempo di Recupero:</label>
+                        <input type="text" class="ex-recupero" placeholder="es. 60 secondi" value="${recuperoVal}">
+
+                        <label>Link Foto/GIF Esercizio (opzionale):</label>
+                        <input type="url" class="ex-img" placeholder="https://esempio.it/foto.gif" value="${imgVal}">
                     </div>
-                    <div>
-                        <label>Serie x Reps:</label>
-                        <input type="text" class="ex-serie" placeholder="es. 3x12" value="${serieVal}">
-                    </div>
-                </div>
-
-                <label>Tempo di Recupero:</label>
-                <input type="text" class="ex-recupero" placeholder="es. 60 secondi" value="${recuperoVal}">
-
-                <label>Link Foto/GIF Esercizio (opzionale):</label>
-                <input type="url" class="ex-img" placeholder="https://esempio.it/foto.gif" value="${imgVal}">
-
-                <button type="button" class="btn-remove-ex" onclick="rimuoviEsercizio(this)">Elimina Esercizio</button>
-                <div style="clear: both;"></div>
+                </details>
             `;
-            container.appendChild(nuovoEsercizio); // Aggiunge il nuovo esercizio al DOM
+            container.appendChild(nuovoEsercizio);
         }
 
-        // Funzione per aggiungere un nuovo giorno di allenamento nel form di creazione
-        function aggiungiGiorno(giornoSelezionato = "", muscoliSelezionati = "") {
+        function aggiungiGiorno(giornoSelezionato = "", muscoliSelezionati = []) {
             const contenitore = document.getElementById('contenitore-giorni');
             const numeroGiorni = contenitore.querySelectorAll('.giorno-box').length + 1;
             
@@ -1079,32 +1168,36 @@
             const nuovoGiorno = document.createElement('div');
             nuovoGiorno.className = 'giorno-box';
             nuovoGiorno.innerHTML = `
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <label style="margin: 0;">Giorno / Sessione:</label>
-                    <button type="button" class="btn-remove-ex" style="float: none; margin: 0; padding: 6px 12px;" onclick="rimuoviGiorno(this)">Elimina Giorno</button>
-                </div>
-                <select class="giorno-select" style="margin-top: 8px;">
-                    ${htmlOpzioniGiorni}
-                </select>
+                <details open style="background: transparent; border: none; margin: 0;">
+                    <summary style="border-radius: 8px; margin-bottom: 15px;">
+                        <span>Sessione ${numeroGiorni}</span>
+                        <button type="button" class="btn-remove-ex" style="background-color: var(--btn-back);" onclick="rimuoviGiorno(this)">Elimina Giorno</button>
+                    </summary>
+                    <div style="padding: 5px;">
+                        <label>Giorno / Sessione:</label>
+                        <select class="giorno-select" style="margin-top: 8px;">
+                            ${htmlOpzioniGiorni}
+                        </select>
 
-                <label>Muscoli Coinvolti:</label>
-                <select class="muscoli-input">
-                    ${generaOpzioniSelect(elencoMuscoliConsigliati, muscoliSelezionati)}
-                </select>
+                        <label>Muscoli Coinvolti (puoi selezionarne più di uno tenendo premuto Ctrl o toccandoli):</label>
+                        <select class="muscoli-input" multiple style="height: 110px;" onchange="aggiornaEserciziDelGiorno(this)">
+                            ${generaOpzioniSelectMultipla(elencoMuscoliConsigliati, muscoliSelezionati)}
+                        </select>
 
-                <h3 style="margin-top: 20px;">Esercizi</h3>
-                <div class="lista-esercizi-giorno"></div>
+                        <h3 style="margin-top: 20px;">Esercizi</h3>
+                        <div class="lista-esercizi-giorno"></div>
 
-                <button class="btn-add" onclick="aggiungiEsercizio(this)">+ Aggiungi un altro esercizio</button>
+                        <button class="btn-add" onclick="aggiungiEsercizio(this)">+ Aggiungi un altro esercizio</button>
+                    </div>
+                </details>
             `;
-            contenitore.appendChild(nuovoGiorno); // Aggiunge il giorno al contenitore
+            contenitore.appendChild(nuovoGiorno);
 
             if (!giornoSelezionato) {
-                aggiungiEsercizio(nuovoGiorno.querySelector('.btn-add')); // Aggiunge un esercizio iniziale di default
+                aggiungiEsercizio(nuovoGiorno.querySelector('.btn-add'));
             }
         }
 
-        // Funzione asincrona per raccogliere i dati del form e generare la scheda finale
         async function generaSchedaFinale() {
             const blocchiGiorno = document.querySelectorAll('.giorno-box');
             
@@ -1114,10 +1207,11 @@
                 giorni: []
             };
 
-            // Ciclo sui blocchi giorno per estrarre tutti i dati inseriti
             blocchiGiorno.forEach((giornoBox) => {
                 const giornoNome = giornoBox.querySelector('.giorno-select').value;
-                const muscoli = giornoBox.querySelector('.muscoli-input').value || "Generali";
+                const muscoliSelect = giornoBox.querySelector('.muscoli-input');
+                const muscoliSelezionatiArray = Array.from(muscoliSelect.selectedOptions).map(opt => opt.value);
+                const muscoli = muscoliSelezionatiArray.length > 0 ? muscoliSelezionatiArray.join(", ") : "Generali";
 
                 const nomi = giornoBox.querySelectorAll('.ex-nome');
                 const muscoliEx = giornoBox.querySelectorAll('.ex-muscolo');
@@ -1143,16 +1237,15 @@
                 });
             });
 
-            await salvaInStorico(datiSchedaAttuale); // Salva la scheda nel Cloud
-            await caricaStoricoLogAtleta(nomeAtletaSalvato); // Carica lo storico log dell'atleta
-            renderizzaScheda(datiSchedaAttuale); // Mostra la scheda a schermo
+            await salvaInStorico(datiSchedaAttuale);
+            await caricaStoricoLogAtleta(nomeAtletaSalvato);
+            renderizzaScheda(datiSchedaAttuale);
             
-            document.getElementById('form-creazione').style.display = 'none'; // Nasconde il form
-            document.getElementById('scheda-finale').style.display = 'block'; // Mostra la scheda finale
-            document.getElementById('logout-btn').style.display = 'block'; // Mostra il logout
+            document.getElementById('form-creazione').style.display = 'none';
+            document.getElementById('scheda-finale').style.display = 'block';
+            document.getElementById('logout-btn').style.display = 'block';
         }
 
-        // Funzione asincrona per scaricare i log di allenamento passati dell'atleta
         async function caricaStoricoLogAtleta(nomeCliente) {
             if (!nomeCliente) return;
             const { data, error } = await supabaseClient
@@ -1162,34 +1255,31 @@
                 .order('data_allenamento', { ascending: false });
 
             if (!error && data) {
-                storicoLogAtletaCache = data; // Salva i dati in cache
+                storicoLogAtletaCache = data;
             } else {
                 storicoLogAtletaCache = [];
             }
         }
 
-        // Funzione asincrona per eliminare una singola sessione dallo storico carichi
         async function eliminaSingoloLog(logId) {
             if (!confirm("Sei sicuro di voler eliminare questa sessione dallo storico?")) return;
 
             const { error } = await supabaseClient
                 .from('storico_allenamenti')
                 .delete()
-                .eq('id', logId); // Elimina il log tramite ID da Supabase
+                .eq('id', logId);
 
             if (error) {
                 alert("Errore durante l'eliminazione: " + error.message);
             } else {
-                await caricaStoricoLogAtleta(nomeAtletaSalvato); // Ricarica lo storico aggiornato
-                renderizzaScheda(datiSchedaAttuale); // Aggiorna la vista
+                await caricaStoricoLogAtleta(nomeAtletaSalvato);
+                renderizzaScheda(datiSchedaAttuale);
             }
         }
 
-        // Funzione per costruire e renderizzare visivamente la scheda finale a schermo
         function renderizzaScheda(data) {
             document.getElementById('titolo-principale').innerText = data.cliente ? "Scheda " + data.cliente : "Scheda Allenamento";
 
-            // Controllo della vista in base al ruolo (Atleta o Trainer)
             if (isModalitaAtleta) {
                 document.getElementById('btn-condividi').style.display = 'none';
                 document.getElementById('btn-modifica').style.display = 'none';
@@ -1210,7 +1300,6 @@
 
             let htmlSchedaFinale = "";
 
-            // Generazione del codice HTML per ciascun giorno e ciascun esercizio
             data.giorni.forEach((giorno, gIdx) => {
                 let htmlEsercizi = "";
                 giorno.esercizi.forEach((ex, eIdx) => {
@@ -1290,21 +1379,19 @@
                 `;
             });
 
-            document.getElementById('res-lista-giorni').innerHTML = htmlSchedaFinale; // Inserisce l'HTML generato nella pagina
+            document.getElementById('res-lista-giorni').innerHTML = htmlSchedaFinale;
         }
 
-        // Funzione asincrona per salvare nel Cloud i log di allenamento inseriti dall'atleta
         async function salvaLogAtleta() {
             if (!datiSchedaAttuale || !datiSchedaAttuale.giorni) {
                 alert("Errore: nessun dato della scheda caricato.");
                 return;
             }
 
-            const dataOggi = new Date().toISOString().split('T')[0]; // Ottiene la data odierna in formato YYYY-MM-DD
+            const dataOggi = new Date().toISOString().split('T')[0];
             const nomeClienteCorrente = nomeAtletaSalvato || datiSchedaAttuale.cliente;
             let logSalvatiTotali = 0;
 
-            // Ciclo per verificare e salvare i log di ciascun esercizio compilato
             for (let gIdx = 0; gIdx < datiSchedaAttuale.giorni.length; gIdx++) {
                 const giorno = datiSchedaAttuale.giorni[gIdx];
                 
@@ -1318,7 +1405,6 @@
                         const kgUsati = inputKg.value.trim();
                         const repsFatte = inputReps.value.trim();
 
-                        // Controlla se esiste già un log salvato per lo stesso esercizio nella stessa data
                         const { data: esistente } = await supabaseClient
                             .from('storico_allenamenti')
                             .select('id')
@@ -1329,14 +1415,12 @@
 
                         let error;
                         if (esistente) {
-                            // Aggiorna il log esistente
                             const res = await supabaseClient
                                 .from('storico_allenamenti')
                                 .update({ kg_usati: kgUsati, reps_fatte: repsFatte })
                                 .eq('id', esistente.id);
                             error = res.error;
                         } else {
-                            // Inserisce un nuovo log di allenamento
                             const res = await supabaseClient
                                 .from('storico_allenamenti')
                                 .insert([{
@@ -1361,14 +1445,13 @@
 
             if (logSalvatiTotali > 0) {
                 alert("Allenamento e carichi registrati con successo nel Cloud!");
-                await caricaStoricoLogAtleta(nomeAtletaSalvato); // Ricarica lo storico
-                renderizzaScheda(datiSchedaAttuale); // Aggiorna la vista
+                await caricaStoricoLogAtleta(nomeAtletaSalvato);
+                renderizzaScheda(datiSchedaAttuale);
             } else {
                 alert("Compila almeno un campo tra Kg e Reps prima di salvare.");
             }
         }
 
-        // Funzione asincrona per effettuare il login dell'atleta tramite nome e PIN
         async function caricaSchedaAtletaDaInput() {
             const nomeInput = document.getElementById('nome-atleta-cerca').value.trim();
             const pinInput = document.getElementById('pin-atleta-cerca').value.trim();
@@ -1378,7 +1461,6 @@
                 return;
             }
 
-            // Interrogazione a Supabase per verificare l'esistenza della scheda
             const { data, error } = await supabaseClient
                 .from('schede')
                 .select('*')
@@ -1395,23 +1477,22 @@
 
             if (data && data.length > 0) {
                 const trovata = data[0].dati_scheda;
-                isModalitaAtleta = true; // Attiva modalità atleta
+                isModalitaAtleta = true;
                 datiSchedaAttuale = trovata;
                 nomeAtletaSalvato = trovata.cliente;
                 
-                await caricaStoricoLogAtleta(nomeAtletaSalvato); // Carica lo storico
+                await caricaStoricoLogAtleta(nomeAtletaSalvato);
 
-                document.getElementById('schermata-login-atleta').style.display = 'none'; // Nasconde login atleta
-                renderizzaScheda(trovata); // Mostra la scheda
-                document.getElementById('scheda-finale').style.display = 'block'; // Mostra contenitore finale
-                document.getElementById('menu-btn').style.display = 'none'; // Nasconde menu laterale
-                document.getElementById('logout-btn').style.display = 'block'; // Mostra logout
+                document.getElementById('schermata-login-atleta').style.display = 'none';
+                renderizzaScheda(trovata);
+                document.getElementById('scheda-finale').style.display = 'block';
+                document.getElementById('menu-btn').style.display = 'none';
+                document.getElementById('logout-btn').style.display = 'block';
             } else {
                 alert("Nome o PIN non validi. Verifica le tue credenziali con il tuo Personal Trainer.");
             }
         }
 
-        // Funzione per copiare negli appunti il link condivisibile della scheda per il cliente
         function copiaLinkCliente() {
             if (!datiSchedaAttuale) return;
             const jsonString = JSON.stringify(datiSchedaAttuale);
@@ -1425,14 +1506,12 @@
             });
         }
 
-        // Funzione per consentire al trainer di tornare a modificare la scheda
         function tornaAlForm() {
-            document.getElementById('form-creazione').style.display = 'block'; // Mostra il form
-            document.getElementById('scheda-finale').style.display = 'none'; // Nasconde la vista finale
-            document.getElementById('logout-btn').style.display = 'block'; // Mostra il logout
+            document.getElementById('form-creazione').style.display = 'block';
+            document.getElementById('scheda-finale').style.display = 'none';
+            document.getElementById('logout-btn').style.display = 'block';
         }
 
-        // Funzione asincrona per salvare o aggiornare la scheda nel database Supabase
         async function salvaInStorico(scheda) {
             try {
                 if (!currentTrainer) {
@@ -1440,14 +1519,12 @@
                     return;
                 }
 
-                // Rimuove eventuali vecchie versioni della scheda dello stesso cliente per quel trainer
                 await supabaseClient
                     .from('schede')
                     .delete()
                     .eq('trainer_id', currentTrainer.id)
                     .ilike('cliente', scheda.cliente);
 
-                // Inserisce la nuova scheda aggiornata nel Cloud
                 const { error } = await supabaseClient
                     .from('schede')
                     .insert([{ 
@@ -1466,13 +1543,11 @@
             }
         }
 
-        // Funzione per aprire o chiudere l'accordion del singolo atleta nel menu laterale
         function toggleAccordionAtleta(element) {
             const item = element.parentElement;
             item.classList.toggle('active');
         }
 
-        // Funzione asincrona per aggiornare l'elenco degli atleti nel pannello laterale del trainer
         async function aggiornaListaStorico() {
             const container = document.getElementById('lista-storico-atleti');
             container.innerHTML = "<p style='color: var(--color-etichette);'>Caricamento dal Cloud...</p>";
@@ -1482,7 +1557,6 @@
                 return;
             }
 
-            // Scarica l'elenco delle schede salvate dal trainer corrente
             const { data: storico, error } = await supabaseClient
                 .from('schede')
                 .select('*')
@@ -1494,10 +1568,9 @@
                 return;
             }
 
-            window.storicoCloud = storico; // Salva lo storico in una variabile globale
+            window.storicoCloud = storico;
 
             let html = "";
-            // Ciclo per generare l'HTML di ciascun atleta nel drawer
             storico.forEach((item, index) => {
                 const pinMostrato = item.pin_atleta || (item.dati_scheda ? item.dati_scheda.pin : '----') || '----';
                 
@@ -1518,15 +1591,13 @@
                     </div>
                 `;
             });
-            container.innerHTML = html; // Inserisce l'HTML nel drawer
+            container.innerHTML = html;
         }
 
-        // Funzione per popolare il form di creazione con i dati di una scheda esistente
         function popolaFormConDati(scheda) {
             const contenitore = document.getElementById('contenitore-giorni');
             contenitore.innerHTML = '';
 
-            // Ciclo sui giorni della scheda salvata
             scheda.giorni.forEach((giornoData) => {
                 const nuovoGiorno = document.createElement('div');
                 nuovoGiorno.className = 'giorno-box';
@@ -1541,24 +1612,31 @@
                     htmlOpzioniGiorni += `<option value="${g}" ${sel}>${g}</option>`;
                 });
 
+                let muscoliArray = giornoData.muscoli ? giornoData.muscoli.split(',').map(m => m.trim()) : [];
+
                 nuovoGiorno.innerHTML = `
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <label style="margin: 0;">Giorno / Sessione:</label>
-                        <button type="button" class="btn-remove-ex" style="float: none; margin: 0; padding: 6px 12px;" onclick="rimuoviGiorno(this)">Elimina Giorno</button>
-                    </div>
-                    <select class="giorno-select" style="margin-top: 8px;">
-                        ${htmlOpzioniGiorni}
-                    </select>
+                    <details open style="background: transparent; border: none; margin: 0;">
+                        <summary style="border-radius: 8px; margin-bottom: 15px;">
+                            <span>${giornoData.nome}</span>
+                            <button type="button" class="btn-remove-ex" style="background-color: var(--btn-back);" onclick="rimuoviGiorno(this)">Elimina Giorno</button>
+                        </summary>
+                        <div style="padding: 5px;">
+                            <label>Giorno / Sessione:</label>
+                            <select class="giorno-select" style="margin-top: 8px;">
+                                ${htmlOpzioniGiorni}
+                            </select>
 
-                    <label>Muscoli Coinvolti:</label>
-                    <select class="muscoli-input">
-                        ${generaOpzioniSelect(elencoMuscoliConsigliati, giornoData.muscoli)}
-                    </select>
+                            <label>Muscoli Coinvolti (puoi selezionarne più di uno tenendo premuto Ctrl o toccandoli):</label>
+                            <select class="muscoli-input" multiple style="height: 110px;" onchange="aggiornaEserciziDelGiorno(this)">
+                                ${generaOpzioniSelectMultipla(elencoMuscoliConsigliati, muscoliArray)}
+                            </select>
 
-                    <h3 style="margin-top: 20px;">Esercizi</h3>
-                    <div class="lista-esercizi-giorno"></div>
+                            <h3 style="margin-top: 20px;">Esercizi</h3>
+                            <div class="lista-esercizi-giorno"></div>
 
-                    <button class="btn-add" onclick="aggiungiEsercizio(this)">+ Aggiungi un altro esercizio</button>
+                            <button class="btn-add" onclick="aggiungiEsercizio(this)">+ Aggiungi un altro esercizio</button>
+                        </div>
+                    </details>
                 `;
                 contenitore.appendChild(nuovoGiorno);
 
@@ -1569,7 +1647,6 @@
             });
         }
 
-        // Funzione asincrona per caricare la scheda di un atleta selezionato dal menu laterale
         async function caricaAtletaDaStorico(index) {
             if (!window.storicoCloud || !window.storicoCloud[index]) return;
             
@@ -1584,11 +1661,10 @@
             document.getElementById('nome-cliente-iniziale').value = nomeAtletaSalvato;
             document.getElementById('pin-cliente-iniziale').value = pinAtletaSalvato;
 
-            await caricaStoricoLogAtleta(nomeAtletaSalvato); // Carica i log storici
+            await caricaStoricoLogAtleta(nomeAtletaSalvato);
 
-            popolaFormConDati(schedaSelezionata); // Riempie il form
+            popolaFormConDati(schedaSelezionata);
 
-            // Nasconde le schermate non pertinenti
             document.getElementById('schermata-scelta').style.display = 'none';
             document.getElementById('schermata-login-form-trainer').style.display = 'none';
             document.getElementById('schermata-admin-panel').style.display = 'none';
@@ -1596,33 +1672,31 @@
             document.getElementById('schermata-menu').style.display = 'none';
             document.getElementById('form-creazione').style.display = 'none';
 
-            renderizzaScheda(schedaSelezionata); // Mostra la scheda
+            renderizzaScheda(schedaSelezionata);
             document.getElementById('scheda-finale').style.display = 'block';
             document.getElementById('menu-btn').style.display = 'block';
             document.getElementById('logout-btn').style.display = 'block';
             
-            toggleDrawer(); // Chiude il pannello laterale
+            toggleDrawer();
         }
 
-        // Funzione asincrona per eliminare definitivamente un atleta e la sua scheda dal Cloud
         async function eliminaDaStorico(idRecord, index) {
             if (!confirm("Sei sicuro di voler eliminare questo atleta dallo storico?")) return;
 
             const { error } = await supabaseClient
                 .from('schede')
                 .delete()
-                .eq('id', idRecord); // Elimina il record da Supabase tramite ID
+                .eq('id', idRecord);
 
             if (error) {
                 alert("Errore durante l'eliminazione dal Cloud: " + error.message);
                 console.error(error);
             } else {
                 alert("Atleta eliminato con successo!");
-                aggiornaListaStorico(); // Aggiorna l'elenco nel drawer
+                aggiornaListaStorico();
             }
         }
 
-        // Funzione di sistema eseguita automaticamente al caricamento della pagina
         window.onload = function() {
             const h1El = document.getElementById('titolo-principale');
             if (h1El) h1El.setAttribute('data-titolo-originale', h1El.innerText);
@@ -1633,7 +1707,6 @@
             const urlParams = new URLSearchParams(window.location.search);
             const dataParam = urlParams.get('data');
 
-            // Controlla se la pagina è stata aperta tramite un link condiviso con parametri
             if (dataParam) {
                 try {
                     const data = JSON.parse(decodeURIComponent(dataParam));
@@ -1660,10 +1733,8 @@
             }
         };
 
-        // Event listener per azzerare gli input quando si chiude o si lascia la pagina
         window.addEventListener('pagehide', azzeraTuttiInput);
 
-        // Observer per rimuovere automaticamente eventuali elementi estranei iniettati da Netlify
         const observer = new MutationObserver(() => {
             const drawer = document.querySelector('netlify-drawer, #netlify-drawer-root');
             if (drawer) {
