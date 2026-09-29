@@ -1,9 +1,6 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-
-    <!-- Cerco placeholder per modificare i suggerimenti -->
-
     <!-- Configurazione della codifica dei caratteri -->
     <meta charset="UTF-8">
     <!-- Configurazione della visualizzazione responsive per dispositivi mobili -->
@@ -733,10 +730,10 @@
         <h2>Inserisci le tue credenziali di accesso</h2>
         <form onsubmit="event.preventDefault(); eseguiLoginTrainer();" autocomplete="off">
             <label for="login-trainer-nome">Nome Personal Trainer:</label>
-            <input type="text" id="login-trainer-nome" name="no_autofill_trainer_nome" placeholder="" autocomplete="off" required>
+            <input type="text" id="login-trainer-nome" name="no_autofill_trainer_nome" placeholder="es. Marco" autocomplete="off" required>
 
             <label for="login-trainer-pin">PIN di Sicurezza:</label>
-            <input type="password" inputmode="numeric" id="login-trainer-pin" name="no_autofill_trainer_pin" placeholder="" maxlength="6" autocomplete="off" required>
+            <input type="password" inputmode="numeric" id="login-trainer-pin" name="no_autofill_trainer_pin" placeholder="••••" maxlength="6" autocomplete="off" required>
 
             <button type="submit" class="btn-submit">Accedi al Gestionale</button>
         </form>
@@ -750,10 +747,10 @@
         <div style="background-color: var(--bg-giorno-box); padding: 15px; border-radius: 10px; border: 1px solid var(--color-bordi); margin-top: 15px;">
             <h3>Aggiungi Nuovo Personal Trainer</h3>
             <label>Nome e Cognome Trainer:</label>
-            <input type="text" id="new-trainer-nome" name="no_autofill_new_trainer_nome" placeholder="" autocomplete="off">
+            <input type="text" id="new-trainer-nome" name="no_autofill_new_trainer_nome" placeholder="es. Marco Rossi" autocomplete="off">
             <label>PIN Assegnato (4 cifre):</label>
             <div style="display: flex; gap: 8px;">
-                <input type="text" id="new-trainer-pin" name="no_autofill_new_trainer_pin" placeholder="" maxlength="6" autocomplete="off">
+                <input type="text" id="new-trainer-pin" name="no_autofill_new_trainer_pin" placeholder="es. 1234" maxlength="6" autocomplete="off">
                 <button type="button" class="btn-add" style="width: auto; padding: 0 15px; margin-top: 6px; white-space: nowrap;" onclick="generaPinCasualeInput('new-trainer-pin')">Genera PIN</button>
             </div>
             <button class="btn-add" onclick="aggiungiNuovoTrainer()">+ Aggiungi Trainer</button>
@@ -780,11 +777,11 @@
         <div style="background-color: var(--bg-giorno-box); padding: 15px; border-radius: 10px; border: 1px solid var(--color-bordi);">
             <h3 style="margin-top:0;">Gestione Schede Atleti</h3>
             <label for="nome-cliente-iniziale">Inserisci Nome del Cliente / Atleta:</label>
-            <input type="text" id="nome-cliente-iniziale" name="no_autofill_cliente_nome" placeholder="" autocomplete="off" required>
+            <input type="text" id="nome-cliente-iniziale" name="no_autofill_cliente_nome" placeholder="es. Mario Rossi" autocomplete="off" required>
 
             <label for="pin-cliente-iniziale">PIN Assegnato all'Atleta (4 cifre):</label>
             <div style="display: flex; gap: 8px;">
-                <input type="text" id="pin-cliente-iniziale" name="no_autofill_cliente_pin" placeholder="" maxlength="6" autocomplete="off">
+                <input type="text" id="pin-cliente-iniziale" name="no_autofill_cliente_pin" placeholder="es. 1234 o genera" maxlength="6" autocomplete="off">
                 <button type="button" class="btn-add" style="width: auto; padding: 0 15px; margin-top: 6px; white-space: nowrap;" onclick="generaPinCasualeInput('pin-cliente-iniziale')">Genera PIN</button>
             </div>
 
@@ -800,10 +797,10 @@
         
         <form onsubmit="event.preventDefault(); caricaSchedaAtletaDaInput();" autocomplete="off">
             <label for="nome-atleta-cerca">Inserisci il tuo Nome e Cognome:</label>
-            <input type="text" id="nome-atleta-cerca" name="no_autofill_cerca_atleta_nome" placeholder="" autocomplete="off" required>
+            <input type="text" id="nome-atleta-cerca" name="no_autofill_cerca_atleta_nome" placeholder="es. Mario Rossi" autocomplete="off" required>
 
             <label for="pin-atleta-cerca">Inserisci il tuo PIN:</label>
-            <input type="password" inputmode="numeric" id="pin-atleta-cerca" name="no_autofill_cerca_atleta_pin" placeholder="" maxlength="6" autocomplete="off" required>
+            <input type="password" inputmode="numeric" id="pin-atleta-cerca" name="no_autofill_cerca_atleta_pin" placeholder="••••" maxlength="6" autocomplete="off" required>
 
             <button type="submit" class="btn-submit">Apri La Mia Scheda</button>
         </form>
@@ -916,7 +913,30 @@
             return dataStringa;
         }
 
-        // Funzioni per gestire il timer (Modifica, Avvia/Pausa e Reset sul tempo impostato)
+        // Funzione per generare un beep acustico tramite Web Audio API
+        function suonaBeep() {
+            try {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                if (!AudioContext) return;
+                const ctx = new AudioContext();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(880, ctx.currentTime); // Frequenza nota La
+                gain.gain.setValueAtTime(0.1, ctx.currentTime);
+
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+
+                osc.start();
+                osc.stop(ctx.currentTime + 0.4); // Durata 400ms
+            } catch (e) {
+                console.log("Audio non supportato o bloccato dal browser", e);
+            }
+        }
+
+        // Funzioni per gestire il timer con orologio reale e recupero stato in background
         function modificaTempoTimer(btnEl, secondiVariazione) {
             const box = btnEl.closest('.timer-box-tendina');
             const display = box.querySelector('.timer-display-orologio');
@@ -925,16 +945,16 @@
             secondiAttuali += secondiVariazione;
             if (secondiAttuali < 0) secondiAttuali = 0;
 
-            // Aggiorniamo sia il tempo corrente che il tempo base salvato per il reset
             box.setAttribute('data-secondi', secondiAttuali);
             box.setAttribute('data-tempo-base', secondiAttuali);
+            box.removeAttribute('data-target-time');
             
             const min = Math.floor(secondiAttuali / 60);
             const sec = secondiAttuali % 60;
             display.innerText = `${min}:${sec < 10 ? '0' : ''}${sec}`;
 
             const btnAvvia = box.querySelector('.btn-timer-azione');
-            btnAvvia.innerText = "Avvia";
+            btnAvvia.innerText = "⏱️ Avvia";
         }
 
         function resetTimerTendina(btnResetEl) {
@@ -944,16 +964,16 @@
             const box = btnResetEl.closest('.timer-box-tendina');
             const display = box.querySelector('.timer-display-orologio');
             
-            // Ripristina l'ultimo tempo scelto dall'atleta (memorizzato in data-tempo-base o 60s di default)
             let tempoBase = parseInt(box.getAttribute('data-tempo-base') || '60');
             box.setAttribute('data-secondi', tempoBase);
+            box.removeAttribute('data-target-time');
             
             const min = Math.floor(tempoBase / 60);
             const sec = tempoBase % 60;
             display.innerText = `${min}:${sec < 10 ? '0' : ''}${sec}`;
 
             const btnAvvia = box.querySelector('.btn-timer-azione');
-            btnAvvia.innerText = "Avvia";
+            btnAvvia.innerText = "⏱️️ Avvia";
             btnAvvia.onclick = function() { avviaTimerIncrementale(btnAvvia); };
         }
 
@@ -971,42 +991,78 @@
                 return;
             }
 
+            // Calcoliamo il timestamp esatto di fine basato sull'orologio reale di sistema
+            const targetTime = Date.now() + (secondiRimanenti * 1000);
+            box.setAttribute('data-target-time', targetTime);
+
             function aggiornaTesto() {
-                const min = Math.floor(secondiRimanenti / 60);
-                const sec = secondiRimanenti % 60;
-                display.innerText = `${min}:${sec < 10 ? '0' : ''}${sec}`;
+                const adesso = Date.now();
+                const diffMs = parseInt(box.getAttribute('data-target-time')) - adesso;
+                let secRim = Math.ceil(diffMs / 1000);
+
+                if (secRim > 0) {
+                    box.setAttribute('data-secondi', secRim);
+                    const min = Math.floor(secRim / 60);
+                    const sec = secRim % 60;
+                    display.innerText = `${min}:${sec < 10 ? '0' : ''}${sec}`;
+                } else {
+                    clearInterval(timerAttivoInterval);
+                    display.innerText = "0:00 - Fatto!";
+                    btnAvviaEl.innerText = "⏱️ Avvia";
+                    btnAvviaEl.onclick = function() { avviaTimerIncrementale(btnAvviaEl); };
+                    
+                    let tempoBase = parseInt(box.getAttribute('data-tempo-base') || '60');
+                    box.setAttribute('data-secondi', tempoBase);
+                    box.removeAttribute('data-target-time');
+
+                    suonaBeep();
+                    if ("vibrate" in navigator) {
+                        navigator.vibrate([200, 100, 200]);
+                    }
+                    alert("⏱️ Tempo di recupero scaduto! Torna sotto i pesi.");
+                }
             }
 
             aggiornaTesto();
             btnAvviaEl.innerText = "Pausa";
             btnAvviaEl.onclick = function() {
                 clearInterval(timerAttivoInterval);
+                box.removeAttribute('data-target-time');
                 btnAvviaEl.innerText = "Riprendi";
                 btnAvviaEl.onclick = function() { avviaTimerIncrementale(btnAvviaEl); };
             };
 
-            timerAttivoInterval = setInterval(() => {
-                secondiRimanenti--;
-                if (secondiRimanenti >= 0) {
-                    box.setAttribute('data-secondi', secondiRimanenti);
-                    aggiornaTesto();
-                } else {
-                    clearInterval(timerAttivoInterval);
-                    display.innerText = "0:00 - Fatto!";
-                    btnAvviaEl.innerText = "Avvia";
-                    btnAvviaEl.onclick = function() { avviaTimerIncrementale(btnAvviaEl); };
-                    
-                    // Riporta il timer al valore base impostato dall'atleta per la serie successiva
-                    let tempoBase = parseInt(box.getAttribute('data-tempo-base') || '60');
-                    box.setAttribute('data-secondi', tempoBase);
-
-                    if ("vibrate" in navigator) {
-                        navigator.vibrate([200, 100, 200]);
-                    }
-                    alert("Tempo di recupero scaduto! Torna sotto i pesi.");
-                }
-            }, 1000);
+            timerAttivoInterval = setInterval(aggiornaTesto, 500);
         }
+
+        // Controllo riattivazione: se l'atleta esce e torna, calcola il tempo reale trascorso
+        document.addEventListener("visibilitychange", function() {
+            if (!document.hidden) {
+                const activeTimers = document.querySelectorAll('.timer-box-tendina');
+                activeTimers.forEach(box => {
+                    const targetTime = box.getAttribute('data-target-time');
+                    if (targetTime) {
+                        const display = box.querySelector('.timer-display-orologio');
+                        const adesso = Date.now();
+                        const diffMs = parseInt(targetTime) - adesso;
+                        let secRim = Math.ceil(diffMs / 1000);
+
+                        if (secRim > 0) {
+                            const min = Math.floor(secRim / 60);
+                            const sec = secRim % 60;
+                            display.innerText = `${min}:${sec < 10 ? '0' : ''}${sec}`;
+                        } else {
+                            display.innerText = "0:00 - Fatto!";
+                            box.removeAttribute('data-target-time');
+                            suonaBeep();
+                            if ("vibrate" in navigator) {
+                                navigator.vibrate([200, 100, 200]);
+                            }
+                        }
+                    }
+                });
+            }
+        });
 
         function ottieniTuttiGliEsercizi() {
             let tutti = [];
@@ -1371,7 +1427,7 @@
                     </summary>
                     <div class="dettagli-esercizio-content">
                         <label>Nome Esercizio (Scrivi o seleziona):</label>
-                        <input type="text" class="ex-nome-input" list="${idDatalist}" placeholder="" value="${esSelezionato}" oninput="aggiornaTitoloEsercizio(this)" autocomplete="off">
+                        <input type="text" class="ex-nome-input" list="${idDatalist}" placeholder="es. Lat Machine Technogym" value="${esSelezionato}" oninput="aggiornaTitoloEsercizio(this)" autocomplete="off">
                         <datalist id="${idDatalist}">
                             ${generaOpzioniDatalist(listaFiltro)}
                         </datalist>
@@ -1385,15 +1441,15 @@
                             </div>
                             <div>
                                 <label>Serie x Reps:</label>
-                                <input type="text" class="ex-serie" placeholder="" value="${serieVal}">
+                                <input type="text" class="ex-serie" placeholder="es. 3x12" value="${serieVal}">
                             </div>
                         </div>
 
                         <label>Tempo di Recupero:</label>
-                        <input type="text" class="ex-recupero" placeholder="" value="${recuperoVal}">
+                        <input type="text" class="ex-recupero" placeholder="es. 60 secondi" value="${recuperoVal}">
 
                         <label>Link Foto/GIF Esercizio (opzionale):</label>
-                        <input type="url" class="ex-img" placeholder="" value="${imgVal}">
+                        <input type="url" class="ex-img" placeholder="https://esempio.it/foto.gif" value="${imgVal}">
                     </div>
                 </details>
             `;
@@ -1423,13 +1479,13 @@
                     </summary>
                     <div style="padding: 15px; background-color: var(--bg-card); border-top: 1px solid var(--color-bordi);">
                         <label>Nome Giorno / Sessione:</label>
-                        <input type="text" class="giorno-nome-input" list="${idDatalistGiorni}" placeholder="" value="${nomeGiornoDefault}" oninput="aggiornaTitoloGiorno(this)" autocomplete="off" style="margin-top: 8px;">
+                        <input type="text" class="giorno-nome-input" list="${idDatalistGiorni}" placeholder="es. Giorno 1" value="${nomeGiornoDefault}" oninput="aggiornaTitoloGiorno(this)" autocomplete="off" style="margin-top: 8px;">
                         <datalist id="${idDatalistGiorni}">
                             ${generaOpzioniDatalist(opzioniNomiGiorni)}
                         </datalist>
 
                         <label>Muscoli Coinvolti (Scrivi o seleziona):</label>
-                        <input type="text" class="muscoli-input" list="${idDatalistMuscoli}" placeholder="" value="${muscoloSelezionato}" oninput="aggiornaEserciziDelGiorno(this)" autocomplete="off">
+                        <input type="text" class="muscoli-input" list="${idDatalistMuscoli}" placeholder="es. Petto, Tricipiti o Full Body" value="${muscoloSelezionato}" oninput="aggiornaEserciziDelGiorno(this)" autocomplete="off">
                         <datalist id="${idDatalistMuscoli}">
                             ${generaOpzioniDatalist(elencoMuscoliConsigliati)}
                         </datalist>
@@ -1594,20 +1650,20 @@
                             <div class="grid-2">
                                 <div>
                                     <label>Kg usati:</label>
-                                    <input type="text" id="log-kg-${gIdx}-${eIdx}" placeholder="">
+                                    <input type="text" id="log-kg-${gIdx}-${eIdx}" placeholder="es. 50 kg">
                                 </div>
                                 <div>
                                     <label>Reps fatte:</label>
-                                    <input type="text" id="log-reps-${gIdx}-${eIdx}" placeholder="">
+                                    <input type="text" id="log-reps-${gIdx}-${eIdx}" placeholder="es. 4x10">
                                 </div>
                             </div>
                         </div>
                     ` : '';
 
-                    // Tendina del Timer con memoria del tempo base per il reset intelligente
+                    // Tendina del Timer aggiornata con gestione orologio reale e audio
                     let timerTendinaHtml = `
                         <details class="timer-box-tendina" data-secondi="60" data-tempo-base="60">
-                            <summary>Apri Timer di Recupero</summary>
+                            <summary>⏱️ Apri Timer di Recupero</summary>
                             <div class="timer-content-interno">
                                 <div class="timer-display-orologio">1:00</div>
                                 <div class="timer-modifica-controls">
@@ -1615,8 +1671,8 @@
                                     <button type="button" class="btn-mod-tempo" onclick="modificaTempoTimer(this, 30)">+30s</button>
                                 </div>
                                 <div class="timer-action-controls">
-                                    <button type="button" class="btn-timer-azione" onclick="avviaTimerIncrementale(this)">Avvia</button>
-                                    <button type="button" class="btn-timer-reset" onclick="resetTimerTendina(this)">Reset</button>
+                                    <button type="button" class="btn-timer-azione" onclick="avviaTimerIncrementale(this)">⏱️ Avvia</button>
+                                    <button type="button" class="btn-timer-reset" onclick="resetTimerTendina(this)">🔄 Reset</button>
                                 </div>
                             </div>
                         </details>
