@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
+
+    <!-- Cerco placeholder per modificare i suggerimenti -->
+
     <!-- Configurazione della codifica dei caratteri -->
     <meta charset="UTF-8">
     <!-- Configurazione della visualizzazione responsive per dispositivi mobili -->
@@ -247,7 +250,7 @@
             display: none;
         }
 
-        /* Struttura grafica del pannello laterale a scomparsa (Drawer) per gli atleti */
+        /* Struttura grafica del pannello laterale a scomparsa (Drawer) */
         #side-drawer {
             position: fixed;
             top: 0;
@@ -382,7 +385,6 @@
             transform: rotate(180deg);
         }
 
-        /* Nome dell'esercizio o del giorno libero di estendersi */
         .titolo-esercizio-span,
         .giorno-box details > summary > span:first-child {
             flex: 1;
@@ -400,9 +402,8 @@
             background-color: #000000;
             border-top: 1px solid var(--color-bordi);
         }
-        /* ---------------------------------------------------- */
 
-        /* --- STILE NERO E PULITO PER LE SCHEDE FINALI DEGLI ESERCIZI (TENDINE) --- */
+        /* Stile NERO E PULITO PER LE SCHEDE FINALI DEGLI ESERCIZI */
         .ex-card-final details {
             background-color: #000000 !important;
             border: 1px solid var(--color-bordi);
@@ -432,7 +433,6 @@
             background-color: #000000;
             border-top: 1px solid var(--color-bordi);
         }
-        /* ------------------------------------------------------------------------ */
 
         /* Stile dei tag details per creare sezioni comprimibili generali (giorni) */
         #res-lista-giorni details {
@@ -459,7 +459,6 @@
 
         .dettagli-giorno-content { padding: 15px; }
 
-        /* Titolo testuale dell'esercizio nella scheda finale */
         .ex-title { 
             font-weight: bold;
             margin: 0;
@@ -472,7 +471,6 @@
             min-width: 0;
         }
 
-        /* Etichetta visiva del gruppo muscolare dell'esercizio */
         .ex-muscolo-tag { 
             display: inline-block;
             background-color: var(--tag-muscolo-bg);
@@ -484,7 +482,6 @@
             font-size: 0.85rem;
         }
 
-        /* Contenitore dei dettagli secondari dell'esercizio (serie e recupero) */
         .ex-details { 
             display: flex;
             justify-content: space-between;
@@ -493,55 +490,58 @@
             color: var(--color-etichette);
         }
         
-        /* Stile per la tendina del Timer */
-        .timer-box-tendina {
-            margin-top: 12px;
-            background-color: rgba(56, 189, 248, 0.05);
+        /* --- STILE PER IL TIMER A TENDINA NEL MENU LATERALE --- */
+        .timer-sidebar-tendina {
+            background-color: var(--bg-giorno-box);
             border: 1px solid var(--color-bordi);
-            border-radius: 8px;
-            padding: 10px;
+            border-radius: 10px;
+            margin-top: 15px;
+            overflow: hidden;
         }
 
-        .timer-box-tendina summary {
-            background: none !important;
-            background-image: none !important;
-            padding: 4px 0;
-            font-size: 0.9rem;
+        .timer-sidebar-tendina summary {
+            padding: 12px 15px;
+            font-size: 0.95rem;
             color: var(--btn-add-ex);
+            font-weight: 600;
             cursor: pointer;
+            list-style: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: rgba(255, 255, 255, 0.03);
         }
 
-        .timer-box-tendina summary::after {
-            content: "▼";
-            font-size: 0.7rem;
-        }
+        .timer-sidebar-tendina summary::-webkit-details-marker { display: none; }
 
-        .timer-content-interno {
-            margin-top: 12px;
+        .timer-sidebar-content {
+            padding: 15px;
+            background-color: var(--bg-card);
+            border-top: 1px solid var(--color-bordi);
             text-align: center;
         }
 
         .timer-display-orologio {
             font-family: monospace;
-            font-size: 1.6rem;
+            font-size: 1.8rem;
             font-weight: bold;
             color: var(--btn-add-ex);
-            margin-bottom: 10px;
+            margin: 10px 0;
         }
 
         .timer-modifica-controls {
             display: flex;
             justify-content: center;
-            gap: 10px;
-            margin-bottom: 10px;
+            gap: 8px;
+            margin-bottom: 12px;
         }
 
         .btn-mod-tempo {
             background-color: var(--bg-giorno-box);
             color: var(--color-testo);
             border: 1px solid var(--color-bordi);
-            padding: 8px 14px;
-            font-size: 0.9rem;
+            padding: 6px 12px;
+            font-size: 0.85rem;
             border-radius: 6px;
             cursor: pointer;
             width: auto;
@@ -553,7 +553,6 @@
             color: var(--btn-add-ex);
         }
 
-        /* Container pulsanti di controllo Avvia/Reset affiancati */
         .timer-action-controls {
             display: flex;
             justify-content: center;
@@ -564,8 +563,8 @@
             background-color: var(--btn-add-ex);
             color: #0f172a;
             border: none;
-            padding: 8px 16px;
-            font-size: 0.9rem;
+            padding: 8px 14px;
+            font-size: 0.85rem;
             border-radius: 6px;
             cursor: pointer;
             font-weight: 700;
@@ -577,8 +576,8 @@
             background-color: var(--bg-giorno-box);
             color: var(--color-etichette);
             border: 1px solid var(--color-bordi);
-            padding: 8px 12px;
-            font-size: 0.9rem;
+            padding: 8px 10px;
+            font-size: 0.85rem;
             border-radius: 6px;
             cursor: pointer;
             font-weight: 600;
@@ -589,8 +588,8 @@
             border-color: var(--btn-back);
             color: var(--btn-back);
         }
+        /* ---------------------------------------------------- */
 
-        /* Anteprima visiva dell'immagine o GIF dell'esercizio */
         .ex-img-preview {
             width: 100%;
             max-height: 220px;
@@ -600,7 +599,6 @@
             border: 1px solid var(--color-bordi);
         }
 
-        /* Box contenitore dei campi di input per registrare il log giornaliero dell'atleta */
         .log-inputs {
             background-color: rgba(255, 255, 255, 0.03);
             border: 1px dashed var(--color-bordi);
@@ -614,7 +612,6 @@
             font-size: 0.85rem;
         }
 
-        /* Box a tendina comprimibile per visualizzare lo storico dei carichi precedenti */
         .storico-box-tendina {
             margin-top: 12px;
             background-color: rgba(56, 189, 248, 0.05);
@@ -701,19 +698,39 @@
 </head>
 <body>
 
-    <!-- Elemento audio nascosto con file MP3 nativo per aggirare le restrizioni di iPhone/Safari -->
-    <audio id="audio-notifica" preload="auto">
-        <source src="https://actions.google.com/sounds/v1/alarms/beep_short.ogg" type="audio/ogg">
-        <source src="https://actions.google.com/sounds/v1/alarms/digital_watch_alarm_long.ogg" type="audio/ogg">
-    </audio>
-
     <button id="menu-btn" onclick="toggleDrawer()">MENU</button>
     <button id="logout-btn" onclick="tornaAllaHome()">LOGOUT</button>
 
+    <!-- Pannello laterale unificato (Drawer) -->
     <div id="side-drawer">
-        <h2 style="margin-top: 40px;">Miei Atleti</h2>
-        <p style="font-size: 0.85rem; color: var(--color-etichette);">Seleziona un tuo atleta per aprire la tendina e i suoi servizi:</p>
-        <div id="lista-storico-atleti"></div>
+        <div id="drawer-content-trainer" style="display: none;">
+            <h2 style="margin-top: 40px;">Miei Atleti</h2>
+            <p style="font-size: 0.85rem; color: var(--color-etichette);">Seleziona un tuo atleta per aprire la tendina e i suoi servizi:</p>
+            <div id="lista-storico-atleti"></div>
+        </div>
+
+        <div id="drawer-content-atleta" style="display: none;">
+            <h2 style="margin-top: 40px;">Menu Atleta</h2>
+            <p style="font-size: 0.85rem; color: var(--color-etichette);">Strumenti di supporto per l'allenamento:</p>
+            
+            <details class="timer-sidebar-tendina" id="timer-sidebar-container" data-secondi="60" data-tempo-base="60">
+                <summary>
+                    <span>Timer di Recupero</span>
+                    <span class="summary-arrow">▼</span>
+                </summary>
+                <div class="timer-sidebar-content">
+                    <div class="timer-display-orologio" id="sidebar-timer-display">1:00</div>
+                    <div class="timer-modifica-controls">
+                        <button type="button" class="btn-mod-tempo" onclick="modificaTempoTimerSidebar(-30)">-30s</button>
+                        <button type="button" class="btn-mod-tempo" onclick="modificaTempoTimerSidebar(30)">+30s</button>
+                    </div>
+                    <div class="timer-action-controls">
+                        <button type="button" class="btn-timer-azione" id="sidebar-btn-avvia" onclick="avviaTimerSidebar()"Avvia</button>
+                        <button type="button" class="btn-timer-reset" onclick="resetTimerSidebar()">Reset</button>
+                    </div>
+                </div>
+            </details>
+        </div>
     </div>
 
     <h1 id="titolo-principale">Gestionale Fit</h1>
@@ -736,10 +753,10 @@
         <h2>Inserisci le tue credenziali di accesso</h2>
         <form onsubmit="event.preventDefault(); eseguiLoginTrainer();" autocomplete="off">
             <label for="login-trainer-nome">Nome Personal Trainer:</label>
-            <input type="text" id="login-trainer-nome" name="no_autofill_trainer_nome" placeholder="es. Marco" autocomplete="off" required>
+            <input type="text" id="login-trainer-nome" name="no_autofill_trainer_nome" placeholder="" autocomplete="off" required>
 
             <label for="login-trainer-pin">PIN di Sicurezza:</label>
-            <input type="password" inputmode="numeric" id="login-trainer-pin" name="no_autofill_trainer_pin" placeholder="••••" maxlength="6" autocomplete="off" required>
+            <input type="password" inputmode="numeric" id="login-trainer-pin" name="no_autofill_trainer_pin" placeholder="" maxlength="6" autocomplete="off" required>
 
             <button type="submit" class="btn-submit">Accedi al Gestionale</button>
         </form>
@@ -753,10 +770,10 @@
         <div style="background-color: var(--bg-giorno-box); padding: 15px; border-radius: 10px; border: 1px solid var(--color-bordi); margin-top: 15px;">
             <h3>Aggiungi Nuovo Personal Trainer</h3>
             <label>Nome e Cognome Trainer:</label>
-            <input type="text" id="new-trainer-nome" name="no_autofill_new_trainer_nome" placeholder="es. Marco Rossi" autocomplete="off">
+            <input type="text" id="new-trainer-nome" name="no_autofill_new_trainer_nome" placeholder="" autocomplete="off">
             <label>PIN Assegnato (4 cifre):</label>
             <div style="display: flex; gap: 8px;">
-                <input type="text" id="new-trainer-pin" name="no_autofill_new_trainer_pin" placeholder="es. 1234" maxlength="6" autocomplete="off">
+                <input type="text" id="new-trainer-pin" name="no_autofill_new_trainer_pin" placeholder="" maxlength="6" autocomplete="off">
                 <button type="button" class="btn-add" style="width: auto; padding: 0 15px; margin-top: 6px; white-space: nowrap;" onclick="generaPinCasualeInput('new-trainer-pin')">Genera PIN</button>
             </div>
             <button class="btn-add" onclick="aggiungiNuovoTrainer()">+ Aggiungi Trainer</button>
@@ -783,11 +800,11 @@
         <div style="background-color: var(--bg-giorno-box); padding: 15px; border-radius: 10px; border: 1px solid var(--color-bordi);">
             <h3 style="margin-top:0;">Gestione Schede Atleti</h3>
             <label for="nome-cliente-iniziale">Inserisci Nome del Cliente / Atleta:</label>
-            <input type="text" id="nome-cliente-iniziale" name="no_autofill_cliente_nome" placeholder="es. Mario Rossi" autocomplete="off" required>
+            <input type="text" id="nome-cliente-iniziale" name="no_autofill_cliente_nome" placeholder="" autocomplete="off" required>
 
             <label for="pin-cliente-iniziale">PIN Assegnato all'Atleta (4 cifre):</label>
             <div style="display: flex; gap: 8px;">
-                <input type="text" id="pin-cliente-iniziale" name="no_autofill_cliente_pin" placeholder="es. 1234 o genera" maxlength="6" autocomplete="off">
+                <input type="text" id="pin-cliente-iniziale" name="no_autofill_cliente_pin" placeholder="" maxlength="6" autocomplete="off">
                 <button type="button" class="btn-add" style="width: auto; padding: 0 15px; margin-top: 6px; white-space: nowrap;" onclick="generaPinCasualeInput('pin-cliente-iniziale')">Genera PIN</button>
             </div>
 
@@ -803,10 +820,10 @@
         
         <form onsubmit="event.preventDefault(); caricaSchedaAtletaDaInput();" autocomplete="off">
             <label for="nome-atleta-cerca">Inserisci il tuo Nome e Cognome:</label>
-            <input type="text" id="nome-atleta-cerca" name="no_autofill_cerca_atleta_nome" placeholder="es. Mario Rossi" autocomplete="off" required>
+            <input type="text" id="nome-atleta-cerca" name="no_autofill_cerca_atleta_nome" placeholder="" autocomplete="off" required>
 
             <label for="pin-atleta-cerca">Inserisci il tuo PIN:</label>
-            <input type="password" inputmode="numeric" id="pin-atleta-cerca" name="no_autofill_cerca_atleta_pin" placeholder="••••" maxlength="6" autocomplete="off" required>
+            <input type="password" inputmode="numeric" id="pin-atleta-cerca" name="no_autofill_cerca_atleta_pin" placeholder="" maxlength="6" autocomplete="off" required>
 
             <button type="submit" class="btn-submit">Apri La Mia Scheda</button>
         </form>
@@ -866,7 +883,7 @@
         let isModalitaAtleta = false;
         let currentTrainer = null;
         let storicoLogAtletaCache = [];
-        let timerAttivoInterval = null;
+        let timerSidebarInterval = null;
 
         const eserciziPerMuscolo = {
             "Petto": [
@@ -919,23 +936,10 @@
             return dataStringa;
         }
 
-        // Funzione per riprodurre il suono reale tramite l'elemento <audio> sbloccato dal tocco utente
-        function suonaNotifica() {
-            try {
-                const audioEl = document.getElementById('audio-notifica');
-                if (audioEl) {
-                    audioEl.currentTime = 0;
-                    audioEl.play().catch(err => console.log("Riproduzione audio bloccata da iOS:", err));
-                }
-            } catch (e) {
-                console.log("Errore audio:", e);
-            }
-        }
-
-        // Funzioni per gestire il timer con orologio reale e recupero stato in background
-        function modificaTempoTimer(btnEl, secondiVariazione) {
-            const box = btnEl.closest('.timer-box-tendina');
-            const display = box.querySelector('.timer-display-orologio');
+        // Funzioni per gestire il Timer a tendina nel Menu Laterale
+        function modificaTempoTimerSidebar(secondiVariazione) {
+            const box = document.getElementById('timer-sidebar-container');
+            const display = document.getElementById('sidebar-timer-display');
             let secondiAttuali = parseInt(box.getAttribute('data-secondi') || '60');
             
             secondiAttuali += secondiVariazione;
@@ -949,16 +953,16 @@
             const sec = secondiAttuali % 60;
             display.innerText = `${min}:${sec < 10 ? '0' : ''}${sec}`;
 
-            const btnAvvia = box.querySelector('.btn-timer-azione');
-            btnAvvia.innerText = "⏱️ Avvia";
+            const btnAvvia = document.getElementById('sidebar-btn-avvia');
+            btnAvvia.innerText = "Avvia";
         }
 
-        function resetTimerTendina(btnResetEl) {
-            if (timerAttivoInterval) {
-                clearInterval(timerAttivoInterval);
+        function resetTimerSidebar() {
+            if (timerSidebarInterval) {
+                clearInterval(timerSidebarInterval);
             }
-            const box = btnResetEl.closest('.timer-box-tendina');
-            const display = box.querySelector('.timer-display-orologio');
+            const box = document.getElementById('timer-sidebar-container');
+            const display = document.getElementById('sidebar-timer-display');
             
             let tempoBase = parseInt(box.getAttribute('data-tempo-base') || '60');
             box.setAttribute('data-secondi', tempoBase);
@@ -968,27 +972,19 @@
             const sec = tempoBase % 60;
             display.innerText = `${min}:${sec < 10 ? '0' : ''}${sec}`;
 
-            const btnAvvia = box.querySelector('.btn-timer-azione');
-            btnAvvia.innerText = "⏱️ Avvia";
-            btnAvvia.onclick = function() { avviaTimerIncrementale(btnAvvia); };
+            const btnAvvia = document.getElementById('sidebar-btn-avvia');
+            btnAvvia.innerText = "Avvia";
+            btnAvvia.onclick = function() { avviaTimerSidebar(); };
         }
 
-        function avviaTimerIncrementale(btnAvviaEl) {
-            if (timerAttivoInterval) {
-                clearInterval(timerAttivoInterval);
+        function avviaTimerSidebar() {
+            if (timerSidebarInterval) {
+                clearInterval(timerSidebarInterval);
             }
 
-            // Trucco per sbloccare l'audio nativo di Safari/iOS al primo click utente
-            const audioEl = document.getElementById('audio-notifica');
-            if (audioEl) {
-                audioEl.play().then(() => {
-                    audioEl.pause();
-                    audioEl.currentTime = 0;
-                }).catch(() => {});
-            }
-
-            const box = btnAvviaEl.closest('.timer-box-tendina');
-            const display = box.querySelector('.timer-display-orologio');
+            const box = document.getElementById('timer-sidebar-container');
+            const display = document.getElementById('sidebar-timer-display');
+            const btnAvvia = document.getElementById('sidebar-btn-avvia');
             let secondiRimanenti = parseInt(box.getAttribute('data-secondi') || '60');
 
             if (secondiRimanenti <= 0) {
@@ -1010,43 +1006,39 @@
                     const sec = secRim % 60;
                     display.innerText = `${min}:${sec < 10 ? '0' : ''}${sec}`;
                 } else {
-                    clearInterval(timerAttivoInterval);
+                    clearInterval(timerSidebarInterval);
                     display.innerText = "0:00 - Fatto!";
-                    btnAvviaEl.innerText = "⏱️ Avvia";
-                    btnAvviaEl.onclick = function() { avviaTimerIncrementale(btnAvviaEl); };
+                    btnAvvia.innerText = "Avvia";
+                    btnAvvia.onclick = function() { avviaTimerSidebar(); };
                     
                     let tempoBase = parseInt(box.getAttribute('data-tempo-base') || '60');
                     box.setAttribute('data-secondi', tempoBase);
                     box.removeAttribute('data-target-time');
 
-                    suonaNotifica();
-                    if ("vibrate" in navigator) {
-                        navigator.vibrate([200, 100, 200]);
-                    }
-                    alert("⏱️ Tempo di recupero scaduto! Torna sotto i pesi.");
+                    alert("Tempo di recupero terminato.");
                 }
             }
 
             aggiornaTesto();
-            btnAvviaEl.innerText = "Pausa";
-            btnAvviaEl.onclick = function() {
-                clearInterval(timerAttivoInterval);
+            btnAvvia.innerText = "Pausa";
+            btnAvvia.onclick = function() {
+                clearInterval(timerSidebarInterval);
                 box.removeAttribute('data-target-time');
-                btnAvviaEl.innerText = "Riprendi";
-                btnAvviaEl.onclick = function() { avviaTimerIncrementale(btnAvviaEl); };
+                btnAvvia.innerText = "Riprendi";
+                btnAvvia.onclick = function() { avviaTimerSidebar(); };
             };
 
-            timerAttivoInterval = setInterval(aggiornaTesto, 500);
+            timerSidebarInterval = setInterval(aggiornaTesto, 500);
         }
 
-        // Controllo riattivazione: ricalcola il tempo trascorso quando l'atleta torna sull'app
+        // Controllo riattivazione per il timer in sidebar
         document.addEventListener("visibilitychange", function() {
             if (!document.hidden) {
-                const activeTimers = document.querySelectorAll('.timer-box-tendina');
-                activeTimers.forEach(box => {
+                const box = document.getElementById('timer-sidebar-container');
+                if (box) {
                     const targetTime = box.getAttribute('data-target-time');
                     if (targetTime) {
-                        const display = box.querySelector('.timer-display-orologio');
+                        const display = document.getElementById('sidebar-timer-display');
                         const adesso = Date.now();
                         const diffMs = parseInt(targetTime) - adesso;
                         let secRim = Math.ceil(diffMs / 1000);
@@ -1058,13 +1050,10 @@
                         } else {
                             display.innerText = "0:00 - Fatto!";
                             box.removeAttribute('data-target-time');
-                            suonaNotifica();
-                            if ("vibrate" in navigator) {
-                                navigator.vibrate([200, 100, 200]);
-                            }
+                            alert("Tempo di recupero terminato.");
                         }
                     }
-                });
+                }
             }
         });
 
@@ -1157,8 +1146,19 @@
         }
 
         function toggleDrawer() {
-            document.getElementById('side-drawer').classList.toggle('open');
-            aggiornaListaStorico();
+            const drawer = document.getElementById('side-drawer');
+            drawer.classList.toggle('open');
+            
+            if (drawer.classList.contains('open')) {
+                if (isModalitaAtleta) {
+                    document.getElementById('drawer-content-atleta').style.display = 'block';
+                    document.getElementById('drawer-content-trainer').style.display = 'none';
+                } else if (currentTrainer) {
+                    document.getElementById('drawer-content-trainer').style.display = 'block';
+                    document.getElementById('drawer-content-atleta').style.display = 'none';
+                    aggiornaListaStorico();
+                }
+            }
         }
 
         function generaPinCasualeInput(inputId) {
@@ -1431,7 +1431,7 @@
                     </summary>
                     <div class="dettagli-esercizio-content">
                         <label>Nome Esercizio (Scrivi o seleziona):</label>
-                        <input type="text" class="ex-nome-input" list="${idDatalist}" placeholder="es. Lat Machine Technogym" value="${esSelezionato}" oninput="aggiornaTitoloEsercizio(this)" autocomplete="off">
+                        <input type="text" class="ex-nome-input" list="${idDatalist}" placeholder="" value="${esSelezionato}" oninput="aggiornaTitoloEsercizio(this)" autocomplete="off">
                         <datalist id="${idDatalist}">
                             ${generaOpzioniDatalist(listaFiltro)}
                         </datalist>
@@ -1445,15 +1445,15 @@
                             </div>
                             <div>
                                 <label>Serie x Reps:</label>
-                                <input type="text" class="ex-serie" placeholder="es. 3x12" value="${serieVal}">
+                                <input type="text" class="ex-serie" placeholder="" value="${serieVal}">
                             </div>
                         </div>
 
                         <label>Tempo di Recupero:</label>
-                        <input type="text" class="ex-recupero" placeholder="es. 60 secondi" value="${recuperoVal}">
+                        <input type="text" class="ex-recupero" placeholder="" value="${recuperoVal}">
 
                         <label>Link Foto/GIF Esercizio (opzionale):</label>
-                        <input type="url" class="ex-img" placeholder="https://esempio.it/foto.gif" value="${imgVal}">
+                        <input type="url" class="ex-img" placeholder="" value="${imgVal}">
                     </div>
                 </details>
             `;
@@ -1483,13 +1483,13 @@
                     </summary>
                     <div style="padding: 15px; background-color: var(--bg-card); border-top: 1px solid var(--color-bordi);">
                         <label>Nome Giorno / Sessione:</label>
-                        <input type="text" class="giorno-nome-input" list="${idDatalistGiorni}" placeholder="es. Giorno 1" value="${nomeGiornoDefault}" oninput="aggiornaTitoloGiorno(this)" autocomplete="off" style="margin-top: 8px;">
+                        <input type="text" class="giorno-nome-input" list="${idDatalistGiorni}" placeholder="" value="${nomeGiornoDefault}" oninput="aggiornaTitoloGiorno(this)" autocomplete="off" style="margin-top: 8px;">
                         <datalist id="${idDatalistGiorni}">
                             ${generaOpzioniDatalist(opzioniNomiGiorni)}
                         </datalist>
 
                         <label>Muscoli Coinvolti (Scrivi o seleziona):</label>
-                        <input type="text" class="muscoli-input" list="${idDatalistMuscoli}" placeholder="es. Petto, Tricipiti o Full Body" value="${muscoloSelezionato}" oninput="aggiornaEserciziDelGiorno(this)" autocomplete="off">
+                        <input type="text" class="muscoli-input" list="${idDatalistMuscoli}" placeholder="" value="${muscoloSelezionato}" oninput="aggiornaEserciziDelGiorno(this)" autocomplete="off">
                         <datalist id="${idDatalistMuscoli}">
                             ${generaOpzioniDatalist(elencoMuscoliConsigliati)}
                         </datalist>
@@ -1597,7 +1597,7 @@
                 document.getElementById('btn-menu-finale').style.display = 'none';
                 document.getElementById('btn-salva-log').style.display = 'block';
                 document.getElementById('btn-esci-atleta').style.display = 'block';
-                document.getElementById('menu-btn').style.display = 'none';
+                document.getElementById('menu-btn').style.display = 'block';
                 document.getElementById('logout-btn').style.display = 'block';
             } else {
                 document.getElementById('btn-condividi').style.display = 'block';
@@ -1654,33 +1654,15 @@
                             <div class="grid-2">
                                 <div>
                                     <label>Kg usati:</label>
-                                    <input type="text" id="log-kg-${gIdx}-${eIdx}" placeholder="es. 50 kg">
+                                    <input type="text" id="log-kg-${gIdx}-${eIdx}" placeholder="">
                                 </div>
                                 <div>
                                     <label>Reps fatte:</label>
-                                    <input type="text" id="log-reps-${gIdx}-${eIdx}" placeholder="es. 4x10">
+                                    <input type="text" id="log-reps-${gIdx}-${eIdx}" placeholder="">
                                 </div>
                             </div>
                         </div>
                     ` : '';
-
-                    // Tendina del Timer con supporto file MP3 reale per iOS/Safari
-                    let timerTendinaHtml = `
-                        <details class="timer-box-tendina" data-secondi="60" data-tempo-base="60">
-                            <summary>⏱️ Apri Timer di Recupero</summary>
-                            <div class="timer-content-interno">
-                                <div class="timer-display-orologio">1:00</div>
-                                <div class="timer-modifica-controls">
-                                    <button type="button" class="btn-mod-tempo" onclick="modificaTempoTimer(this, -30)">-30s</button>
-                                    <button type="button" class="btn-mod-tempo" onclick="modificaTempoTimer(this, 30)">+30s</button>
-                                </div>
-                                <div class="timer-action-controls">
-                                    <button type="button" class="btn-timer-azione" onclick="avviaTimerIncrementale(this)">⏱️ Avvia</button>
-                                    <button type="button" class="btn-timer-reset" onclick="resetTimerTendina(this)">🔄 Reset</button>
-                                </div>
-                            </div>
-                        </details>
-                    `;
 
                     htmlEsercizi += `
                         <div class="ex-card-final">
@@ -1695,7 +1677,6 @@
                                         <span>Serie: <b>${ex.serie}</b></span>
                                         <span>Recupero: <b>${ex.recupero}</b></span>
                                     </div>
-                                    ${timerTendinaHtml}
                                     ${mediaHtml}
                                     ${logHtml}
                                     ${storicoHtml}
@@ -1825,7 +1806,7 @@
                 document.getElementById('schermata-login-atleta').style.display = 'none';
                 renderizzaScheda(trovata);
                 document.getElementById('scheda-finale').style.display = 'block';
-                document.getElementById('menu-btn').style.display = 'none';
+                document.getElementById('menu-btn').style.display = 'block';
                 document.getElementById('logout-btn').style.display = 'block';
             } else {
                 alert("Nome o PIN non validi. Verifica le tue credenziali con il tuo Personal Trainer.");
@@ -2016,7 +1997,7 @@
                     isModalitaAtleta = true;
                     nomeAtletaSalvato = data.cliente || "";
                     
-                    document.getElementById('menu-btn').style.display = 'none';
+                    document.getElementById('menu-btn').style.display = 'block';
                     document.getElementById('schermata-scelta').style.display = 'none';
                     document.getElementById('schermata-login-form-trainer').style.display = 'none';
                     document.getElementById('schermata-admin-panel').style.display = 'none';
