@@ -934,7 +934,7 @@
             display.innerText = `${min}:${sec < 10 ? '0' : ''}${sec}`;
 
             const btnAvvia = box.querySelector('.btn-timer-azione');
-            btnAvvia.innerText = "⏱️ Avvia";
+            btnAvvia.innerText = "Avvia";
         }
 
         function resetTimerTendina(btnResetEl) {
@@ -953,7 +953,7 @@
             display.innerText = `${min}:${sec < 10 ? '0' : ''}${sec}`;
 
             const btnAvvia = box.querySelector('.btn-timer-azione');
-            btnAvvia.innerText = "⏱️ Avvia";
+            btnAvvia.innerText = "Avvia";
             btnAvvia.onclick = function() { avviaTimerIncrementale(btnAvvia); };
         }
 
@@ -993,7 +993,7 @@
                 } else {
                     clearInterval(timerAttivoInterval);
                     display.innerText = "0:00 - Fatto!";
-                    btnAvviaEl.innerText = "⏱️ Avvia";
+                    btnAvviaEl.innerText = "Avvia";
                     btnAvviaEl.onclick = function() { avviaTimerIncrementale(btnAvviaEl); };
                     
                     // Riporta il timer al valore base impostato dall'atleta per la serie successiva
@@ -1003,7 +1003,7 @@
                     if ("vibrate" in navigator) {
                         navigator.vibrate([200, 100, 200]);
                     }
-                    alert("⏱️ Tempo di recupero scaduto! Torna sotto i pesi.");
+                    alert("Tempo di recupero scaduto! Torna sotto i pesi.");
                 }
             }, 1000);
         }
@@ -1607,7 +1607,7 @@
                     // Tendina del Timer con memoria del tempo base per il reset intelligente
                     let timerTendinaHtml = `
                         <details class="timer-box-tendina" data-secondi="60" data-tempo-base="60">
-                            <summary>⏱️ Apri Timer di Recupero</summary>
+                            <summary>Apri Timer di Recupero</summary>
                             <div class="timer-content-interno">
                                 <div class="timer-display-orologio">1:00</div>
                                 <div class="timer-modifica-controls">
@@ -1615,8 +1615,8 @@
                                     <button type="button" class="btn-mod-tempo" onclick="modificaTempoTimer(this, 30)">+30s</button>
                                 </div>
                                 <div class="timer-action-controls">
-                                    <button type="button" class="btn-timer-azione" onclick="avviaTimerIncrementale(this)">⏱️ Avvia</button>
-                                    <button type="button" class="btn-timer-reset" onclick="resetTimerTendina(this)">🔄 Reset</button>
+                                    <button type="button" class="btn-timer-azione" onclick="avviaTimerIncrementale(this)">Avvia</button>
+                                    <button type="button" class="btn-timer-reset" onclick="resetTimerTendina(this)">Reset</button>
                                 </div>
                             </div>
                         </details>
