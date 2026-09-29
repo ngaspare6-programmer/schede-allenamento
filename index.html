@@ -34,8 +34,8 @@
             --btn-add-ex: #38bdf8;       
             --btn-add-giorno: #6366f1;   
             --btn-submit: #22c55e;       
-            --btn-back: #ef4444;         
             --btn-share: #0284c7;        
+            --btn-back: #ef4444;         
             --btn-delete-ex: #ef4444;    
 
             --header-giorno-1: #0284c7;  
@@ -46,13 +46,13 @@
             --tag-muscolo-text: #38bdf8; 
         }
 
-        /* Configurazione dello stile generale della pagina principale */
+        /* Configurazione dello stile generale della pagina principale (con padding aumentato in alto per i bottoni fissi) */
         body {
             font-family: 'Inter', system-ui, -apple-system, sans-serif;
             background-color: var(--bg-pagina);
             color: var(--color-testo);
             margin: 0;
-            padding: 10px 15px; 
+            padding: 55px 15px 15px 15px; 
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -78,22 +78,23 @@
 
         /* Stile specifico per il titolo principale dell'applicazione */
         h1 { 
-            font-size: 2rem;
+            font-size: 1.8rem;
             color: var(--color-titoli);
             text-align: center;
-            margin-top: 10px;    
-            margin-bottom: 25px; 
+            margin-top: 5px;    
+            margin-bottom: 20px; 
             letter-spacing: -0.5px;
+            word-break: break-word;
         }
 
         /* Dimensioni standard per sottotitoli di livello 2 e 3 */
-        h2 { font-size: 1.5rem; text-align: center; }
-        h3 { font-size: 1.2rem; }
+        h2 { font-size: 1.4rem; text-align: center; }
+        h3 { font-size: 1.1rem; }
 
-        /* Contenitore grafico principale a forma di scheda (Card) */
+        /* Contenitore grafico principale a forma di scheda (Card con overflow hidden per evitare sbordamenti) */
         .card {
             background-color: var(--bg-card);
-            padding: 20px 25px; 
+            padding: 20px 20px; 
             border-radius: 16px;
             max-width: 650px;
             width: 100%;
@@ -101,15 +102,16 @@
             border: 1px solid var(--color-bordi);
             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
             box-sizing: border-box;
+            overflow: hidden; 
         }
         
         /* Stile per le etichette descrittive dei campi di input */
         label { 
             display: block;
-            margin-top: 18px;
+            margin-top: 15px;
             color: var(--color-etichette);
             font-weight: 600;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
         }
         
         /* Stile comune per tutti i campi di input di testo e menu a tendina select */
@@ -156,10 +158,12 @@
         .btn-remove-ex {
             background-color: var(--btn-delete-ex);
             color: #ffffff;
-            padding: 6px 10px;
+            padding: 6px 12px;
             font-size: 0.75rem;
             width: auto;
             margin: 0;
+            margin-right: 15px; /* spostamento pulsante elimina*/
+            white-space: nowrap;
         }
 
         /* Griglia a due colonne simmetriche */
@@ -173,8 +177,10 @@
         .scelta-ruolo-grid { 
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-top: 25px;
+            gap: 12px;
+            margin-top: 20px;
+            box-sizing: border-box;
+            width: 100%;
         }
 
         /* Stile grafico dei box interattivi per la selezione del ruolo */
@@ -182,10 +188,11 @@
             background-color: var(--bg-giorno-box);
             border: 2px solid var(--color-bordi);
             border-radius: 12px;
-            padding: 35px 15px;
+            padding: 25px 10px;
             text-align: center;
             cursor: pointer;
             transition: all 0.2s ease;
+            box-sizing: border-box;
         }
 
         /* Effetto visivo al passaggio del mouse sui box di ruolo */
@@ -197,21 +204,21 @@
         /* Stile del testo interno ai box di ruolo */
         .ruolo-box h3 { 
             margin: 0;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             color: var(--color-titoli);
         }
 
-        /* Posizionamento fisso del pulsante per aprire il menu laterale */
+        /* Posizionamento fisso del pulsante per aprire il menu laterale (più compatto per mobile) */
         #menu-btn {
             position: fixed;
-            top: 15px;
-            left: 15px;
+            top: 10px;
+            left: 10px;
             background-color: var(--bg-card);
             color: var(--color-titoli);
             border: 1px solid var(--color-bordi);
-            font-size: 1.1rem;
-            padding: 8px 14px;
-            border-radius: 8px;
+            font-size: 0.85rem;
+            padding: 6px 10px;
+            border-radius: 6px;
             cursor: pointer;
             z-index: 1000;
             width: auto;
@@ -220,17 +227,17 @@
             display: none;
         }
 
-        /* Posizionamento fisso del pulsante di logout in alto a destra */
+        /* Posizionamento fisso del pulsante di logout in alto a destra (più compatto per mobile) */
         #logout-btn {
             position: fixed;
-            top: 15px;
-            right: 15px;
+            top: 10px;
+            right: 10px;
             background-color: var(--btn-back);
             color: #ffffff;
             border: 1px solid var(--color-bordi);
-            font-size: 1.1rem;
-            padding: 8px 14px;
-            border-radius: 8px;
+            font-size: 0.85rem;
+            padding: 6px 10px;
+            border-radius: 6px;
             cursor: pointer;
             z-index: 1000;
             width: auto;
@@ -323,24 +330,26 @@
         /* Contenitore grafico per la gestione di un singolo giorno nel form di creazione */
         .giorno-box {
             background-color: var(--bg-giorno-box);
-            padding: 18px;
+            padding: 15px;
             border-radius: 10px;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             border: 1px solid var(--color-bordi);
         }
 
-        /* --- STILE NERO PULITO PER LA TENDINA DEGLI ESERCIZI --- */
-        .esercizio-box details {
-            background-color: #1a2332;
+        /* --- STILE PER ALLINEAMENTO E GESTIONE FRECCETTA --- */
+        .esercizio-box details,
+        .giorno-box details {
+            background-color: #000000;
             border: 1px solid var(--color-bordi);
             border-radius: 8px;
             margin-top: 15px;
             overflow: hidden;
         }
 
-        .esercizio-box summary {
-            background-color: #1a2332 !important; /* Sfondo scelta esercizio */
-            background-image: none !important;    /* Rimuove eventuali gradienti ereditati */
+        .esercizio-box summary,
+        .giorno-box details > summary {
+            background-color: #000000 !important; 
+            background-image: none !important;    
             padding: 12px 15px;
             font-size: 0.95rem;
             color: var(--color-testo);
@@ -352,17 +361,39 @@
             align-items: center;
         }
 
-        .esercizio-box summary::-webkit-details-marker { display: none; }
-        .esercizio-box summary::after {
-            content: "▼";
+        /* Blocco destro contenente pulsante e freccettina */
+        .summary-right-actions {
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+            margin-left: 15px;
+        }
+
+        /* Icona della freccettina gestita come elemento indipendente a destra */
+        .summary-arrow {
             font-size: 0.75rem;
             color: var(--color-etichette);
             transition: transform 0.2s ease;
+            flex-shrink: 0;
+            user-select: none;
         }
 
-        .esercizio-box details[open] summary::after {
+        details[open] > summary .summary-arrow {
             transform: rotate(180deg);
         }
+
+        /* Nome dell'esercizio o del giorno libero di estendersi */
+        .titolo-esercizio-span,
+        .giorno-box details > summary > span:first-child {
+            flex: 1;
+            min-width: 0;
+            word-break: break-word;
+            overflow-wrap: break-word;
+            white-space: normal;
+        }
+
+        .esercizio-box summary::-webkit-details-marker,
+        .giorno-box details > summary::-webkit-details-marker { display: none; }
 
         .dettagli-esercizio-content {
             padding: 15px;
@@ -371,8 +402,40 @@
         }
         /* ---------------------------------------------------- */
 
+        /* --- STILE NERO E PULITO PER LE SCHEDE FINALI DEGLI ESERCIZI (TENDINE) --- */
+        .ex-card-final details {
+            background-color: #000000 !important;
+            border: 1px solid var(--color-bordi);
+            border-radius: 8px;
+            margin-bottom: 12px;
+            overflow: hidden;
+        }
+
+        .ex-card-final summary {
+            background-color: #000000 !important;
+            background-image: none !important;
+            padding: 12px 15px;
+            font-size: 0.95rem;
+            color: var(--color-testo);
+            font-weight: 600;
+            cursor: pointer;
+            list-style: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .ex-card-final summary::-webkit-details-marker { display: none; }
+        
+        .ex-card-final-content {
+            padding: 15px;
+            background-color: #000000;
+            border-top: 1px solid var(--color-bordi);
+        }
+        /* ------------------------------------------------------------------------ */
+
         /* Stile dei tag details per creare sezioni comprimibili generali (giorni) */
-        details {
+        #res-lista-giorni details {
             background-color: var(--bg-card);
             border-radius: 10px;
             margin-bottom: 12px;
@@ -380,10 +443,10 @@
             overflow: hidden;
         }
 
-        summary {
+        #res-lista-giorni summary {
             background: linear-gradient(135deg, var(--header-giorno-1), var(--header-giorno-2));
             padding: 15px 20px;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: bold;
             cursor: pointer;
             list-style: none;
@@ -392,31 +455,21 @@
             align-items: center;
         }
 
-        summary::after { 
-            content: "▼";
-            font-size: 0.8rem;
-            transition: transform 0.2s ease;
-        }
-
-        details[open] summary::after { transform: rotate(180deg); }
+        #res-lista-giorni details[open] > summary .summary-arrow { transform: rotate(180deg); }
 
         .dettagli-giorno-content { padding: 15px; }
-
-        /* Scheda grafica finale in cui viene visualizzato l'esercizio */
-        .ex-card-final {
-            background-color: var(--card-ex-finale);
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 12px;
-            border-left: 5px solid var(--bordo-ex-finale);
-        }
 
         /* Titolo testuale dell'esercizio nella scheda finale */
         .ex-title { 
             font-weight: bold;
             margin: 0;
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             color: var(--color-testo);
+            word-break: break-word;
+            overflow-wrap: break-word;
+            white-space: normal;
+            flex: 1;
+            min-width: 0;
         }
 
         /* Etichetta visiva del gruppo muscolare dell'esercizio */
@@ -665,7 +718,7 @@
             
             <div class="ruolo-box" style="opacity: 0.5; cursor: not-allowed;" onclick="alert('La sezione Alimentazione sarà disponibile a breve!')">
                 <h3>Alimentazione</h3>
-                <span style="font-size: 0.75rem; color: var(--color-etichette);">(In arrivo)</span>
+                <span style="font-size: 0.7rem; color: var(--color-etichette); display: block; margin-top: 5px;">(In arrivo)</span>
             </div>
         </div>
 
@@ -760,6 +813,14 @@
             return [...new Set(tutti)];
         }
 
+        function generaOpzioniDatalist(lista) {
+            let html = "";
+            lista.forEach(item => {
+                html += `<option value="${item}">`;
+            });
+            return html;
+        }
+
         function generaOpzioniSelect(lista, valoreSelezionato = "") {
             let html = `<option value="">Seleziona...</option>`;
             let trovato = false;
@@ -777,40 +838,20 @@
             return html;
         }
 
-        function generaOpzioniSelectMultipla(lista, valoriSelezionati = []) {
-            let html = "";
-            let arraySelezionati = Array.isArray(valoriSelezionati) ? valoriSelezionati : [valoriSelezionati];
-            
-            lista.forEach(item => {
-                const isSelected = arraySelezionati.includes(item) ? 'selected' : '';
-                html += `<option value="${item}" ${isSelected}>${item}</option>`;
-            });
-
-            arraySelezionati.forEach(val => {
-                if (val && !lista.includes(val)) {
-                    html += `<option value="${val}" selected>${val}</option>`;
-                }
-            });
-
-            return html;
-        }
-
-        function aggiornaEserciziDelGiorno(selectMuscoloEl) {
-            const giornoBox = selectMuscoloEl.closest('.giorno-box');
-            const opzioniSelezionate = Array.from(selectMuscoloEl.selectedOptions).map(opt => opt.value.toLowerCase());
-            const selectEsercizi = giornoBox.querySelectorAll('.ex-nome');
+        function aggiornaEserciziDelGiorno(inputMuscoloEl) {
+            const giornoBox = inputMuscoloEl.closest('.giorno-box');
+            const testoMuscolo = inputMuscoloEl.value.toLowerCase();
+            const inputEsercizi = giornoBox.querySelectorAll('.ex-nome-input');
 
             let eserciziTrovati = [];
 
-            if (opzioniSelezionate.length === 0 || opzioniSelezionate.includes("full body") || opzioniSelezionate.includes("")) {
+            if (!testoMuscolo || testoMuscolo.includes("full body")) {
                 eserciziTrovati = ottieniTuttiGliEsercizi();
             } else {
-                opzioniSelezionate.forEach(muscoloScelto => {
-                    Object.keys(eserciziPerMuscolo).forEach(categoria => {
-                        if (muscoloScelto.includes(categoria.toLowerCase())) {
-                            eserciziTrovati = eserciziTrovati.concat(eserciziPerMuscolo[categoria]);
-                        }
-                    });
+                Object.keys(eserciziPerMuscolo).forEach(categoria => {
+                    if (testoMuscolo.includes(categoria.toLowerCase())) {
+                        eserciziTrovati = eserciziTrovati.concat(eserciziPerMuscolo[categoria]);
+                    }
                 });
 
                 if (eserciziTrovati.length === 0) {
@@ -820,17 +861,28 @@
                 }
             }
 
-            selectEsercizi.forEach(selectEx => {
-                const valoreCorrente = selectEx.value;
-                selectEx.innerHTML = generaOpzioniSelect(eserciziTrovati, valoreCorrente);
+            inputEsercizi.forEach(inputEx => {
+                const datalist = inputEx.nextElementSibling;
+                if (datalist && datalist.tagName === 'DATALIST') {
+                    datalist.innerHTML = generaOpzioniDatalist(eserciziTrovati);
+                }
             });
         }
 
-        function aggiornaTitoloEsercizio(selectExEl) {
-            const titoloSpan = selectExEl.closest('.esercizio-box').querySelector('.titolo-esercizio-span');
-            const nomeScelto = selectExEl.value;
+        function aggiornaTitoloEsercizio(inputExEl) {
+            const titoloSpan = inputExEl.closest('.esercizio-box').querySelector('.titolo-esercizio-span');
+            const nomeScelto = inputExEl.value;
             if (titoloSpan) {
-                titoloSpan.innerText = nomeScelto ? nomeScelto : "Seleziona esercizio...";
+                titoloSpan.innerText = nomeScelto ? nomeScelto : "Seleziona o scrivi esercizio...";
+            }
+        }
+
+        function aggiornaTitoloGiorno(inputGiornoEl) {
+            const giornoBox = inputGiornoEl.closest('.giorno-box');
+            const titoloSpan = giornoBox.querySelector('.titolo-giorno-span');
+            const nomeScelto = inputGiornoEl.value;
+            if (titoloSpan) {
+                titoloSpan.innerText = nomeScelto ? nomeScelto : "Nuovo Giorno";
             }
         }
 
@@ -1086,46 +1138,40 @@
         function aggiungiEsercizio(btn, esSelezionato = "", muscoloSelezionato = "", serieVal = "", recuperoVal = "", imgVal = "") {
             const giornoBox = btn.closest('.giorno-box');
             const container = giornoBox.querySelector('.lista-esercizi-giorno');
-            const muscoloSelect = giornoBox.querySelector('.muscoli-input');
+            const inputMuscolo = giornoBox.querySelector('.muscoli-input');
             
             let listaFiltro = ottieniTuttiGliEsercizi();
-            if (muscoloSelect) {
-                const opzioniSelezionate = Array.from(muscoloSelect.selectedOptions).map(opt => opt.value.toLowerCase());
+            if (inputMuscolo && inputMuscolo.value.trim() !== "") {
+                const testoMuscolo = inputMuscolo.value.toLowerCase();
                 let eserciziTrovati = [];
-                if (opzioniSelezionate.length === 0 || opzioniSelezionate.includes("full body") || opzioniSelezionate.includes("")) {
-                    eserciziTrovati = ottieniTuttiGliEsercizi();
-                } else {
-                    opzioniSelezionate.forEach(muscoloScelto => {
-                        Object.keys(eserciziPerMuscolo).forEach(categoria => {
-                            if (muscoloScelto.includes(categoria.toLowerCase())) {
-                                eserciziTrovati = eserciziTrovati.concat(eserciziPerMuscolo[categoria]);
-                            }
-                        });
-                    });
-                    if (eserciziTrovati.length === 0) {
-                        eserciziTrovati = ottieniTuttiGliEsercizi();
-                    } else {
-                        eserciziTrovati = [...new Set(eserciziTrovati)];
+                Object.keys(eserciziPerMuscolo).forEach(categoria => {
+                    if (testoMuscolo.includes(categoria.toLowerCase())) {
+                        eserciziTrovati = eserciziTrovati.concat(eserciziPerMuscolo[categoria]);
                     }
+                });
+                if (eserciziTrovati.length > 0) {
+                    listaFiltro = [...new Set(eserciziTrovati)];
                 }
-                listaFiltro = eserciziTrovati;
             }
 
+            const idDatalist = 'ex-list-' + Math.random().toString(36).substr(2, 9);
             const nuovoEsercizio = document.createElement('div');
             nuovoEsercizio.className = 'esercizio-box';
             nuovoEsercizio.innerHTML = `
-                <details open>
+                <details>
                     <summary>
-                        <span class="titolo-esercizio-span">${esSelezionato || 'Seleziona esercizio...'}</span>
-                        <div style="display: flex; align-items: center; gap: 10px;">
+                        <span class="titolo-esercizio-span">${esSelezionato || 'Seleziona o scrivi esercizio...'}</span>
+                        <div class="summary-right-actions">
                             <button type="button" class="btn-remove-ex" onclick="rimuoviEsercizio(this)">Elimina</button>
+                            <span class="summary-arrow">▼</span>
                         </div>
                     </summary>
                     <div class="dettagli-esercizio-content">
-                        <label>Nome Esercizio:</label>
-                        <select class="ex-nome" onchange="aggiornaTitoloEsercizio(this)">
-                            ${generaOpzioniSelect(listaFiltro, esSelezionato)}
-                        </select>
+                        <label>Nome Esercizio (Scrivi o seleziona):</label>
+                        <input type="text" class="ex-nome-input" list="${idDatalist}" placeholder="es. Lat Machine Technogym" value="${esSelezionato}" oninput="aggiornaTitoloEsercizio(this)" autocomplete="off">
+                        <datalist id="${idDatalist}">
+                            ${generaOpzioniDatalist(listaFiltro)}
+                        </datalist>
 
                         <div class="grid-2">
                             <div>
@@ -1151,38 +1197,39 @@
             container.appendChild(nuovoEsercizio);
         }
 
-        function aggiungiGiorno(giornoSelezionato = "", muscoliSelezionati = []) {
+        function aggiungiGiorno(nomeGiornoPreimpostato = "", muscoloSelezionato = "") {
             const contenitore = document.getElementById('contenitore-giorni');
             const numeroGiorni = contenitore.querySelectorAll('.giorno-box').length + 1;
             
-            const opzioniGiorni = [
-                `Giorno ${numeroGiorni}`, "Giorno 1", "Giorno 2", "Giorno 3", "Giorno 4", "Giorno 5", "Richiamo / Extra"
-            ];
+            const nomeGiornoDefault = nomeGiornoPreimpostato || `Giorno ${numeroGiorni}`;
+            const idDatalistMuscoli = 'muscoli-list-' + Math.random().toString(36).substr(2, 9);
+            const idDatalistGiorni = 'giorni-list-' + Math.random().toString(36).substr(2, 9);
 
-            let htmlOpzioniGiorni = "";
-            opzioniGiorni.forEach(g => {
-                const sel = (g === giornoSelezionato) ? 'selected' : '';
-                htmlOpzioniGiorni += `<option value="${g}" ${sel}>${g}</option>`;
-            });
+            const opzioniNomiGiorni = ["Giorno 1", "Giorno 2", "Giorno 3", "Giorno 4", "Giorno 5", "Richiamo / Extra"];
 
             const nuovoGiorno = document.createElement('div');
             nuovoGiorno.className = 'giorno-box';
             nuovoGiorno.innerHTML = `
-                <details open style="background: transparent; border: none; margin: 0;">
-                    <summary style="border-radius: 8px; margin-bottom: 15px;">
-                        <span>Sessione ${numeroGiorni}</span>
-                        <button type="button" class="btn-remove-ex" style="background-color: var(--btn-back);" onclick="rimuoviGiorno(this)">Elimina Giorno</button>
+                <details>
+                    <summary>
+                        <span class="titolo-giorno-span">${nomeGiornoDefault}</span>
+                        <div class="summary-right-actions">
+                            <button type="button" class="btn-remove-ex" style="background-color: var(--btn-back);" onclick="rimuoviGiorno(this)">Elimina Giorno</button>
+                            <span class="summary-arrow">▼</span>
+                        </div>
                     </summary>
-                    <div style="padding: 5px;">
-                        <label>Giorno / Sessione:</label>
-                        <select class="giorno-select" style="margin-top: 8px;">
-                            ${htmlOpzioniGiorni}
-                        </select>
+                    <div style="padding: 15px; background-color: var(--bg-card); border-top: 1px solid var(--color-bordi);">
+                        <label>Nome Giorno / Sessione:</label>
+                        <input type="text" class="giorno-nome-input" list="${idDatalistGiorni}" placeholder="es. Giorno 1" value="${nomeGiornoDefault}" oninput="aggiornaTitoloGiorno(this)" autocomplete="off" style="margin-top: 8px;">
+                        <datalist id="${idDatalistGiorni}">
+                            ${generaOpzioniDatalist(opzioniNomiGiorni)}
+                        </datalist>
 
-                        <label>Muscoli Coinvolti (puoi selezionarne più di uno tenendo premuto Ctrl o toccandoli):</label>
-                        <select class="muscoli-input" multiple style="height: 110px;" onchange="aggiornaEserciziDelGiorno(this)">
-                            ${generaOpzioniSelectMultipla(elencoMuscoliConsigliati, muscoliSelezionati)}
-                        </select>
+                        <label>Muscoli Coinvolti (Scrivi o seleziona):</label>
+                        <input type="text" class="muscoli-input" list="${idDatalistMuscoli}" placeholder="es. Petto, Tricipiti o Full Body" value="${muscoloSelezionato}" oninput="aggiornaEserciziDelGiorno(this)" autocomplete="off">
+                        <datalist id="${idDatalistMuscoli}">
+                            ${generaOpzioniDatalist(elencoMuscoliConsigliati)}
+                        </datalist>
 
                         <h3 style="margin-top: 20px;">Esercizi</h3>
                         <div class="lista-esercizi-giorno"></div>
@@ -1193,7 +1240,7 @@
             `;
             contenitore.appendChild(nuovoGiorno);
 
-            if (!giornoSelezionato) {
+            if (!nomeGiornoPreimpostato) {
                 aggiungiEsercizio(nuovoGiorno.querySelector('.btn-add'));
             }
         }
@@ -1208,12 +1255,13 @@
             };
 
             blocchiGiorno.forEach((giornoBox) => {
-                const giornoNome = giornoBox.querySelector('.giorno-select').value;
-                const muscoliSelect = giornoBox.querySelector('.muscoli-input');
-                const muscoliSelezionatiArray = Array.from(muscoliSelect.selectedOptions).map(opt => opt.value);
-                const muscoli = muscoliSelezionatiArray.length > 0 ? muscoliSelezionatiArray.join(", ") : "Generali";
+                const giornoInput = giornoBox.querySelector('.giorno-nome-input');
+                const giornoNome = giornoInput ? giornoInput.value.trim() || "Giorno" : "Giorno";
+                
+                const muscoloInput = giornoBox.querySelector('.muscoli-input');
+                const muscoli = muscoloInput ? muscoloInput.value.trim() || "Generali" : "Generali";
 
-                const nomi = giornoBox.querySelectorAll('.ex-nome');
+                const nomi = giornoBox.querySelectorAll('.ex-nome-input');
                 const muscoliEx = giornoBox.querySelectorAll('.ex-muscolo');
                 const serie = giornoBox.querySelectorAll('.ex-serie');
                 const recuperi = giornoBox.querySelectorAll('.ex-recupero');
@@ -1222,7 +1270,7 @@
                 let esercizi = [];
                 for (let i = 0; i < nomi.length; i++) {
                     esercizi.push({
-                        nome: nomi[i].value || `Esercizio ${i+1}`,
+                        nome: nomi[i].value.trim() || `Esercizio ${i+1}`,
                         muscolo: muscoliEx[i].value,
                         serie: serie[i].value || "3x10",
                         recupero: recuperi[i].value || "60 sec",
@@ -1353,24 +1401,31 @@
 
                     htmlEsercizi += `
                         <div class="ex-card-final">
-                            <p class="ex-title">${eIdx+1}. ${ex.nome}</p>
-                            ${ex.muscolo ? `<span class="ex-muscolo-tag">${ex.muscolo}</span>` : ''}
-                            <div class="ex-details">
-                                <span>Serie: <b>${ex.serie}</b></span>
-                                <span>Recupero: <b>${ex.recupero}</b></span>
-                            </div>
-                            ${mediaHtml}
-                            ${storicoHtml}
-                            ${logHtml}
+                            <details>
+                                <summary>
+                                    <span class="ex-title">${eIdx+1}. ${ex.nome}</span>
+                                    <span class="summary-arrow">▼</span>
+                                </summary>
+                                <div class="ex-card-final-content">
+                                    ${ex.muscolo ? `<span class="ex-muscolo-tag">${ex.muscolo}</span>` : ''}
+                                    <div class="ex-details">
+                                        <span>Serie: <b>${ex.serie}</b></span>
+                                        <span>Recupero: <b>${ex.recupero}</b></span>
+                                    </div>
+                                    ${mediaHtml}
+                                    ${storicoHtml}
+                                    ${logHtml}
+                                </div>
+                            </details>
                         </div>
                     `;
                 });
 
                 htmlSchedaFinale += `
-                    <details ${gIdx === 0 ? 'open' : ''}>
+                    <details>
                         <summary>
-                            <span>${giorno.nome}</span>
-                            <span style="font-size: 0.85rem; font-weight: normal; opacity: 0.9;">${giorno.muscoli}</span>
+                            <span>${giorno.nome} <small style="font-size: 0.85rem; font-weight: normal; opacity: 0.9; margin-left: 10px;">${giorno.muscoli}</small></span>
+                            <span class="summary-arrow">▼</span>
                         </summary>
                         <div class="dettagli-giorno-content">
                             ${htmlEsercizi}
@@ -1599,50 +1654,15 @@
             contenitore.innerHTML = '';
 
             scheda.giorni.forEach((giornoData) => {
-                const nuovoGiorno = document.createElement('div');
-                nuovoGiorno.className = 'giorno-box';
+                aggiungiGiorno(giornoData.nome, giornoData.muscoli);
+                const ultimoGiornoBox = contenitore.lastElementChild;
+                const containerEsercizi = ultimoGiornoBox.querySelector('.lista-esercizi-giorno');
                 
-                const opzioniGiorni = [
-                    "Giorno 1", "Giorno 2", "Giorno 3", "Giorno 4", "Giorno 5", "Richiamo / Extra"
-                ];
+                // Svuota l'esercizio predefinito vuoto creato da aggiungiGiorno per rimpiazzarlo con quelli reali
+                containerEsercizi.innerHTML = '';
 
-                let htmlOpzioniGiorni = "";
-                opzioniGiorni.forEach(g => {
-                    const sel = (g === giornoData.nome) ? 'selected' : '';
-                    htmlOpzioniGiorni += `<option value="${g}" ${sel}>${g}</option>`;
-                });
-
-                let muscoliArray = giornoData.muscoli ? giornoData.muscoli.split(',').map(m => m.trim()) : [];
-
-                nuovoGiorno.innerHTML = `
-                    <details open style="background: transparent; border: none; margin: 0;">
-                        <summary style="border-radius: 8px; margin-bottom: 15px;">
-                            <span>${giornoData.nome}</span>
-                            <button type="button" class="btn-remove-ex" style="background-color: var(--btn-back);" onclick="rimuoviGiorno(this)">Elimina Giorno</button>
-                        </summary>
-                        <div style="padding: 5px;">
-                            <label>Giorno / Sessione:</label>
-                            <select class="giorno-select" style="margin-top: 8px;">
-                                ${htmlOpzioniGiorni}
-                            </select>
-
-                            <label>Muscoli Coinvolti (puoi selezionarne più di uno tenendo premuto Ctrl o toccandoli):</label>
-                            <select class="muscoli-input" multiple style="height: 110px;" onchange="aggiornaEserciziDelGiorno(this)">
-                                ${generaOpzioniSelectMultipla(elencoMuscoliConsigliati, muscoliArray)}
-                            </select>
-
-                            <h3 style="margin-top: 20px;">Esercizi</h3>
-                            <div class="lista-esercizi-giorno"></div>
-
-                            <button class="btn-add" onclick="aggiungiEsercizio(this)">+ Aggiungi un altro esercizio</button>
-                        </div>
-                    </details>
-                `;
-                contenitore.appendChild(nuovoGiorno);
-
-                const containerEsercizi = nuovoGiorno.querySelector('.lista-esercizi-giorno');
                 giornoData.esercizi.forEach((ex) => {
-                    aggiungiEsercizio(nuovoGiorno.querySelector('.btn-add'), ex.nome, ex.muscolo, ex.serie, ex.recupero, ex.immagine);
+                    aggiungiEsercizio(ultimoGiornoBox.querySelector('.btn-add'), ex.nome, ex.muscolo, ex.serie, ex.recupero, ex.immagine);
                 });
             });
         }
