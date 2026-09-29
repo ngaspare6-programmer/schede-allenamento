@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
+
+    <!-- Cerco placeholder per modificare i suggerimenti -->
+
     <!-- Configurazione della codifica dei caratteri -->
     <meta charset="UTF-8">
     <!-- Configurazione della visualizzazione responsive per dispositivi mobili -->
@@ -162,7 +165,7 @@
             font-size: 0.75rem;
             width: auto;
             margin: 0;
-            margin-right: 15px; /* spostamento pulsante elimina*/
+            margin-right: 15px; 
             white-space: nowrap;
         }
 
@@ -632,10 +635,10 @@
         <h2>Inserisci le tue credenziali di accesso</h2>
         <form onsubmit="event.preventDefault(); eseguiLoginTrainer();" autocomplete="off">
             <label for="login-trainer-nome">Nome Personal Trainer:</label>
-            <input type="text" id="login-trainer-nome" name="no_autofill_trainer_nome" placeholder="es. Marco" autocomplete="off" required>
+            <input type="text" id="login-trainer-nome" name="no_autofill_trainer_nome" placeholder="" autocomplete="off" required>
 
             <label for="login-trainer-pin">PIN di Sicurezza:</label>
-            <input type="password" inputmode="numeric" id="login-trainer-pin" name="no_autofill_trainer_pin" placeholder="••••" maxlength="6" autocomplete="off" required>
+            <input type="password" inputmode="numeric" id="login-trainer-pin" name="no_autofill_trainer_pin" placeholder="" maxlength="6" autocomplete="off" required>
 
             <button type="submit" class="btn-submit">Accedi al Gestionale</button>
         </form>
@@ -649,10 +652,10 @@
         <div style="background-color: var(--bg-giorno-box); padding: 15px; border-radius: 10px; border: 1px solid var(--color-bordi); margin-top: 15px;">
             <h3>Aggiungi Nuovo Personal Trainer</h3>
             <label>Nome e Cognome Trainer:</label>
-            <input type="text" id="new-trainer-nome" name="no_autofill_new_trainer_nome" placeholder="es. Marco Rossi" autocomplete="off">
+            <input type="text" id="new-trainer-nome" name="no_autofill_new_trainer_nome" placeholder="" autocomplete="off">
             <label>PIN Assegnato (4 cifre):</label>
             <div style="display: flex; gap: 8px;">
-                <input type="text" id="new-trainer-pin" name="no_autofill_new_trainer_pin" placeholder="es. 1234" maxlength="6" autocomplete="off">
+                <input type="text" id="new-trainer-pin" name="no_autofill_new_trainer_pin" placeholder="" maxlength="6" autocomplete="off">
                 <button type="button" class="btn-add" style="width: auto; padding: 0 15px; margin-top: 6px; white-space: nowrap;" onclick="generaPinCasualeInput('new-trainer-pin')">Genera PIN</button>
             </div>
             <button class="btn-add" onclick="aggiungiNuovoTrainer()">+ Aggiungi Trainer</button>
@@ -679,11 +682,11 @@
         <div style="background-color: var(--bg-giorno-box); padding: 15px; border-radius: 10px; border: 1px solid var(--color-bordi);">
             <h3 style="margin-top:0;">Gestione Schede Atleti</h3>
             <label for="nome-cliente-iniziale">Inserisci Nome del Cliente / Atleta:</label>
-            <input type="text" id="nome-cliente-iniziale" name="no_autofill_cliente_nome" placeholder="es. Mario Rossi" autocomplete="off" required>
+            <input type="text" id="nome-cliente-iniziale" name="no_autofill_cliente_nome" placeholder="" autocomplete="off" required>
 
             <label for="pin-cliente-iniziale">PIN Assegnato all'Atleta (4 cifre):</label>
             <div style="display: flex; gap: 8px;">
-                <input type="text" id="pin-cliente-iniziale" name="no_autofill_cliente_pin" placeholder="es. 1234 o genera" maxlength="6" autocomplete="off">
+                <input type="text" id="pin-cliente-iniziale" name="no_autofill_cliente_pin" placeholder="" maxlength="6" autocomplete="off">
                 <button type="button" class="btn-add" style="width: auto; padding: 0 15px; margin-top: 6px; white-space: nowrap;" onclick="generaPinCasualeInput('pin-cliente-iniziale')">Genera PIN</button>
             </div>
 
@@ -699,10 +702,10 @@
         
         <form onsubmit="event.preventDefault(); caricaSchedaAtletaDaInput();" autocomplete="off">
             <label for="nome-atleta-cerca">Inserisci il tuo Nome e Cognome:</label>
-            <input type="text" id="nome-atleta-cerca" name="no_autofill_cerca_atleta_nome" placeholder="es. Mario Rossi" autocomplete="off" required>
+            <input type="text" id="nome-atleta-cerca" name="no_autofill_cerca_atleta_nome" placeholder="" autocomplete="off" required>
 
             <label for="pin-atleta-cerca">Inserisci il tuo PIN:</label>
-            <input type="password" inputmode="numeric" id="pin-atleta-cerca" name="no_autofill_cerca_atleta_pin" placeholder="••••" maxlength="6" autocomplete="off" required>
+            <input type="password" inputmode="numeric" id="pin-atleta-cerca" name="no_autofill_cerca_atleta_pin" placeholder="" maxlength="6" autocomplete="off" required>
 
             <button type="submit" class="btn-submit">Apri La Mia Scheda</button>
         </form>
@@ -802,8 +805,18 @@
         };
 
         const elencoMuscoliConsigliati = [
-            "Petto", "Dorso", "Gambe", "Spalle", "Bicipiti", "Tricipiti", "Addome", "Full Body"
+            "Petto","Schiena", "Dorso", "Gambe", "Spalle", "Bicipiti", "Tricipiti", "Addome", "Full Body"
         ];
+
+        // Funzione di utilità per formattare la data da AAAA-MM-GG a GG-MM-AAAA
+        function formattaDataItaliana(dataStringa) {
+            if (!dataStringa) return '';
+            const parti = dataStringa.split('-');
+            if (parti.length === 3) {
+                return `${parti[2]}-${parti[1]}-${parti[0]}`;
+            }
+            return dataStringa;
+        }
 
         function ottieniTuttiGliEsercizi() {
             let tutti = [];
@@ -1168,7 +1181,7 @@
                     </summary>
                     <div class="dettagli-esercizio-content">
                         <label>Nome Esercizio (Scrivi o seleziona):</label>
-                        <input type="text" class="ex-nome-input" list="${idDatalist}" placeholder="es. Lat Machine Technogym" value="${esSelezionato}" oninput="aggiornaTitoloEsercizio(this)" autocomplete="off">
+                        <input type="text" class="ex-nome-input" list="${idDatalist}" placeholder="" value="${esSelezionato}" oninput="aggiornaTitoloEsercizio(this)" autocomplete="off">
                         <datalist id="${idDatalist}">
                             ${generaOpzioniDatalist(listaFiltro)}
                         </datalist>
@@ -1182,15 +1195,15 @@
                             </div>
                             <div>
                                 <label>Serie x Reps:</label>
-                                <input type="text" class="ex-serie" placeholder="es. 3x12" value="${serieVal}">
+                                <input type="text" class="ex-serie" placeholder="" value="${serieVal}">
                             </div>
                         </div>
 
                         <label>Tempo di Recupero:</label>
-                        <input type="text" class="ex-recupero" placeholder="es. 60 secondi" value="${recuperoVal}">
+                        <input type="text" class="ex-recupero" placeholder="" value="${recuperoVal}">
 
                         <label>Link Foto/GIF Esercizio (opzionale):</label>
-                        <input type="url" class="ex-img" placeholder="https://esempio.it/foto.gif" value="${imgVal}">
+                        <input type="url" class="ex-img" placeholder="" value="${imgVal}">
                     </div>
                 </details>
             `;
@@ -1220,13 +1233,13 @@
                     </summary>
                     <div style="padding: 15px; background-color: var(--bg-card); border-top: 1px solid var(--color-bordi);">
                         <label>Nome Giorno / Sessione:</label>
-                        <input type="text" class="giorno-nome-input" list="${idDatalistGiorni}" placeholder="es. Giorno 1" value="${nomeGiornoDefault}" oninput="aggiornaTitoloGiorno(this)" autocomplete="off" style="margin-top: 8px;">
+                        <input type="text" class="giorno-nome-input" list="${idDatalistGiorni}" placeholder="" value="${nomeGiornoDefault}" oninput="aggiornaTitoloGiorno(this)" autocomplete="off" style="margin-top: 8px;">
                         <datalist id="${idDatalistGiorni}">
                             ${generaOpzioniDatalist(opzioniNomiGiorni)}
                         </datalist>
 
                         <label>Muscoli Coinvolti (Scrivi o seleziona):</label>
-                        <input type="text" class="muscoli-input" list="${idDatalistMuscoli}" placeholder="es. Petto, Tricipiti o Full Body" value="${muscoloSelezionato}" oninput="aggiornaEserciziDelGiorno(this)" autocomplete="off">
+                        <input type="text" class="muscoli-input" list="${idDatalistMuscoli}" placeholder="" value="${muscoloSelezionato}" oninput="aggiornaEserciziDelGiorno(this)" autocomplete="off">
                         <datalist id="${idDatalistMuscoli}">
                             ${generaOpzioniDatalist(elencoMuscoliConsigliati)}
                         </datalist>
@@ -1365,9 +1378,11 @@
                                 `<button class="btn-elimina-log" onclick="eliminaSingoloLog(${l.id})">Elimina</button>` : 
                                 ``;
 
+                            const dataItaliana = formattaDataItaliana(l.data_allenamento);
+
                             righeStorico += `
                                 <div class="storico-riga">
-                                    <span><b>${l.data_allenamento}</b></span>
+                                    <span><b>${dataItaliana}</b></span>
                                     <span>Kg: <b>${l.kg_usati || '-'}</b> | Reps: <b>${l.reps_fatte || '-'}</b></span>
                                     ${azioneElimina}
                                 </div>
@@ -1375,7 +1390,7 @@
                         });
                         storicoHtml = `
                             <details class="storico-box-tendina">
-                                <summary>Visualizza Storico Precedenti (${logEsercizio.length})</summary>
+                                <summary> Visualizza Storico Precedenti </summary>
                                 <div class="storico-lista">
                                     ${righeStorico}
                                 </div>
@@ -1389,11 +1404,11 @@
                             <div class="grid-2">
                                 <div>
                                     <label>Kg usati:</label>
-                                    <input type="text" id="log-kg-${gIdx}-${eIdx}" placeholder="es. 50 kg">
+                                    <input type="text" id="log-kg-${gIdx}-${eIdx}" placeholder="">
                                 </div>
                                 <div>
                                     <label>Reps fatte:</label>
-                                    <input type="text" id="log-reps-${gIdx}-${eIdx}" placeholder="es. 4x10">
+                                    <input type="text" id="log-reps-${gIdx}-${eIdx}" placeholder="">
                                 </div>
                             </div>
                         </div>
@@ -1413,8 +1428,8 @@
                                         <span>Recupero: <b>${ex.recupero}</b></span>
                                     </div>
                                     ${mediaHtml}
-                                    ${storicoHtml}
                                     ${logHtml}
+                                    ${storicoHtml}
                                 </div>
                             </details>
                         </div>
@@ -1658,7 +1673,6 @@
                 const ultimoGiornoBox = contenitore.lastElementChild;
                 const containerEsercizi = ultimoGiornoBox.querySelector('.lista-esercizi-giorno');
                 
-                // Svuota l'esercizio predefinito vuoto creato da aggiungiGiorno per rimpiazzarlo con quelli reali
                 containerEsercizi.innerHTML = '';
 
                 giornoData.esercizi.forEach((ex) => {
