@@ -701,6 +701,12 @@
 </head>
 <body>
 
+    <!-- Elemento audio nascosto con file MP3 nativo per aggirare le restrizioni di iPhone/Safari -->
+    <audio id="audio-notifica" preload="auto">
+        <source src="https://actions.google.com/sounds/v1/alarms/beep_short.ogg" type="audio/ogg">
+        <source src="https://actions.google.com/sounds/v1/alarms/digital_watch_alarm_long.ogg" type="audio/ogg">
+    </audio>
+
     <button id="menu-btn" onclick="toggleDrawer()">MENU</button>
     <button id="logout-btn" onclick="tornaAllaHome()">LOGOUT</button>
 
@@ -913,26 +919,16 @@
             return dataStringa;
         }
 
-        // Funzione per generare un beep acustico tramite Web Audio API
-        function suonaBeep() {
+        // Funzione per riprodurre il suono reale tramite l'elemento <audio> sbloccato dal tocco utente
+        function suonaNotifica() {
             try {
-                const AudioContext = window.AudioContext || window.webkitAudioContext;
-                if (!AudioContext) return;
-                const ctx = new AudioContext();
-                const osc = ctx.createOscillator();
-                const gain = ctx.createGain();
-
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(880, ctx.currentTime); // Frequenza nota La
-                gain.gain.setValueAtTime(0.1, ctx.currentTime);
-
-                osc.connect(gain);
-                gain.connect(ctx.destination);
-
-                osc.start();
-                osc.stop(ctx.currentTime + 0.4); // Durata 400ms
+                const audioEl = document.getElementById('audio-notifica');
+                if (audioEl) {
+                    audioEl.currentTime = 0;
+                    audioEl.play().catch(err => console.log("Riproduzione audio bloccata da iOS:", err));
+                }
             } catch (e) {
-                console.log("Audio non supportato o bloccato dal browser", e);
+                console.log("Errore audio:", e);
             }
         }
 
@@ -973,13 +969,22 @@
             display.innerText = `${min}:${sec < 10 ? '0' : ''}${sec}`;
 
             const btnAvvia = box.querySelector('.btn-timer-azione');
-            btnAvvia.innerText = "⏱️️ Avvia";
+            btnAvvia.innerText = "⏱️ Avvia";
             btnAvvia.onclick = function() { avviaTimerIncrementale(btnAvvia); };
         }
 
         function avviaTimerIncrementale(btnAvviaEl) {
             if (timerAttivoInterval) {
                 clearInterval(timerAttivoInterval);
+            }
+
+            // Trucco per sbloccare l'audio nativo di Safari/iOS al primo click utente
+            const audioEl = document.getElementById('audio-notifica');
+            if (audioEl) {
+                audioEl.play().then(() => {
+                    audioEl.pause();
+                    audioEl.currentTime = 0;
+                }).catch(() => {});
             }
 
             const box = btnAvviaEl.closest('.timer-box-tendina');
@@ -991,7 +996,6 @@
                 return;
             }
 
-            // Calcoliamo il timestamp esatto di fine basato sull'orologio reale di sistema
             const targetTime = Date.now() + (secondiRimanenti * 1000);
             box.setAttribute('data-target-time', targetTime);
 
@@ -1015,7 +1019,7 @@
                     box.setAttribute('data-secondi', tempoBase);
                     box.removeAttribute('data-target-time');
 
-                    suonaBeep();
+                    suonaNotifica();
                     if ("vibrate" in navigator) {
                         navigator.vibrate([200, 100, 200]);
                     }
@@ -1035,7 +1039,7 @@
             timerAttivoInterval = setInterval(aggiornaTesto, 500);
         }
 
-        // Controllo riattivazione: se l'atleta esce e torna, calcola il tempo reale trascorso
+        // Controllo riattivazione: ricalcola il tempo trascorso quando l'atleta torna sull'app
         document.addEventListener("visibilitychange", function() {
             if (!document.hidden) {
                 const activeTimers = document.querySelectorAll('.timer-box-tendina');
@@ -1054,7 +1058,7 @@
                         } else {
                             display.innerText = "0:00 - Fatto!";
                             box.removeAttribute('data-target-time');
-                            suonaBeep();
+                            suonaNotifica();
                             if ("vibrate" in navigator) {
                                 navigator.vibrate([200, 100, 200]);
                             }
@@ -1660,7 +1664,7 @@
                         </div>
                     ` : '';
 
-                    // Tendina del Timer aggiornata con gestione orologio reale e audio
+                    // Tendina del Timer con supporto file MP3 reale per iOS/Safari
                     let timerTendinaHtml = `
                         <details class="timer-box-tendina" data-secondi="60" data-tempo-base="60">
                             <summary>⏱️ Apri Timer di Recupero</summary>
