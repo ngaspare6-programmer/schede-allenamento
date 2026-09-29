@@ -491,10 +491,108 @@
         .ex-details { 
             display: flex;
             justify-content: space-between;
+            align-items: center;
             margin-top: 10px;
             color: var(--color-etichette);
         }
         
+        /* Stile per la tendina del Timer */
+        .timer-box-tendina {
+            margin-top: 12px;
+            background-color: rgba(56, 189, 248, 0.05);
+            border: 1px solid var(--color-bordi);
+            border-radius: 8px;
+            padding: 10px;
+        }
+
+        .timer-box-tendina summary {
+            background: none !important;
+            background-image: none !important;
+            padding: 4px 0;
+            font-size: 0.9rem;
+            color: var(--btn-add-ex);
+            cursor: pointer;
+        }
+
+        .timer-box-tendina summary::after {
+            content: "▼";
+            font-size: 0.7rem;
+        }
+
+        .timer-content-interno {
+            margin-top: 12px;
+            text-align: center;
+        }
+
+        .timer-display-orologio {
+            font-family: monospace;
+            font-size: 1.6rem;
+            font-weight: bold;
+            color: var(--btn-add-ex);
+            margin-bottom: 10px;
+        }
+
+        .timer-modifica-controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .btn-mod-tempo {
+            background-color: var(--bg-giorno-box);
+            color: var(--color-testo);
+            border: 1px solid var(--color-bordi);
+            padding: 8px 14px;
+            font-size: 0.9rem;
+            border-radius: 6px;
+            cursor: pointer;
+            width: auto;
+            margin: 0;
+            font-weight: bold;
+        }
+        .btn-mod-tempo:hover {
+            border-color: var(--btn-add-ex);
+            color: var(--btn-add-ex);
+        }
+
+        /* Container pulsanti di controllo Avvia/Reset affiancati */
+        .timer-action-controls {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-timer-azione {
+            background-color: var(--btn-add-ex);
+            color: #0f172a;
+            border: none;
+            padding: 8px 16px;
+            font-size: 0.9rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 700;
+            width: auto;
+            margin: 0;
+        }
+
+        .btn-timer-reset {
+            background-color: var(--bg-giorno-box);
+            color: var(--color-etichette);
+            border: 1px solid var(--color-bordi);
+            padding: 8px 12px;
+            font-size: 0.9rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            width: auto;
+            margin: 0;
+        }
+        .btn-timer-reset:hover {
+            border-color: var(--btn-back);
+            color: var(--btn-back);
+        }
+
         /* Anteprima visiva dell'immagine o GIF dell'esercizio */
         .ex-img-preview {
             width: 100%;
@@ -765,6 +863,7 @@
         let isModalitaAtleta = false;
         let currentTrainer = null;
         let storicoLogAtletaCache = [];
+        let timerAttivoInterval = null;
 
         const eserciziPerMuscolo = {
             "Petto": [
@@ -805,10 +904,9 @@
         };
 
         const elencoMuscoliConsigliati = [
-            "Petto","Schiena", "Dorso", "Gambe", "Spalle", "Bicipiti", "Tricipiti", "Addome", "Full Body"
+            "Petto", "Dorso", "Gambe", "Spalle", "Bicipiti", "Tricipiti", "Addome", "Full Body"
         ];
 
-        // Funzione di utilità per formattare la data da AAAA-MM-GG a GG-MM-AAAA
         function formattaDataItaliana(dataStringa) {
             if (!dataStringa) return '';
             const parti = dataStringa.split('-');
@@ -816,6 +914,98 @@
                 return `${parti[2]}-${parti[1]}-${parti[0]}`;
             }
             return dataStringa;
+        }
+
+        // Funzioni per gestire il timer (Modifica, Avvia/Pausa e Reset sul tempo impostato)
+        function modificaTempoTimer(btnEl, secondiVariazione) {
+            const box = btnEl.closest('.timer-box-tendina');
+            const display = box.querySelector('.timer-display-orologio');
+            let secondiAttuali = parseInt(box.getAttribute('data-secondi') || '60');
+            
+            secondiAttuali += secondiVariazione;
+            if (secondiAttuali < 0) secondiAttuali = 0;
+
+            // Aggiorniamo sia il tempo corrente che il tempo base salvato per il reset
+            box.setAttribute('data-secondi', secondiAttuali);
+            box.setAttribute('data-tempo-base', secondiAttuali);
+            
+            const min = Math.floor(secondiAttuali / 60);
+            const sec = secondiAttuali % 60;
+            display.innerText = `${min}:${sec < 10 ? '0' : ''}${sec}`;
+
+            const btnAvvia = box.querySelector('.btn-timer-azione');
+            btnAvvia.innerText = "⏱️ Avvia";
+        }
+
+        function resetTimerTendina(btnResetEl) {
+            if (timerAttivoInterval) {
+                clearInterval(timerAttivoInterval);
+            }
+            const box = btnResetEl.closest('.timer-box-tendina');
+            const display = box.querySelector('.timer-display-orologio');
+            
+            // Ripristina l'ultimo tempo scelto dall'atleta (memorizzato in data-tempo-base o 60s di default)
+            let tempoBase = parseInt(box.getAttribute('data-tempo-base') || '60');
+            box.setAttribute('data-secondi', tempoBase);
+            
+            const min = Math.floor(tempoBase / 60);
+            const sec = tempoBase % 60;
+            display.innerText = `${min}:${sec < 10 ? '0' : ''}${sec}`;
+
+            const btnAvvia = box.querySelector('.btn-timer-azione');
+            btnAvvia.innerText = "⏱️ Avvia";
+            btnAvvia.onclick = function() { avviaTimerIncrementale(btnAvvia); };
+        }
+
+        function avviaTimerIncrementale(btnAvviaEl) {
+            if (timerAttivoInterval) {
+                clearInterval(timerAttivoInterval);
+            }
+
+            const box = btnAvviaEl.closest('.timer-box-tendina');
+            const display = box.querySelector('.timer-display-orologio');
+            let secondiRimanenti = parseInt(box.getAttribute('data-secondi') || '60');
+
+            if (secondiRimanenti <= 0) {
+                alert("Imposta prima un tempo maggiore di zero!");
+                return;
+            }
+
+            function aggiornaTesto() {
+                const min = Math.floor(secondiRimanenti / 60);
+                const sec = secondiRimanenti % 60;
+                display.innerText = `${min}:${sec < 10 ? '0' : ''}${sec}`;
+            }
+
+            aggiornaTesto();
+            btnAvviaEl.innerText = "Pausa";
+            btnAvviaEl.onclick = function() {
+                clearInterval(timerAttivoInterval);
+                btnAvviaEl.innerText = "Riprendi";
+                btnAvviaEl.onclick = function() { avviaTimerIncrementale(btnAvviaEl); };
+            };
+
+            timerAttivoInterval = setInterval(() => {
+                secondiRimanenti--;
+                if (secondiRimanenti >= 0) {
+                    box.setAttribute('data-secondi', secondiRimanenti);
+                    aggiornaTesto();
+                } else {
+                    clearInterval(timerAttivoInterval);
+                    display.innerText = "0:00 - Fatto!";
+                    btnAvviaEl.innerText = "⏱️ Avvia";
+                    btnAvviaEl.onclick = function() { avviaTimerIncrementale(btnAvviaEl); };
+                    
+                    // Riporta il timer al valore base impostato dall'atleta per la serie successiva
+                    let tempoBase = parseInt(box.getAttribute('data-tempo-base') || '60');
+                    box.setAttribute('data-secondi', tempoBase);
+
+                    if ("vibrate" in navigator) {
+                        navigator.vibrate([200, 100, 200]);
+                    }
+                    alert("⏱️ Tempo di recupero scaduto! Torna sotto i pesi.");
+                }
+            }, 1000);
         }
 
         function ottieniTuttiGliEsercizi() {
@@ -1390,7 +1580,7 @@
                         });
                         storicoHtml = `
                             <details class="storico-box-tendina">
-                                <summary> Visualizza Storico Precedenti </summary>
+                                <summary>📊 Visualizza Storico Precedenti</summary>
                                 <div class="storico-lista">
                                     ${righeStorico}
                                 </div>
@@ -1414,6 +1604,24 @@
                         </div>
                     ` : '';
 
+                    // Tendina del Timer con memoria del tempo base per il reset intelligente
+                    let timerTendinaHtml = `
+                        <details class="timer-box-tendina" data-secondi="60" data-tempo-base="60">
+                            <summary>⏱️ Apri Timer di Recupero</summary>
+                            <div class="timer-content-interno">
+                                <div class="timer-display-orologio">1:00</div>
+                                <div class="timer-modifica-controls">
+                                    <button type="button" class="btn-mod-tempo" onclick="modificaTempoTimer(this, -30)">-30s</button>
+                                    <button type="button" class="btn-mod-tempo" onclick="modificaTempoTimer(this, 30)">+30s</button>
+                                </div>
+                                <div class="timer-action-controls">
+                                    <button type="button" class="btn-timer-azione" onclick="avviaTimerIncrementale(this)">⏱️ Avvia</button>
+                                    <button type="button" class="btn-timer-reset" onclick="resetTimerTendina(this)">🔄 Reset</button>
+                                </div>
+                            </div>
+                        </details>
+                    `;
+
                     htmlEsercizi += `
                         <div class="ex-card-final">
                             <details>
@@ -1427,6 +1635,7 @@
                                         <span>Serie: <b>${ex.serie}</b></span>
                                         <span>Recupero: <b>${ex.recupero}</b></span>
                                     </div>
+                                    ${timerTendinaHtml}
                                     ${mediaHtml}
                                     ${logHtml}
                                     ${storicoHtml}
