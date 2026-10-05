@@ -688,7 +688,6 @@
         footer strong { color: var(--btn-add-ex); }
 
         #schermata-login-form-trainer,
-        #schermata-admin-panel,
         #schermata-login-trainer,
         #schermata-login-atleta,
         #schermata-menu,
@@ -725,7 +724,7 @@
                         <button type="button" class="btn-mod-tempo" onclick="modificaTempoTimerSidebar(30)">+30s</button>
                     </div>
                     <div class="timer-action-controls">
-                        <button type="button" class="btn-timer-azione" id="sidebar-btn-avvia" onclick="avviaTimerSidebar()"Avvia</button>
+                        <button type="button" class="btn-timer-azione" id="sidebar-btn-avvia" onclick="avviaTimerSidebar()">Avvia</button>
                         <button type="button" class="btn-timer-reset" onclick="resetTimerSidebar()">Reset</button>
                     </div>
                 </div>
@@ -752,46 +751,15 @@
     <div class="card" id="schermata-login-form-trainer">
         <h2>Inserisci le tue credenziali di accesso</h2>
         <form onsubmit="event.preventDefault(); eseguiLoginTrainer();" autocomplete="off">
-            <label for="login-trainer-nome">Nome Personal Trainer:</label>
-            <input type="text" id="login-trainer-nome" name="no_autofill_trainer_nome" placeholder="" autocomplete="off" required>
+            <label for="login-trainer-email">Email:</label>
+            <input type="email" id="login-trainer-email" name="email" placeholder="" autocomplete="username" required>
 
-            <label for="login-trainer-pin">PIN di Sicurezza:</label>
-            <input type="password" inputmode="numeric" id="login-trainer-pin" name="no_autofill_trainer_pin" placeholder="" maxlength="6" autocomplete="off" required>
+            <label for="login-trainer-password">Password:</label>
+            <input type="password" id="login-trainer-password" name="password" placeholder="" autocomplete="current-password" required>
 
             <button type="submit" class="btn-submit">Accedi al Gestionale</button>
         </form>
         <button class="btn-back" onclick="tornaAllaHome()">Indietro</button>
-    </div>
-
-    <div class="card" id="schermata-admin-panel">
-        <h2 style="color: var(--btn-add-ex);">Pannello Amministratore</h2>
-        <p style="text-align: center; color: var(--color-etichette);">Gestione autorizzazioni e Staff Personal Trainer</p>
-        
-        <div style="background-color: var(--bg-giorno-box); padding: 15px; border-radius: 10px; border: 1px solid var(--color-bordi); margin-top: 15px;">
-            <h3>Aggiungi Nuovo Personal Trainer</h3>
-            <label>Nome e Cognome Trainer:</label>
-            <input type="text" id="new-trainer-nome" name="no_autofill_new_trainer_nome" placeholder="" autocomplete="off">
-            <label>PIN Assegnato (4 cifre):</label>
-            <div style="display: flex; gap: 8px;">
-                <input type="text" id="new-trainer-pin" name="no_autofill_new_trainer_pin" placeholder="" maxlength="6" autocomplete="off">
-                <button type="button" class="btn-add" style="width: auto; padding: 0 15px; margin-top: 6px; white-space: nowrap;" onclick="generaPinCasualeInput('new-trainer-pin')">Genera PIN</button>
-            </div>
-            <button class="btn-add" onclick="aggiungiNuovoTrainer()">+ Aggiungi Trainer</button>
-        </div>
-
-        <h3 style="margin-top: 25px; margin-bottom: 5px;">Staff Attivo</h3>
-        <table class="staff-table">
-            <thead>
-                <tr>
-                    <th>Nome</th>
-                    <th>PIN</th>
-                    <th>Azione</th>
-                </tr>
-            </thead>
-            <tbody id="lista-staff-body"></tbody>
-        </table>
-
-        <button class="btn-back" onclick="tornaAllaHome()">Logout Admin</button>
     </div>
 
     <div class="card" id="schermata-login-trainer">
@@ -802,7 +770,8 @@
             <label for="nome-cliente-iniziale">Inserisci Nome del Cliente / Atleta:</label>
             <input type="text" id="nome-cliente-iniziale" name="no_autofill_cliente_nome" placeholder="" autocomplete="off" required>
 
-            <label for="pin-cliente-iniziale">PIN Assegnato all'Atleta (4 cifre):</label>
+            <label for="pin-cliente-iniziale">PIN Atleta (6 cifre):</label>
+            <p style="margin: 4px 0 0; font-size: 0.8rem; color: var(--color-etichette);">Obbligatorio per un nuovo atleta. Per un atleta già esistente lascialo vuoto se non vuoi cambiarlo.</p>
             <div style="display: flex; gap: 8px;">
                 <input type="text" id="pin-cliente-iniziale" name="no_autofill_cliente_pin" placeholder="" maxlength="6" autocomplete="off">
                 <button type="button" class="btn-add" style="width: auto; padding: 0 15px; margin-top: 6px; white-space: nowrap;" onclick="generaPinCasualeInput('pin-cliente-iniziale')">Genera PIN</button>
@@ -859,7 +828,6 @@
     <div class="card" id="scheda-finale">
         <div id="res-lista-giorni"></div>
 
-        <button class="btn-share" id="btn-condividi" onclick="copiaLinkCliente()">Copia Link da inviare al Cliente</button>
         <button class="btn-back" id="btn-modifica" onclick="tornaAlForm()">Torna a Modificare</button>
         <button class="btn-back" id="btn-menu-finale" onclick="tornaAlMenu()">Torna al Menu</button>
         
@@ -878,6 +846,7 @@
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         let datiSchedaAttuale = null;
+        let atletaIdCorrente = null;
         let nomeAtletaSalvato = "";
         let pinAtletaSalvato = "";
         let isModalitaAtleta = false;
@@ -926,6 +895,16 @@
         const elencoMuscoliConsigliati = [
             "Petto", "Dorso", "Gambe", "Spalle", "Bicipiti", "Tricipiti", "Addome", "Full Body"
         ];
+
+        // Pulisce un testo prima di inserirlo nell'HTML (evita che venga eseguito come codice)
+        function esc(valore) {
+            return String(valore ?? '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
 
         function formattaDataItaliana(dataStringa) {
             if (!dataStringa) return '';
@@ -1068,7 +1047,7 @@
         function generaOpzioniDatalist(lista) {
             let html = "";
             lista.forEach(item => {
-                html += `<option value="${item}">`;
+                html += `<option value="${esc(item)}">`;
             });
             return html;
         }
@@ -1080,11 +1059,11 @@
             lista.forEach(item => {
                 const selected = (item === valoreSelezionato) ? 'selected' : '';
                 if (selected) trovato = true;
-                html += `<option value="${item}" ${selected}>${item}</option>`;
+                html += `<option value="${esc(item)}" ${selected}>${esc(item)}</option>`;
             });
 
             if (valoreSelezionato && !trovato) {
-                html = `<option value="${valoreSelezionato}" selected>${valoreSelezionato}</option>` + html;
+                html = `<option value="${esc(valoreSelezionato)}" selected>${esc(valoreSelezionato)}</option>` + html;
             }
 
             return html;
@@ -1161,9 +1140,13 @@
             }
         }
 
+        function generaPinSicuro() {
+            const numero = crypto.getRandomValues(new Uint32Array(1))[0] % 1000000;
+            return numero.toString().padStart(6, '0');
+        }
+
         function generaPinCasualeInput(inputId) {
-            const pinCasuale = Math.floor(1000 + Math.random() * 9000).toString();
-            document.getElementById(inputId).value = pinCasuale;
+            document.getElementById(inputId).value = generaPinSicuro();
         }
 
         function mostraFormLoginTrainer() {
@@ -1174,44 +1157,54 @@
         }
 
         async function eseguiLoginTrainer() {
-            const nomeInserito = document.getElementById('login-trainer-nome').value.trim();
-            const pinInserito = document.getElementById('login-trainer-pin').value.trim();
+            const email = document.getElementById('login-trainer-email').value.trim();
+            const password = document.getElementById('login-trainer-password').value;
 
-            if (!nomeInserito || !pinInserito) {
-                alert("Compila sia il Nome che il PIN!");
+            if (!email || !password) {
+                alert("Compila sia l'Email che la Password!");
                 return;
             }
 
-            const { data: trainer, error } = await supabaseClient
-                .from('trainers')
-                .select('*')
-                .ilike('nome', nomeInserito)
-                .eq('pin', pinInserito)
-                .single();
+            const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+            document.getElementById('login-trainer-password').value = '';
 
-            if (error || !trainer) {
-                alert("Credenziali non valide! Verifica Nome e PIN.");
+            if (error || !data.user) {
+                console.error("Errore login trainer:", error);
+                const motivo = error ? error.message : '';
+                if (motivo.includes('Email not confirmed')) {
+                    alert("Email non confermata. In Supabase → Authentication → Users conferma l'utente.");
+                } else if (motivo.includes('Invalid login credentials')) {
+                    alert("Email o password non validi.");
+                } else {
+                    alert("Accesso non riuscito: " + motivo);
+                }
                 return;
             }
 
-            currentTrainer = trainer;
-            document.getElementById('schermata-login-form-trainer').style.display = 'none';
+            await entraComeTrainer(data.user);
+        }
+
+        // Mostra l'area trainer dopo il login (o quando la sessione è ancora attiva)
+        async function entraComeTrainer(user) {
+            const { data: profilo } = await supabaseClient
+                .from('profili_trainer')
+                .select('nome')
+                .eq('id', user.id)
+                .maybeSingle();
+
+            currentTrainer = { id: user.id, nome: (profilo && profilo.nome) || user.email };
 
             azzeraTuttiInput();
+            atletaIdCorrente = null;
             nomeAtletaSalvato = "";
             pinAtletaSalvato = "";
 
+            document.getElementById('schermata-scelta').style.display = 'none';
+            document.getElementById('schermata-login-form-trainer').style.display = 'none';
+            document.getElementById('welcome-trainer-title').innerText = `Area Trainer (${currentTrainer.nome})`;
+            document.getElementById('schermata-login-trainer').style.display = 'block';
+            document.getElementById('menu-btn').style.display = 'block';
             document.getElementById('logout-btn').style.display = 'block';
-
-            if (currentTrainer.is_admin) {
-                document.getElementById('schermata-admin-panel').style.display = 'block';
-                document.getElementById('menu-btn').style.display = 'none';
-                caricaListaStaff();
-            } else {
-                document.getElementById('welcome-trainer-title').innerText = `Area Trainer (${currentTrainer.nome})`;
-                document.getElementById('schermata-login-trainer').style.display = 'block';
-                document.getElementById('menu-btn').style.display = 'block';
-            }
         }
 
         function apriLoginAtleta() {
@@ -1223,8 +1216,10 @@
         }
 
         function tornaAllaHome() {
+            if (currentTrainer) supabaseClient.auth.signOut();
             isModalitaAtleta = false;
             currentTrainer = null;
+            atletaIdCorrente = null;
             nomeAtletaSalvato = "";
             pinAtletaSalvato = "";
             storicoLogAtletaCache = [];
@@ -1238,7 +1233,6 @@
             azzeraTuttiInput();
             
             document.getElementById('schermata-login-form-trainer').style.display = 'none';
-            document.getElementById('schermata-admin-panel').style.display = 'none';
             document.getElementById('schermata-login-trainer').style.display = 'none';
             document.getElementById('schermata-login-atleta').style.display = 'none';
             document.getElementById('schermata-menu').style.display = 'none';
@@ -1257,6 +1251,9 @@
             
             document.getElementById('nome-cliente-iniziale').value = '';
             document.getElementById('pin-cliente-iniziale').value = '';
+            atletaIdCorrente = null;
+            nomeAtletaSalvato = "";
+            pinAtletaSalvato = "";
         }
 
         async function vaiAlMenu() {
@@ -1268,13 +1265,41 @@
                 return;
             }
 
-            if (inputPin === "") {
-                alert("Inserisci un PIN o clicca su 'Genera PIN' prima di proseguire!");
+            if (inputPin !== "" && !/^\d{6}$/.test(inputPin)) {
+                alert("Il PIN deve essere di 6 cifre.");
                 return;
             }
 
-            if (nomeAtletaSalvato.toLowerCase() !== inputNome.toLowerCase()) {
-                resetFormAllenamento();
+            // Se il nome è cambiato, cerco l'atleta tra i miei: se esiste lo apro, altrimenti è nuovo
+            if (!atletaIdCorrente || nomeAtletaSalvato.toLowerCase() !== inputNome.toLowerCase()) {
+                const { data: mieiAtleti, error } = await supabaseClient
+                    .from('atleti')
+                    .select('id, nome, scheda');
+
+                if (error) {
+                    alert("Errore durante il recupero dei tuoi atleti dal Cloud.");
+                    console.error(error);
+                    return;
+                }
+
+                const trovato = mieiAtleti.find(a => a.nome.trim().toLowerCase() === inputNome.toLowerCase());
+                if (trovato) {
+                    atletaIdCorrente = trovato.id;
+                    datiSchedaAttuale = trovato.scheda;
+                    if (trovato.scheda && trovato.scheda.giorni) {
+                        popolaFormConDati(trovato.scheda);
+                    } else {
+                        resetFormAllenamento();
+                    }
+                } else {
+                    resetFormAllenamento();
+                    atletaIdCorrente = null;
+                }
+            }
+
+            if (!atletaIdCorrente && inputPin === "") {
+                alert("Nuovo atleta: inserisci un PIN o clicca su 'Genera PIN' prima di proseguire!");
+                return;
             }
 
             nomeAtletaSalvato = inputNome;
@@ -1299,71 +1324,6 @@
             document.getElementById('schermata-menu').style.display = 'block';
             document.getElementById('menu-btn').style.display = 'block';
             document.getElementById('logout-btn').style.display = 'block';
-        }
-
-        async function caricaListaStaff() {
-            const { data: staff, error } = await supabaseClient
-                .from('trainers')
-                .select('*')
-                .order('created_at', { ascending: true });
-
-            if (error) return;
-
-            const tbody = document.getElementById('lista-staff-body');
-            tbody.innerHTML = '';
-
-            staff.forEach(t => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td>${t.nome}${t.is_admin ? '<small style="color:var(--btn-add-ex);">(Admin Master)</small>' : ''}</td>
-                    <td><code>${t.pin}</code></td>
-                    <td>
-                        ${!t.is_admin ? `<button class="btn-remove-ex" style="float:none; margin:0;" onclick="eliminaTrainer('${t.id}')">Rimuovi</button>` : '<i>Non Rimuovibile</i>'}
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            });
-        }
-
-        async function aggiungiNuovoTrainer() {
-            const nomeEl = document.getElementById('new-trainer-nome');
-            const pinEl = document.getElementById('new-trainer-pin');
-
-            const nome = nomeEl.value.trim();
-            const pin = pinEl.value.trim();
-
-            if (!nome || !pin) {
-                alert("Inserisci sia il nome che il PIN per il nuovo trainer!");
-                return;
-            }
-
-            const { error } = await supabaseClient
-                .from('trainers')
-                .insert([{ nome: nome, pin: pin, is_admin: false }]);
-
-            if (error) {
-                alert("Errore nell'inserimento: " + error.message);
-            } else {
-                alert(`Trainer ${nome} aggiunto con successo!`);
-                nomeEl.value = '';
-                pinEl.value = '';
-                caricaListaStaff();
-            }
-        }
-
-        async function eliminaTrainer(id) {
-            if (!confirm("Sei sicuro di voler rimuovere questo trainer dallo staff?")) return;
-
-            const { error } = await supabaseClient
-                .from('trainers')
-                .delete()
-                .eq('id', id);
-
-            if (error) {
-                alert("Errore durante l'eliminazione: " + error.message);
-            } else {
-                caricaListaStaff();
-            }
         }
 
         function resetFormAllenamento() {
@@ -1423,7 +1383,7 @@
             nuovoEsercizio.innerHTML = `
                 <details>
                     <summary>
-                        <span class="titolo-esercizio-span">${esSelezionato || 'Seleziona o scrivi esercizio...'}</span>
+                        <span class="titolo-esercizio-span">${esc(esSelezionato) || 'Seleziona o scrivi esercizio...'}</span>
                         <div class="summary-right-actions">
                             <button type="button" class="btn-remove-ex" onclick="rimuoviEsercizio(this)">Elimina</button>
                             <span class="summary-arrow">▼</span>
@@ -1431,7 +1391,7 @@
                     </summary>
                     <div class="dettagli-esercizio-content">
                         <label>Nome Esercizio (Scrivi o seleziona):</label>
-                        <input type="text" class="ex-nome-input" list="${idDatalist}" placeholder="" value="${esSelezionato}" oninput="aggiornaTitoloEsercizio(this)" autocomplete="off">
+                        <input type="text" class="ex-nome-input" list="${idDatalist}" placeholder="" value="${esc(esSelezionato)}" oninput="aggiornaTitoloEsercizio(this)" autocomplete="off">
                         <datalist id="${idDatalist}">
                             ${generaOpzioniDatalist(listaFiltro)}
                         </datalist>
@@ -1445,15 +1405,15 @@
                             </div>
                             <div>
                                 <label>Serie x Reps:</label>
-                                <input type="text" class="ex-serie" placeholder="" value="${serieVal}">
+                                <input type="text" class="ex-serie" placeholder="" value="${esc(serieVal)}">
                             </div>
                         </div>
 
                         <label>Tempo di Recupero:</label>
-                        <input type="text" class="ex-recupero" placeholder="" value="${recuperoVal}">
+                        <input type="text" class="ex-recupero" placeholder="" value="${esc(recuperoVal)}">
 
                         <label>Link Foto/GIF Esercizio (opzionale):</label>
-                        <input type="url" class="ex-img" placeholder="" value="${imgVal}">
+                        <input type="url" class="ex-img" placeholder="" value="${esc(imgVal)}">
                     </div>
                 </details>
             `;
@@ -1475,7 +1435,7 @@
             nuovoGiorno.innerHTML = `
                 <details>
                     <summary>
-                        <span class="titolo-giorno-span">${nomeGiornoDefault}</span>
+                        <span class="titolo-giorno-span">${esc(nomeGiornoDefault)}</span>
                         <div class="summary-right-actions">
                             <button type="button" class="btn-remove-ex" style="background-color: var(--btn-back);" onclick="rimuoviGiorno(this)">Elimina Giorno</button>
                             <span class="summary-arrow">▼</span>
@@ -1483,13 +1443,13 @@
                     </summary>
                     <div style="padding: 15px; background-color: var(--bg-card); border-top: 1px solid var(--color-bordi);">
                         <label>Nome Giorno / Sessione:</label>
-                        <input type="text" class="giorno-nome-input" list="${idDatalistGiorni}" placeholder="" value="${nomeGiornoDefault}" oninput="aggiornaTitoloGiorno(this)" autocomplete="off" style="margin-top: 8px;">
+                        <input type="text" class="giorno-nome-input" list="${idDatalistGiorni}" placeholder="" value="${esc(nomeGiornoDefault)}" oninput="aggiornaTitoloGiorno(this)" autocomplete="off" style="margin-top: 8px;">
                         <datalist id="${idDatalistGiorni}">
                             ${generaOpzioniDatalist(opzioniNomiGiorni)}
                         </datalist>
 
                         <label>Muscoli Coinvolti (Scrivi o seleziona):</label>
-                        <input type="text" class="muscoli-input" list="${idDatalistMuscoli}" placeholder="" value="${muscoloSelezionato}" oninput="aggiornaEserciziDelGiorno(this)" autocomplete="off">
+                        <input type="text" class="muscoli-input" list="${idDatalistMuscoli}" placeholder="" value="${esc(muscoloSelezionato)}" oninput="aggiornaEserciziDelGiorno(this)" autocomplete="off">
                         <datalist id="${idDatalistMuscoli}">
                             ${generaOpzioniDatalist(elencoMuscoliConsigliati)}
                         </datalist>
@@ -1513,7 +1473,6 @@
             
             datiSchedaAttuale = {
                 cliente: nomeAtletaSalvato,
-                pin: pinAtletaSalvato,
                 giorni: []
             };
 
@@ -1548,8 +1507,9 @@
                 });
             });
 
-            await salvaInStorico(datiSchedaAttuale);
-            await caricaStoricoLogAtleta(nomeAtletaSalvato);
+            const salvata = await salvaInStorico(datiSchedaAttuale);
+            if (!salvata) return;
+            await caricaStoricoLogAtleta();
             renderizzaScheda(datiSchedaAttuale);
             
             document.getElementById('form-creazione').style.display = 'none';
@@ -1557,12 +1517,16 @@
             document.getElementById('logout-btn').style.display = 'block';
         }
 
-        async function caricaStoricoLogAtleta(nomeCliente) {
-            if (!nomeCliente) return;
+        // Storico carichi dell'atleta aperto (lato trainer: la RLS mostra solo i suoi atleti)
+        async function caricaStoricoLogAtleta() {
+            if (!atletaIdCorrente) {
+                storicoLogAtletaCache = [];
+                return;
+            }
             const { data, error } = await supabaseClient
-                .from('storico_allenamenti')
+                .from('allenamenti_log')
                 .select('*')
-                .ilike('cliente', nomeCliente)
+                .eq('atleta_id', atletaIdCorrente)
                 .order('data_allenamento', { ascending: false });
 
             if (!error && data) {
@@ -1576,14 +1540,14 @@
             if (!confirm("Sei sicuro di voler eliminare questa sessione dallo storico?")) return;
 
             const { error } = await supabaseClient
-                .from('storico_allenamenti')
+                .from('allenamenti_log')
                 .delete()
                 .eq('id', logId);
 
             if (error) {
                 alert("Errore durante l'eliminazione: " + error.message);
             } else {
-                await caricaStoricoLogAtleta(nomeAtletaSalvato);
+                await caricaStoricoLogAtleta();
                 renderizzaScheda(datiSchedaAttuale);
             }
         }
@@ -1592,7 +1556,6 @@
             document.getElementById('titolo-principale').innerText = data.cliente ? "Scheda " + data.cliente : "Scheda Allenamento";
 
             if (isModalitaAtleta) {
-                document.getElementById('btn-condividi').style.display = 'none';
                 document.getElementById('btn-modifica').style.display = 'none';
                 document.getElementById('btn-menu-finale').style.display = 'none';
                 document.getElementById('btn-salva-log').style.display = 'block';
@@ -1600,7 +1563,6 @@
                 document.getElementById('menu-btn').style.display = 'block';
                 document.getElementById('logout-btn').style.display = 'block';
             } else {
-                document.getElementById('btn-condividi').style.display = 'block';
                 document.getElementById('btn-modifica').style.display = 'block';
                 document.getElementById('btn-menu-finale').style.display = 'block';
                 document.getElementById('btn-salva-log').style.display = 'none';
@@ -1614,10 +1576,12 @@
             data.giorni.forEach((giorno, gIdx) => {
                 let htmlEsercizi = "";
                 giorno.esercizi.forEach((ex, eIdx) => {
-                    let mediaHtml = ex.immagine ? `<img src="${ex.immagine}" class="ex-img-preview" alt="${ex.nome}">` : '';
+                    // Solo link http/https: niente "javascript:" o altro
+                    const immagineValida = ex.immagine && /^https?:\/\//i.test(ex.immagine);
+                    let mediaHtml = immagineValida ? `<img src="${esc(ex.immagine)}" class="ex-img-preview" alt="${esc(ex.nome)}">` : '';
 
-                    const logEsercizio = storicoLogAtletaCache.filter(l => 
-                        l.nome_esercizio.toLowerCase().trim() === ex.nome.toLowerCase().trim()
+                    const logEsercizio = storicoLogAtletaCache.filter(l =>
+                        String(l.nome_esercizio || '').toLowerCase().trim() === String(ex.nome || '').toLowerCase().trim()
                     );
 
                     let storicoHtml = "";
@@ -1633,7 +1597,7 @@
                             righeStorico += `
                                 <div class="storico-riga">
                                     <span><b>${dataItaliana}</b></span>
-                                    <span>Kg: <b>${l.kg_usati || '-'}</b> | Reps: <b>${l.reps_fatte || '-'}</b></span>
+                                    <span>Kg: <b>${esc(l.kg_usati) || '-'}</b> | Reps: <b>${esc(l.reps_fatte) || '-'}</b></span>
                                     ${azioneElimina}
                                 </div>
                             `;
@@ -1668,14 +1632,14 @@
                         <div class="ex-card-final">
                             <details>
                                 <summary>
-                                    <span class="ex-title">${eIdx+1}. ${ex.nome}</span>
+                                    <span class="ex-title">${eIdx+1}. ${esc(ex.nome)}</span>
                                     <span class="summary-arrow">▼</span>
                                 </summary>
                                 <div class="ex-card-final-content">
-                                    ${ex.muscolo ? `<span class="ex-muscolo-tag">${ex.muscolo}</span>` : ''}
+                                    ${ex.muscolo ? `<span class="ex-muscolo-tag">${esc(ex.muscolo)}</span>` : ''}
                                     <div class="ex-details">
-                                        <span>Serie: <b>${ex.serie}</b></span>
-                                        <span>Recupero: <b>${ex.recupero}</b></span>
+                                        <span>Serie: <b>${esc(ex.serie)}</b></span>
+                                        <span>Recupero: <b>${esc(ex.recupero)}</b></span>
                                     </div>
                                     ${mediaHtml}
                                     ${logHtml}
@@ -1689,7 +1653,7 @@
                 htmlSchedaFinale += `
                     <details>
                         <summary>
-                            <span>${giorno.nome} <small style="font-size: 0.85rem; font-weight: normal; opacity: 0.9; margin-left: 10px;">${giorno.muscoli}</small></span>
+                            <span>${esc(giorno.nome)} <small style="font-size: 0.85rem; font-weight: normal; opacity: 0.9; margin-left: 10px;">${esc(giorno.muscoli)}</small></span>
                             <span class="summary-arrow">▼</span>
                         </summary>
                         <div class="dettagli-giorno-content">
@@ -1708,68 +1672,51 @@
                 return;
             }
 
-            const dataOggi = new Date().toISOString().split('T')[0];
-            const nomeClienteCorrente = nomeAtletaSalvato || datiSchedaAttuale.cliente;
-            let logSalvatiTotali = 0;
-
-            for (let gIdx = 0; gIdx < datiSchedaAttuale.giorni.length; gIdx++) {
-                const giorno = datiSchedaAttuale.giorni[gIdx];
-                
-                for (let eIdx = 0; eIdx < giorno.esercizi.length; eIdx++) {
-                    const esercizio = giorno.esercizi[eIdx];
-                    
+            const righe = [];
+            datiSchedaAttuale.giorni.forEach((giorno, gIdx) => {
+                giorno.esercizi.forEach((esercizio, eIdx) => {
                     const inputKg = document.getElementById(`log-kg-${gIdx}-${eIdx}`);
                     const inputReps = document.getElementById(`log-reps-${gIdx}-${eIdx}`);
 
                     if (inputKg && inputReps && (inputKg.value.trim() !== "" || inputReps.value.trim() !== "")) {
-                        const kgUsati = inputKg.value.trim();
-                        const repsFatte = inputReps.value.trim();
-
-                        const { data: esistente } = await supabaseClient
-                            .from('storico_allenamenti')
-                            .select('id')
-                            .ilike('cliente', nomeClienteCorrente)
-                            .eq('data_allenamento', dataOggi)
-                            .ilike('nome_esercizio', esercizio.nome)
-                            .maybeSingle();
-
-                        let error;
-                        if (esistente) {
-                            const res = await supabaseClient
-                                .from('storico_allenamenti')
-                                .update({ kg_usati: kgUsati, reps_fatte: repsFatte })
-                                .eq('id', esistente.id);
-                            error = res.error;
-                        } else {
-                            const res = await supabaseClient
-                                .from('storico_allenamenti')
-                                .insert([{
-                                    cliente: nomeClienteCorrente,
-                                    data_allenamento: dataOggi,
-                                    giorno_nome: giorno.nome,
-                                    nome_esercizio: esercizio.nome,
-                                    kg_usati: kgUsati,
-                                    reps_fatte: repsFatte
-                                }]);
-                            error = res.error;
-                        }
-
-                        if (!error) {
-                            logSalvatiTotali++;
-                        } else {
-                            console.error("Errore salvataggio log esercizio:", error);
-                        }
+                        righe.push({
+                            giorno_nome: giorno.nome,
+                            nome_esercizio: esercizio.nome,
+                            kg_usati: inputKg.value.trim(),
+                            reps_fatte: inputReps.value.trim()
+                        });
                     }
-                }
+                });
+            });
+
+            if (righe.length === 0) {
+                alert("Compila almeno un campo tra Kg e Reps prima di salvare.");
+                return;
             }
 
-            if (logSalvatiTotali > 0) {
-                alert("Allenamento e carichi registrati con successo nel Cloud!");
-                await caricaStoricoLogAtleta(nomeAtletaSalvato);
-                renderizzaScheda(datiSchedaAttuale);
-            } else {
-                alert("Compila almeno un campo tra Kg e Reps prima di salvare.");
+            // Il server ricontrolla nome e PIN prima di salvare
+            const { data: storico, error } = await supabaseClient.rpc('salva_log_atleta', {
+                p_nome: nomeAtletaSalvato,
+                p_pin: pinAtletaSalvato,
+                p_righe: righe
+            });
+
+            if (error) {
+                console.error("Errore salvataggio log:", error);
+                alert(error.message.includes('troppi_tentativi')
+                    ? "Troppi tentativi. Riprova tra 15 minuti."
+                    : "Si è verificato un errore durante il salvataggio nel Cloud.");
+                return;
             }
+
+            if (!storico) {
+                alert("Sessione non valida: esci e rientra con nome e PIN.");
+                return;
+            }
+
+            storicoLogAtletaCache = storico;
+            alert("Allenamento e carichi registrati con successo nel Cloud!");
+            renderizzaScheda(datiSchedaAttuale);
         }
 
         async function caricaSchedaAtletaDaInput() {
@@ -1781,49 +1728,38 @@
                 return;
             }
 
-            const { data, error } = await supabaseClient
-                .from('schede')
-                .select('*')
-                .ilike('cliente', nomeInput)
-                .eq('pin_atleta', pinInput)
-                .order('created_at', { ascending: false })
-                .limit(1);
+            // Il controllo di nome e PIN lo fa il server: restituisce solo la scheda di questo atleta
+            const { data, error } = await supabaseClient.rpc('accesso_atleta', {
+                p_nome: nomeInput,
+                p_pin: pinInput
+            });
 
             if (error) {
-                alert("Errore durante il recupero dal Cloud.");
                 console.error(error);
+                alert(error.message.includes('troppi_tentativi')
+                    ? "Troppi tentativi sbagliati. Riprova tra 15 minuti."
+                    : "Errore durante il recupero dal Cloud.");
                 return;
             }
 
-            if (data && data.length > 0) {
-                const trovata = data[0].dati_scheda;
-                isModalitaAtleta = true;
-                datiSchedaAttuale = trovata;
-                nomeAtletaSalvato = trovata.cliente;
-                
-                await caricaStoricoLogAtleta(nomeAtletaSalvato);
-
-                document.getElementById('schermata-login-atleta').style.display = 'none';
-                renderizzaScheda(trovata);
-                document.getElementById('scheda-finale').style.display = 'block';
-                document.getElementById('menu-btn').style.display = 'block';
-                document.getElementById('logout-btn').style.display = 'block';
-            } else {
+            if (!data || !data.scheda) {
                 alert("Nome o PIN non validi. Verifica le tue credenziali con il tuo Personal Trainer.");
+                return;
             }
-        }
 
-        function copiaLinkCliente() {
-            if (!datiSchedaAttuale) return;
-            const jsonString = JSON.stringify(datiSchedaAttuale);
-            const encodedData = encodeURIComponent(jsonString);
-            const urlCliente = window.location.origin + window.location.pathname + "?data=" + encodedData;
+            isModalitaAtleta = true;
+            atletaIdCorrente = data.id;
+            datiSchedaAttuale = data.scheda;
+            nomeAtletaSalvato = data.nome;
+            pinAtletaSalvato = pinInput;
+            storicoLogAtletaCache = data.storico || [];
 
-            navigator.clipboard.writeText(urlCliente).then(() => {
-                const btn = document.getElementById('btn-condividi');
-                btn.innerText = "Link Copiato";
-                setTimeout(() => { btn.innerText = "Copia Link da inviare al Cliente"; }, 3000);
-            });
+            document.getElementById('pin-atleta-cerca').value = '';
+            document.getElementById('schermata-login-atleta').style.display = 'none';
+            renderizzaScheda(datiSchedaAttuale);
+            document.getElementById('scheda-finale').style.display = 'block';
+            document.getElementById('menu-btn').style.display = 'block';
+            document.getElementById('logout-btn').style.display = 'block';
         }
 
         function tornaAlForm() {
@@ -1832,35 +1768,30 @@
             document.getElementById('logout-btn').style.display = 'block';
         }
 
+        // Crea o aggiorna l'atleta sul server. Il PIN viene cifrato lì, non è mai salvato in chiaro.
         async function salvaInStorico(scheda) {
-            try {
-                if (!currentTrainer) {
-                    alert("Errore: nessuna sessione trainer attiva.");
-                    return;
-                }
-
-                await supabaseClient
-                    .from('schede')
-                    .delete()
-                    .eq('trainer_id', currentTrainer.id)
-                    .ilike('cliente', scheda.cliente);
-
-                const { error } = await supabaseClient
-                    .from('schede')
-                    .insert([{ 
-                        cliente: scheda.cliente, 
-                        pin_atleta: scheda.pin || pinAtletaSalvato,
-                        dati_scheda: scheda,
-                        trainer_id: currentTrainer.id 
-                    }]);
-
-                if (error) {
-                    console.error("Errore salvataggio Supabase:", error);
-                    alert("Si è verificato un errore durante il salvataggio nel Cloud.");
-                }
-            } catch (err) {
-                console.error("Errore di connessione a Supabase:", err);
+            if (!currentTrainer) {
+                alert("Errore: nessuna sessione trainer attiva.");
+                return false;
             }
+
+            const { data: idSalvato, error } = await supabaseClient.rpc('salva_atleta', {
+                p_id: atletaIdCorrente,
+                p_nome: scheda.cliente,
+                p_pin: pinAtletaSalvato || null,
+                p_scheda: scheda
+            });
+
+            if (error) {
+                console.error("Errore salvataggio Supabase:", error);
+                alert("Si è verificato un errore durante il salvataggio nel Cloud.");
+                return false;
+            }
+
+            atletaIdCorrente = idSalvato;
+            pinAtletaSalvato = "";
+            document.getElementById('pin-cliente-iniziale').value = '';
+            return true;
         }
 
         function toggleAccordionAtleta(element) {
@@ -1878,10 +1809,9 @@
             }
 
             const { data: storico, error } = await supabaseClient
-                .from('schede')
-                .select('*')
-                .eq('trainer_id', currentTrainer.id)
-                .order('created_at', { ascending: false });
+                .from('atleti')
+                .select('id, nome, scheda, updated_at')
+                .order('updated_at', { ascending: false });
 
             if (error || !storico || storico.length === 0) {
                 container.innerHTML = "<p style='color: var(--color-etichette);'>Nessun atleta presente nel tuo storico.</p>";
@@ -1892,26 +1822,40 @@
 
             let html = "";
             storico.forEach((item, index) => {
-                const pinMostrato = item.pin_atleta || (item.dati_scheda ? item.dati_scheda.pin : '----') || '----';
-                
                 html += `
                     <div class="atleta-accordion-item">
                         <div class="atleta-accordion-header" onclick="toggleAccordionAtleta(this)">
-                            <span>${item.cliente}</span>
+                            <span>${esc(item.nome)}</span>
                             <span style="font-size: 0.8rem;">▼</span>
                         </div>
                         <div class="atleta-accordion-body">
-                            <div><span class="pin-badge">PIN Atleta: ${pinMostrato}</span></div>
                             <div class="atleta-actions-grid">
                                 <button class="btn-submit" onclick="caricaAtletaDaStorico(${index})">Scheda</button>
-                                <button class="btn-share" onclick="alert('Nutrizione per ${item.cliente} in arrivo!')">Nutrizione</button>
+                                <button class="btn-share" onclick="alert('Nutrizione in arrivo!')">Nutrizione</button>
                             </div>
-                            <button class="btn-back" style="width: 100%; margin-top: 8px; padding: 6px; font-size: 0.8rem;" onclick="eliminaDaStorico('${item.id}', ${index})">Elimina Atleta</button>
+                            <button class="btn-add" style="width: 100%; margin-top: 8px; padding: 6px; font-size: 0.8rem;" onclick="generaNuovoPinAtleta(${index})">Nuovo PIN</button>
+                            <button class="btn-back" style="width: 100%; margin-top: 8px; padding: 6px; font-size: 0.8rem;" onclick="eliminaDaStorico(${index})">Elimina Atleta</button>
                         </div>
                     </div>
                 `;
             });
             container.innerHTML = html;
+        }
+
+        // Il PIN è salvato cifrato: non si può rileggere, si può solo generarne uno nuovo
+        async function generaNuovoPinAtleta(index) {
+            const record = window.storicoCloud && window.storicoCloud[index];
+            if (!record) return;
+            if (!confirm(`Generare un nuovo PIN per ${record.nome}? Il vecchio smetterà di funzionare.`)) return;
+
+            const nuovoPin = generaPinSicuro();
+            const { error } = await supabaseClient.rpc('cambia_pin_atleta', { p_id: record.id, p_pin: nuovoPin });
+
+            if (error) {
+                alert("Errore durante il cambio PIN: " + error.message);
+                return;
+            }
+            alert(`Nuovo PIN per ${record.nome}: ${nuovoPin}\n\nComunicalo all'atleta adesso: per sicurezza non sarà più visibile.`);
         }
 
         function popolaFormConDati(scheda) {
@@ -1922,7 +1866,7 @@
                 aggiungiGiorno(giornoData.nome, giornoData.muscoli);
                 const ultimoGiornoBox = contenitore.lastElementChild;
                 const containerEsercizi = ultimoGiornoBox.querySelector('.lista-esercizi-giorno');
-                
+
                 containerEsercizi.innerHTML = '';
 
                 giornoData.esercizi.forEach((ex) => {
@@ -1933,25 +1877,29 @@
 
         async function caricaAtletaDaStorico(index) {
             if (!window.storicoCloud || !window.storicoCloud[index]) return;
-            
+
             const recordSelezionato = window.storicoCloud[index];
-            const schedaSelezionata = recordSelezionato.dati_scheda;
+            const schedaSelezionata = recordSelezionato.scheda;
+            if (!schedaSelezionata || !schedaSelezionata.giorni) {
+                alert("Questo atleta non ha ancora una scheda.");
+                return;
+            }
 
             isModalitaAtleta = false;
+            atletaIdCorrente = recordSelezionato.id;
             datiSchedaAttuale = schedaSelezionata;
-            nomeAtletaSalvato = schedaSelezionata.cliente;
-            pinAtletaSalvato = recordSelezionato.pin_atleta || schedaSelezionata.pin || "";
+            nomeAtletaSalvato = recordSelezionato.nome;
+            pinAtletaSalvato = "";
 
             document.getElementById('nome-cliente-iniziale').value = nomeAtletaSalvato;
-            document.getElementById('pin-cliente-iniziale').value = pinAtletaSalvato;
+            document.getElementById('pin-cliente-iniziale').value = '';
 
-            await caricaStoricoLogAtleta(nomeAtletaSalvato);
+            await caricaStoricoLogAtleta();
 
             popolaFormConDati(schedaSelezionata);
 
             document.getElementById('schermata-scelta').style.display = 'none';
             document.getElementById('schermata-login-form-trainer').style.display = 'none';
-            document.getElementById('schermata-admin-panel').style.display = 'none';
             document.getElementById('schermata-login-trainer').style.display = 'none';
             document.getElementById('schermata-menu').style.display = 'none';
             document.getElementById('form-creazione').style.display = 'none';
@@ -1960,60 +1908,44 @@
             document.getElementById('scheda-finale').style.display = 'block';
             document.getElementById('menu-btn').style.display = 'block';
             document.getElementById('logout-btn').style.display = 'block';
-            
+
             toggleDrawer();
         }
 
-        async function eliminaDaStorico(idRecord, index) {
-            if (!confirm("Sei sicuro di voler eliminare questo atleta dallo storico?")) return;
+        async function eliminaDaStorico(index) {
+            const record = window.storicoCloud && window.storicoCloud[index];
+            if (!record) return;
+            if (!confirm(`Sei sicuro di voler eliminare ${record.nome} e tutto il suo storico?`)) return;
 
             const { error } = await supabaseClient
-                .from('schede')
+                .from('atleti')
                 .delete()
-                .eq('id', idRecord);
+                .eq('id', record.id);
 
             if (error) {
                 alert("Errore durante l'eliminazione dal Cloud: " + error.message);
                 console.error(error);
             } else {
+                if (atletaIdCorrente === record.id) {
+                    atletaIdCorrente = null;
+                    nomeAtletaSalvato = "";
+                }
                 alert("Atleta eliminato con successo!");
                 aggiornaListaStorico();
             }
         }
 
-        window.onload = function() {
+        window.onload = async function() {
             const h1El = document.getElementById('titolo-principale');
             if (h1El) h1El.setAttribute('data-titolo-originale', h1El.innerText);
 
             resetFormAllenamento();
             azzeraTuttiInput();
 
-            const urlParams = new URLSearchParams(window.location.search);
-            const dataParam = urlParams.get('data');
-
-            if (dataParam) {
-                try {
-                    const data = JSON.parse(decodeURIComponent(dataParam));
-                    isModalitaAtleta = true;
-                    nomeAtletaSalvato = data.cliente || "";
-                    
-                    document.getElementById('menu-btn').style.display = 'block';
-                    document.getElementById('schermata-scelta').style.display = 'none';
-                    document.getElementById('schermata-login-form-trainer').style.display = 'none';
-                    document.getElementById('schermata-admin-panel').style.display = 'none';
-                    document.getElementById('schermata-login-trainer').style.display = 'none';
-                    document.getElementById('schermata-login-atleta').style.display = 'none';
-                    document.getElementById('schermata-menu').style.display = 'none';
-                    document.getElementById('form-creazione').style.display = 'none';
-                    document.getElementById('logout-btn').style.display = 'block';
-                    
-                    caricaStoricoLogAtleta(nomeAtletaSalvato).then(() => {
-                        renderizzaScheda(data);
-                        document.getElementById('scheda-finale').style.display = 'block';
-                    });
-                } catch (e) {
-                    console.error("Errore nel caricamento dei dati", e);
-                }
+            // Se il trainer era già entrato su questo dispositivo, la sessione è ancora valida
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            if (session && session.user) {
+                await entraComeTrainer(session.user);
             }
         };
 
