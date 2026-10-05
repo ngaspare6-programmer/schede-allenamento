@@ -15,7 +15,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <!-- Importazione dei font Inter e Poppins da Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Poppins:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Inter:wght@400;500;600;700;800&family=Poppins:wght@500;700&display=swap" rel="stylesheet">
 
     <!-- Importazione della libreria ufficiale JavaScript di Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -265,6 +265,20 @@
             padding: 20px;
             box-sizing: border-box;
             overflow-y: auto;
+        }
+
+        /* Pulsante per chiudere il pannello laterale */
+        #drawer-chiudi {
+            position: absolute; top: 12px; right: 12px;
+            width: 36px; height: 36px; margin: 0; padding: 0;
+            border-radius: 10px; border: 1px solid var(--color-bordi);
+            background: transparent; color: var(--color-titoli); font-size: 1rem;
+        }
+
+        /* Pulsante Esci in fondo alla tendina dell'atleta */
+        .drawer-esci {
+            margin-top: 24px; background: transparent; color: var(--color-etichette);
+            border: 1px solid var(--color-bordi);
         }
 
         /* Classe aggiunta via JavaScript per rendere visibile il pannello laterale */
@@ -693,6 +707,139 @@
         #schermata-menu,
         #form-creazione,
         #scheda-finale { display: none; }
+
+        /* =========================================================
+           VISTA ATLETA — design scelto il 6/10/2026
+           Struttura "Tabellone" (A) + colori "Coach" (B). Vedi design/direzione.md
+           ========================================================= */
+        body.modo-atleta {
+            --va-bg: #121316;        /* sfondo grafite */
+            --va-surface: #1A1C21;   /* card: un tono sopra lo sfondo */
+            --va-surface-2: #23262D; /* elementi dentro le card */
+            --va-text: #ECEDEF;
+            --va-muted: #8C8F98;
+            --va-acc: #FF7A45;       /* accento: in futuro cambierà per ogni palestra */
+            --va-on-acc: #121316;    /* testo sopra l'accento: scuro per il contrasto */
+            background: var(--va-bg);
+            padding: 0 0 96px;
+            justify-content: flex-start;
+        }
+        body.modo-atleta #titolo-principale,
+        body.modo-atleta #menu-btn,
+        body.modo-atleta #logout-btn,
+        body.modo-atleta #btn-salva-log,
+        body.modo-atleta #btn-esci-atleta,
+        body.modo-atleta #btn-modifica,
+        body.modo-atleta #btn-menu-finale,
+        body.modo-atleta footer { display: none !important; }
+        body.modo-atleta #scheda-finale {
+            background: none; border: 0; box-shadow: none; padding: 0; max-width: 480px; overflow: visible;
+        }
+
+        .va { color: var(--va-text); font-family: 'Inter', system-ui, sans-serif; }
+        .va button { width: auto; margin: 0; font-family: inherit; }
+
+        .va-top { display: flex; align-items: center; gap: 12px; padding: 24px 20px 8px; }
+        .va-logo {
+            width: 44px; height: 44px; border-radius: 14px; flex-shrink: 0;
+            background: var(--va-surface); color: var(--va-acc);
+            display: grid; place-items: center; font-weight: 800; font-size: 18px;
+        }
+        .va-top-testo { flex: 1; min-width: 0; }
+        .va-top-testo p { margin: 0; font-size: 13px; color: var(--va-muted); }
+        .va-top-testo h2 { margin: 2px 0 0; font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 700; text-align: left; }
+        .va-menu {
+            width: 44px !important; height: 44px; flex-shrink: 0; padding: 0;
+            background: var(--va-surface); color: var(--va-text); border: 0; border-radius: 14px;
+            font-size: 20px; line-height: 1;
+        }
+
+        .va-giorni { display: flex; gap: 8px; padding: 12px 20px 0; overflow-x: auto; scrollbar-width: none; }
+        .va-giorni::-webkit-scrollbar { display: none; }
+        .va-giorni button {
+            background: var(--va-surface); color: var(--va-muted); border: 0; border-radius: 999px;
+            padding: 8px 14px; font-size: 13px; font-weight: 600; white-space: nowrap;
+        }
+        .va-giorni button.attivo { background: var(--va-text); color: var(--va-bg); }
+
+        .va-giorno { padding: 20px 20px 24px; }
+        .va-giorno small { color: var(--va-muted); font-size: 13px; }
+        .va-giorno h3 {
+            font-family: 'Barlow Condensed', sans-serif; font-size: 44px; font-weight: 700; line-height: 1;
+            margin: 4px 0 12px; text-transform: uppercase; letter-spacing: .01em; word-break: break-word;
+        }
+        .va-barra { height: 4px; background: var(--va-surface-2); border-radius: 2px; overflow: hidden; }
+        .va-barra i { display: block; height: 100%; background: var(--va-acc); border-radius: 2px; transition: width .3s ease; }
+
+        .va-attuale { background: var(--va-surface); margin: 0 12px; border-radius: 20px; padding: 20px; }
+        .va-n { color: var(--va-acc); font-size: 12px; font-weight: 700; letter-spacing: .1em; }
+        .va-attuale h4 { font-family: 'Inter', sans-serif; font-size: 20px; margin: 6px 0 20px; word-break: break-word; }
+        .va-img { width: 100%; max-height: 200px; object-fit: cover; border-radius: 14px; margin: -8px 0 20px; display: block; }
+
+        .va-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 20px; }
+        .va-stats span { display: block; font-size: 11px; color: var(--va-muted); letter-spacing: .08em; text-transform: uppercase; margin-bottom: 2px; }
+        .va-stats b { font-family: 'Barlow Condensed', sans-serif; font-size: 34px; font-weight: 600; line-height: 1; word-break: break-word; }
+        .va-stats b em { font-style: normal; font-size: 18px; color: var(--va-muted); margin-left: 2px; }
+
+        .va-input-riga { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .va-stepper { background: var(--va-bg); border-radius: 14px; padding: 10px 12px; }
+        .va-stepper > span { font-size: 11px; color: var(--va-muted); letter-spacing: .08em; text-transform: uppercase; }
+        .va-stepper > div { display: flex; align-items: center; justify-content: space-between; gap: 4px; margin-top: 4px; }
+        .va-stepper button {
+            width: 36px; height: 36px; flex-shrink: 0; border-radius: 10px; border: 0; padding: 0;
+            background: var(--va-surface-2); color: var(--va-text); font-size: 20px; font-weight: 600;
+        }
+        .va-stepper input {
+            width: 100%; min-width: 0; margin: 0; padding: 0; border: 0; background: none; text-align: center;
+            color: var(--va-text); font-family: 'Barlow Condensed', sans-serif; font-size: 32px; font-weight: 700;
+        }
+        .va-stepper input:focus { outline: none; color: var(--va-acc); }
+
+        .va-delta {
+            display: inline-flex; align-items: center; gap: 6px; margin-top: 14px;
+            background: var(--va-surface-2); color: var(--va-muted);
+            font-size: 13px; font-weight: 600; padding: 6px 10px; border-radius: 999px;
+        }
+        .va-delta.su { background: color-mix(in srgb, var(--va-acc) 14%, transparent); color: var(--va-acc); }
+
+        .va-recupero {
+            display: block; width: 100% !important; margin-top: 16px !important; padding: 12px;
+            background: none; color: var(--va-text); border: 1px solid var(--va-surface-2); border-radius: 12px;
+            font-size: 14px; font-weight: 600;
+        }
+
+        /* #res-lista-giorni davanti serve a battere gli stili della vista trainer */
+        #res-lista-giorni .va-storico { margin: 16px 0 0; background: none; border: 0; border-radius: 0; overflow: visible; }
+        #res-lista-giorni .va-storico summary {
+            display: list-item; list-style: disclosure-closed inside; background: none; padding: 4px 0; cursor: pointer;
+            color: var(--va-muted); font-size: 13px; font-weight: 600;
+        }
+        #res-lista-giorni .va-storico[open] summary { list-style-type: disclosure-open; }
+        .va-storico-riga { display: flex; justify-content: space-between; padding: 8px 0; font-size: 14px; color: var(--va-muted); }
+        .va-storico-riga + .va-storico-riga { border-top: 1px solid var(--va-surface-2); }
+        .va-storico-riga b { color: var(--va-text); font-weight: 600; }
+
+        .va-lista { padding: 24px 20px 0; }
+        .va-lista h5 { font-size: 12px; color: var(--va-muted); letter-spacing: .1em; text-transform: uppercase; margin: 0 0 4px; font-family: 'Inter', sans-serif; }
+        .va-riga {
+            display: flex !important; width: 100% !important; align-items: center; justify-content: space-between; gap: 12px;
+            background: none; border: 0; padding: 14px 0; color: var(--va-text); text-align: left; cursor: pointer;
+        }
+        .va-riga + .va-riga { border-top: 1px solid var(--va-surface); }
+        .va-riga b { display: block; font-size: 16px; font-weight: 600; }
+        .va-riga small { color: var(--va-muted); font-size: 13px; font-weight: 400; }
+        .va-num { font-family: 'Barlow Condensed', sans-serif; font-size: 22px; font-weight: 600; color: var(--va-muted); }
+        .va-num.fatto { color: var(--va-acc); }
+
+        .va-cta {
+            position: fixed; left: 12px; right: 12px; bottom: 12px; z-index: 50;
+            max-width: 456px; margin: 0 auto !important; width: auto !important;
+            height: 56px; border: 0; border-radius: 16px;
+            background: var(--va-acc); color: var(--va-on-acc); font-size: 16px; font-weight: 700;
+            box-shadow: 0 8px 24px rgba(0,0,0,.4);
+        }
+        .va-cta.salvato { background: var(--va-text); }
+        .va-cta:disabled { opacity: .7; }
     </style>
 </head>
 <body>
@@ -702,6 +849,7 @@
 
     <!-- Pannello laterale unificato (Drawer) -->
     <div id="side-drawer">
+        <button type="button" id="drawer-chiudi" onclick="chiudiDrawer()" aria-label="Chiudi menu">✕</button>
         <div id="drawer-content-trainer" style="display: none;">
             <h2 style="margin-top: 40px;">Miei Atleti</h2>
             <p style="font-size: 0.85rem; color: var(--color-etichette);">Seleziona un tuo atleta per aprire la tendina e i suoi servizi:</p>
@@ -729,6 +877,8 @@
                     </div>
                 </div>
             </details>
+
+            <button type="button" class="drawer-esci" onclick="tornaAllaHome()">Esci</button>
         </div>
     </div>
 
@@ -853,6 +1003,9 @@
         let currentTrainer = null;
         let storicoLogAtletaCache = [];
         let timerSidebarInterval = null;
+        let coachAtleta = "";
+        // Vista atleta: giorno scelto, esercizio in primo piano, valori inseriti per esercizio
+        let statoAtleta = { giorno: 0, focus: 0, valori: {} };
 
         const eserciziPerMuscolo = {
             "Petto": [
@@ -995,6 +1148,7 @@
                     box.removeAttribute('data-target-time');
 
                     alert("Tempo di recupero terminato.");
+                    chiudiDrawer();
                 }
             }
 
@@ -1030,6 +1184,7 @@
                             display.innerText = "0:00 - Fatto!";
                             box.removeAttribute('data-target-time');
                             alert("Tempo di recupero terminato.");
+                    chiudiDrawer();
                         }
                     }
                 }
@@ -1124,6 +1279,18 @@
             });
         }
 
+        function chiudiDrawer() {
+            document.getElementById('side-drawer').classList.remove('open');
+        }
+
+        // Tocco fuori dalla tendina aperta: la chiude
+        document.addEventListener('click', function(evento) {
+            const drawer = document.getElementById('side-drawer');
+            if (!drawer.classList.contains('open')) return;
+            if (drawer.contains(evento.target) || evento.target.closest('#menu-btn, .va-menu, .va-recupero')) return;
+            chiudiDrawer();
+        });
+
         function toggleDrawer() {
             const drawer = document.getElementById('side-drawer');
             drawer.classList.toggle('open');
@@ -1217,6 +1384,9 @@
 
         function tornaAllaHome() {
             if (currentTrainer) supabaseClient.auth.signOut();
+            document.body.classList.remove('modo-atleta');
+            coachAtleta = "";
+            statoAtleta = { giorno: 0, focus: 0, valori: {} };
             isModalitaAtleta = false;
             currentTrainer = null;
             atletaIdCorrente = null;
@@ -1555,50 +1725,43 @@
         function renderizzaScheda(data) {
             document.getElementById('titolo-principale').innerText = data.cliente ? "Scheda " + data.cliente : "Scheda Allenamento";
 
+            // L'atleta ha la sua vista dedicata (nuovo design)
             if (isModalitaAtleta) {
-                document.getElementById('btn-modifica').style.display = 'none';
-                document.getElementById('btn-menu-finale').style.display = 'none';
-                document.getElementById('btn-salva-log').style.display = 'block';
-                document.getElementById('btn-esci-atleta').style.display = 'block';
-                document.getElementById('menu-btn').style.display = 'block';
-                document.getElementById('logout-btn').style.display = 'block';
-            } else {
-                document.getElementById('btn-modifica').style.display = 'block';
-                document.getElementById('btn-menu-finale').style.display = 'block';
-                document.getElementById('btn-salva-log').style.display = 'none';
-                document.getElementById('btn-esci-atleta').style.display = 'none';
-                document.getElementById('menu-btn').style.display = 'block';
-                document.getElementById('logout-btn').style.display = 'block';
+                document.body.classList.add('modo-atleta');
+                renderSchedaAtleta();
+                return;
             }
+
+            document.body.classList.remove('modo-atleta');
+            document.getElementById('btn-modifica').style.display = 'block';
+            document.getElementById('btn-menu-finale').style.display = 'block';
+            document.getElementById('btn-salva-log').style.display = 'none';
+            document.getElementById('btn-esci-atleta').style.display = 'none';
+            document.getElementById('menu-btn').style.display = 'block';
+            document.getElementById('logout-btn').style.display = 'block';
 
             let htmlSchedaFinale = "";
 
-            data.giorni.forEach((giorno, gIdx) => {
+            data.giorni.forEach((giorno) => {
                 let htmlEsercizi = "";
                 giorno.esercizi.forEach((ex, eIdx) => {
                     // Solo link http/https: niente "javascript:" o altro
                     const immagineValida = ex.immagine && /^https?:\/\//i.test(ex.immagine);
                     let mediaHtml = immagineValida ? `<img src="${esc(ex.immagine)}" class="ex-img-preview" alt="${esc(ex.nome)}">` : '';
 
-                    const logEsercizio = storicoLogAtletaCache.filter(l =>
-                        String(l.nome_esercizio || '').toLowerCase().trim() === String(ex.nome || '').toLowerCase().trim()
-                    );
+                    const logEsercizio = logDiEsercizio(ex.nome);
 
                     let storicoHtml = "";
                     if (logEsercizio.length > 0) {
                         let righeStorico = "";
                         logEsercizio.forEach(l => {
-                            let azioneElimina = !isModalitaAtleta ? 
-                                `<button class="btn-elimina-log" onclick="eliminaSingoloLog(${l.id})">Elimina</button>` : 
-                                ``;
-
                             const dataItaliana = formattaDataItaliana(l.data_allenamento);
 
                             righeStorico += `
                                 <div class="storico-riga">
                                     <span><b>${dataItaliana}</b></span>
                                     <span>Kg: <b>${esc(l.kg_usati) || '-'}</b> | Reps: <b>${esc(l.reps_fatte) || '-'}</b></span>
-                                    ${azioneElimina}
+                                    <button class="btn-elimina-log" onclick="eliminaSingoloLog(${l.id})">Elimina</button>
                                 </div>
                             `;
                         });
@@ -1611,22 +1774,6 @@
                             </details>
                         `;
                     }
-
-                    let logHtml = isModalitaAtleta ? `
-                        <div class="log-inputs">
-                            <label style="color: var(--btn-add-ex);">Registra il tuo allenamento di oggi:</label>
-                            <div class="grid-2">
-                                <div>
-                                    <label>Kg usati:</label>
-                                    <input type="text" id="log-kg-${gIdx}-${eIdx}" placeholder="">
-                                </div>
-                                <div>
-                                    <label>Reps fatte:</label>
-                                    <input type="text" id="log-reps-${gIdx}-${eIdx}" placeholder="">
-                                </div>
-                            </div>
-                        </div>
-                    ` : '';
 
                     htmlEsercizi += `
                         <div class="ex-card-final">
@@ -1642,7 +1789,6 @@
                                         <span>Recupero: <b>${esc(ex.recupero)}</b></span>
                                     </div>
                                     ${mediaHtml}
-                                    ${logHtml}
                                     ${storicoHtml}
                                 </div>
                             </details>
@@ -1666,6 +1812,246 @@
             document.getElementById('res-lista-giorni').innerHTML = htmlSchedaFinale;
         }
 
+        // --- VISTA ATLETA (design: struttura "Tabellone", colori "Coach") ---
+
+        // Storico di un esercizio, dal più recente
+        function logDiEsercizio(nomeEsercizio) {
+            const nome = String(nomeEsercizio || '').toLowerCase().trim();
+            return storicoLogAtletaCache.filter(l => String(l.nome_esercizio || '').toLowerCase().trim() === nome);
+        }
+
+        function numeroDa(testo) {
+            const n = parseFloat(String(testo ?? '').replace(',', '.'));
+            return isNaN(n) ? null : n;
+        }
+
+        function formattaNumero(n) {
+            return Number.isInteger(n) ? String(n) : String(Math.round(n * 100) / 100).replace('.', ',');
+        }
+
+        // "2026-10-01" → "all'1 ottobre" (prep "a") / "dell'1 ottobre" (prep "di")
+        function dataConArticolo(dataStringa, prep = 'a') {
+            const mesi = ['gennaio','febbraio','marzo','aprile','maggio','giugno','luglio','agosto','settembre','ottobre','novembre','dicembre'];
+            const parti = String(dataStringa || '').split('-');
+            if (parti.length !== 3) return '';
+            const giorno = parseInt(parti[2], 10);
+            const apostrofo = [1, 8, 11].includes(giorno);
+            const articolo = prep === 'di' ? (apostrofo ? "dell'" : 'del ') : (apostrofo ? "all'" : 'al ');
+            return `${articolo}${giorno} ${mesi[parseInt(parti[1], 10) - 1]}`;
+        }
+
+        // "90 sec" → 90, "2 min" → 120
+        function secondiRecupero(testo) {
+            const n = numeroDa(String(testo || '').match(/\d+([.,]\d+)?/)?.[0]);
+            if (n === null) return null;
+            return /min/i.test(testo) ? Math.round(n * 60) : Math.round(n);
+        }
+
+        // "4x8" → "8"
+        function repsDaSerie(serie) {
+            const m = String(serie || '').match(/[x×]\s*(\d+)/i);
+            return m ? m[1] : '';
+        }
+
+        // Solo per mostrare: "57.5" → "57,5", "4x8" → "4×8"
+        function mostraNumero(testo) {
+            return String(testo ?? '').replace(/(\d)\.(\d)/g, '$1,$2');
+        }
+        function mostraSerie(testo) {
+            return String(testo ?? '').replace(/(\d)\s*[xX]\s*(\d)/g, '$1×$2');
+        }
+
+        function chiaveEsercizio(gIdx, eIdx) {
+            return `${gIdx}-${eIdx}`;
+        }
+
+        function valoriEsercizio(gIdx, eIdx) {
+            const chiave = chiaveEsercizio(gIdx, eIdx);
+            if (!statoAtleta.valori[chiave]) {
+                const ex = datiSchedaAttuale.giorni[gIdx].esercizi[eIdx];
+                const ultimo = logDiEsercizio(ex.nome)[0];
+                statoAtleta.valori[chiave] = {
+                    kg: ultimo && ultimo.kg_usati ? ultimo.kg_usati : '',
+                    reps: ultimo && ultimo.reps_fatte ? ultimo.reps_fatte : repsDaSerie(ex.serie),
+                    toccato: false
+                };
+            }
+            return statoAtleta.valori[chiave];
+        }
+
+        function htmlDelta(kgOggi, ultimo) {
+            const oggi = numeroDa(kgOggi);
+            const prima = ultimo ? numeroDa(ultimo.kg_usati) : null;
+            if (oggi === null || prima === null) return '';
+            const quando = dataConArticolo(ultimo.data_allenamento);
+            const diff = oggi - prima;
+            if (diff > 0) return `<span class="va-delta su">▲ +${formattaNumero(diff)} kg rispetto ${quando}</span>`;
+            if (diff < 0) return `<span class="va-delta giu">▼ ${formattaNumero(diff)} kg rispetto ${quando}</span>`;
+            return `<span class="va-delta">= Stesso carico ${dataConArticolo(ultimo.data_allenamento, 'di')}</span>`;
+        }
+
+        function renderSchedaAtleta() {
+            const data = datiSchedaAttuale;
+            if (!data || !data.giorni || data.giorni.length === 0) return;
+
+            const gIdx = Math.min(statoAtleta.giorno, data.giorni.length - 1);
+            const giorno = data.giorni[gIdx];
+            const esercizi = giorno.esercizi || [];
+            const fIdx = Math.min(statoAtleta.focus, esercizi.length - 1);
+            const ex = esercizi[fIdx];
+            const valori = valoriEsercizio(gIdx, fIdx);
+            const ultimo = logDiEsercizio(ex.nome)[0];
+
+            const nomeBreve = String(data.cliente || nomeAtletaSalvato || '').trim().split(/\s+/)[0];
+            const iniziale = (coachAtleta || 'GPN Lab').trim().charAt(0).toUpperCase();
+            const fatti = esercizi.filter((_, i) => (statoAtleta.valori[chiaveEsercizio(gIdx, i)] || {}).toccato || (statoAtleta.valori[chiaveEsercizio(gIdx, i)] || {}).salvato).length;
+            const percentuale = esercizi.length ? Math.round(Math.max(fatti, 0.15) / esercizi.length * 100) : 0;
+            const secRecupero = secondiRecupero(ex.recupero);
+
+            const immagineValida = ex.immagine && /^https?:\/\//i.test(ex.immagine);
+
+            const chipsGiorni = data.giorni.length > 1 ? `
+                <nav class="va-giorni">
+                    ${data.giorni.map((g, i) => `<button class="${i === gIdx ? 'attivo' : ''}" onclick="scegliGiornoAtleta(${i})">${esc(g.nome)}</button>`).join('')}
+                </nav>` : '';
+
+            const recuperoStat = secRecupero !== null
+                ? `${secRecupero}<em>s</em>`
+                : esc(ex.recupero || '–');
+
+            const storico = logDiEsercizio(ex.nome).slice(0, 5);
+            const storicoHtml = storico.length ? `
+                <details class="va-storico">
+                    <summary>Storico (${storico.length})</summary>
+                    ${storico.map(l => `
+                        <div class="va-storico-riga">
+                            <span>${formattaDataItaliana(l.data_allenamento)}</span>
+                            <b>${esc(mostraNumero(l.kg_usati)) || '–'} kg × ${esc(l.reps_fatte) || '–'}</b>
+                        </div>`).join('')}
+                </details>` : '';
+
+            const altriEsercizi = esercizi.map((e, i) => {
+                if (i === fIdx) return '';
+                const v = statoAtleta.valori[chiaveEsercizio(gIdx, i)] || {};
+                const fatto = v.toccato || v.salvato;
+                return `
+                    <button class="va-riga" onclick="vaiAEsercizioAtleta(${i})">
+                        <span><b>${esc(e.nome)}</b><small>${esc(mostraSerie(e.serie))} · ${esc(e.recupero)}</small></span>
+                        <span class="va-num ${fatto ? 'fatto' : ''}">${fatto ? '✓' : String(i + 1).padStart(2, '0')}</span>
+                    </button>`;
+            }).join('');
+
+            document.getElementById('res-lista-giorni').innerHTML = `
+                <div class="va">
+                    <header class="va-top">
+                        <div class="va-logo">${esc(iniziale)}</div>
+                        <div class="va-top-testo">
+                            <p>${coachAtleta ? 'Coach ' + esc(coachAtleta) : 'La tua scheda'}</p>
+                            <h2>Ciao ${esc(nomeBreve)}</h2>
+                        </div>
+                        <button class="va-menu" onclick="toggleDrawer()" aria-label="Apri menu">☰</button>
+                    </header>
+
+                    ${chipsGiorni}
+
+                    <section class="va-giorno">
+                        <small>${esc(giorno.nome)}</small>
+                        <h3>${esc(giorno.muscoli)}</h3>
+                        <div class="va-barra"><i style="width: ${percentuale}%"></i></div>
+                    </section>
+
+                    <article class="va-attuale">
+                        <div class="va-n">ESERCIZIO ${fIdx + 1} DI ${esercizi.length}</div>
+                        <h4>${esc(ex.nome)}</h4>
+                        ${immagineValida ? `<img src="${esc(ex.immagine)}" class="va-img" alt="${esc(ex.nome)}">` : ''}
+
+                        <div class="va-stats">
+                            <div><span>Serie</span><b>${esc(mostraSerie(ex.serie) || '–')}</b></div>
+                            <div><span>Recupero</span><b>${recuperoStat}</b></div>
+                            <div><span>Ultima</span><b>${ultimo && ultimo.kg_usati ? esc(mostraNumero(ultimo.kg_usati)) + '<em>kg</em>' : '–'}</b></div>
+                        </div>
+
+                        <div class="va-input-riga">
+                            <div class="va-stepper">
+                                <span>Kg oggi</span>
+                                <div>
+                                    <button type="button" onclick="cambiaValoreAtleta('kg', -2.5)" aria-label="Meno 2,5 kg">−</button>
+                                    <input id="va-kg" inputmode="decimal" value="${esc(mostraNumero(valori.kg))}" placeholder="–" oninput="scriviValoreAtleta('kg', this.value)">
+                                    <button type="button" onclick="cambiaValoreAtleta('kg', 2.5)" aria-label="Più 2,5 kg">+</button>
+                                </div>
+                            </div>
+                            <div class="va-stepper">
+                                <span>Reps</span>
+                                <div>
+                                    <button type="button" onclick="cambiaValoreAtleta('reps', -1)" aria-label="Una ripetizione in meno">−</button>
+                                    <input id="va-reps" inputmode="numeric" value="${esc(valori.reps)}" placeholder="–" oninput="scriviValoreAtleta('reps', this.value)">
+                                    <button type="button" onclick="cambiaValoreAtleta('reps', 1)" aria-label="Una ripetizione in più">+</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="va-delta-box">${htmlDelta(valori.kg, ultimo)}</div>
+
+                        ${secRecupero !== null ? `<button type="button" class="va-recupero" onclick="avviaRecuperoAtleta(${secRecupero})">⏱ Avvia recupero ${secRecupero}s</button>` : ''}
+
+                        ${storicoHtml}
+                    </article>
+
+                    ${altriEsercizi ? `<section class="va-lista"><h5>Altri esercizi</h5>${altriEsercizi}</section>` : ''}
+
+                    <button type="button" class="va-cta" id="va-cta" onclick="salvaLogAtleta()">Salva allenamento</button>
+                </div>
+            `;
+        }
+
+        function scegliGiornoAtleta(gIdx) {
+            statoAtleta.giorno = gIdx;
+            statoAtleta.focus = 0;
+            renderSchedaAtleta();
+            window.scrollTo(0, 0);
+        }
+
+        function vaiAEsercizioAtleta(eIdx) {
+            statoAtleta.focus = eIdx;
+            renderSchedaAtleta();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function aggiornaDeltaAtleta() {
+            const giorno = datiSchedaAttuale.giorni[statoAtleta.giorno];
+            const ex = giorno.esercizi[statoAtleta.focus];
+            const valori = valoriEsercizio(statoAtleta.giorno, statoAtleta.focus);
+            document.getElementById('va-delta-box').innerHTML = htmlDelta(valori.kg, logDiEsercizio(ex.nome)[0]);
+        }
+
+        // Scrittura a mano nel campo (non ridisegna la pagina, così la tastiera resta aperta)
+        function scriviValoreAtleta(campo, valore) {
+            const valori = valoriEsercizio(statoAtleta.giorno, statoAtleta.focus);
+            valori[campo] = valore.trim();
+            valori.toccato = true;
+            if (campo === 'kg') aggiornaDeltaAtleta();
+        }
+
+        // Pulsanti − / +
+        function cambiaValoreAtleta(campo, passo) {
+            const valori = valoriEsercizio(statoAtleta.giorno, statoAtleta.focus);
+            const nuovo = Math.max(0, (numeroDa(valori[campo]) || 0) + passo);
+            valori[campo] = formattaNumero(nuovo);
+            valori.toccato = true;
+            document.getElementById(campo === 'kg' ? 'va-kg' : 'va-reps').value = valori[campo];
+            if (campo === 'kg') aggiornaDeltaAtleta();
+        }
+
+        // Imposta il timer del menu laterale sul recupero dell'esercizio e lo fa partire
+        function avviaRecuperoAtleta(secondi) {
+            const box = document.getElementById('timer-sidebar-container');
+            box.setAttribute('data-secondi', secondi);
+            box.setAttribute('data-tempo-base', secondi);
+            box.open = true;
+            if (!document.getElementById('side-drawer').classList.contains('open')) toggleDrawer();
+            avviaTimerSidebar();
+        }
+
         async function salvaLogAtleta() {
             if (!datiSchedaAttuale || !datiSchedaAttuale.giorni) {
                 alert("Errore: nessun dato della scheda caricato.");
@@ -1673,26 +2059,27 @@
             }
 
             const righe = [];
-            datiSchedaAttuale.giorni.forEach((giorno, gIdx) => {
-                giorno.esercizi.forEach((esercizio, eIdx) => {
-                    const inputKg = document.getElementById(`log-kg-${gIdx}-${eIdx}`);
-                    const inputReps = document.getElementById(`log-reps-${gIdx}-${eIdx}`);
-
-                    if (inputKg && inputReps && (inputKg.value.trim() !== "" || inputReps.value.trim() !== "")) {
-                        righe.push({
-                            giorno_nome: giorno.nome,
-                            nome_esercizio: esercizio.nome,
-                            kg_usati: inputKg.value.trim(),
-                            reps_fatte: inputReps.value.trim()
-                        });
-                    }
+            Object.entries(statoAtleta.valori).forEach(([chiave, valori]) => {
+                if (!valori.toccato || (!valori.kg && !valori.reps)) return;
+                const [gIdx, eIdx] = chiave.split('-').map(Number);
+                const giorno = datiSchedaAttuale.giorni[gIdx];
+                const esercizio = giorno && giorno.esercizi[eIdx];
+                if (!esercizio) return;
+                righe.push({
+                    giorno_nome: giorno.nome,
+                    nome_esercizio: esercizio.nome,
+                    kg_usati: valori.kg,
+                    reps_fatte: valori.reps
                 });
             });
 
             if (righe.length === 0) {
-                alert("Compila almeno un campo tra Kg e Reps prima di salvare.");
+                alert("Segna almeno un carico o le ripetizioni prima di salvare.");
                 return;
             }
+
+            const pulsante = document.getElementById('va-cta');
+            if (pulsante) { pulsante.disabled = true; pulsante.innerText = 'Salvataggio…'; }
 
             // Il server ricontrolla nome e PIN prima di salvare
             const { data: storico, error } = await supabaseClient.rpc('salva_log_atleta', {
@@ -1701,22 +2088,30 @@
                 p_righe: righe
             });
 
-            if (error) {
+            if (error || !storico) {
                 console.error("Errore salvataggio log:", error);
-                alert(error.message.includes('troppi_tentativi')
-                    ? "Troppi tentativi. Riprova tra 15 minuti."
-                    : "Si è verificato un errore durante il salvataggio nel Cloud.");
-                return;
-            }
-
-            if (!storico) {
-                alert("Sessione non valida: esci e rientra con nome e PIN.");
+                if (pulsante) { pulsante.disabled = false; pulsante.innerText = 'Salva allenamento'; }
+                if (error && error.message.includes('troppi_tentativi')) {
+                    alert("Troppi tentativi. Riprova tra 15 minuti.");
+                } else if (!error) {
+                    alert("Sessione non valida: esci e rientra con nome e PIN.");
+                } else {
+                    alert("Si è verificato un errore durante il salvataggio nel Cloud.");
+                }
                 return;
             }
 
             storicoLogAtletaCache = storico;
-            alert("Allenamento e carichi registrati con successo nel Cloud!");
-            renderizzaScheda(datiSchedaAttuale);
+            Object.values(statoAtleta.valori).forEach(v => { if (v.toccato) v.salvato = true; v.toccato = false; });
+            renderSchedaAtleta();
+
+            const nuovoPulsante = document.getElementById('va-cta');
+            nuovoPulsante.innerText = 'Salvato ✓';
+            nuovoPulsante.classList.add('salvato');
+            setTimeout(() => {
+                nuovoPulsante.innerText = 'Salva allenamento';
+                nuovoPulsante.classList.remove('salvato');
+            }, 2500);
         }
 
         async function caricaSchedaAtletaDaInput() {
@@ -1753,6 +2148,8 @@
             nomeAtletaSalvato = data.nome;
             pinAtletaSalvato = pinInput;
             storicoLogAtletaCache = data.storico || [];
+            coachAtleta = data.coach || "";
+            statoAtleta = { giorno: 0, focus: 0, valori: {} };
 
             document.getElementById('pin-atleta-cerca').value = '';
             document.getElementById('schermata-login-atleta').style.display = 'none';
