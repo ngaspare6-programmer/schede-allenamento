@@ -703,7 +703,6 @@
 
         #schermata-login-form-trainer,
         #schermata-login-trainer,
-        #schermata-login-atleta,
         #schermata-menu,
         #form-creazione,
         #scheda-finale { display: none; }
@@ -712,7 +711,8 @@
            VISTA ATLETA — design scelto il 6/10/2026
            Struttura "Tabellone" (A) + colori "Coach" (B). Vedi design/direzione.md
            ========================================================= */
-        body.modo-atleta {
+        body.modo-atleta,
+        body.modo-ingresso {
             --va-bg: #121316;        /* sfondo grafite */
             --va-surface: #1A1C21;   /* card: un tono sopra lo sfondo */
             --va-surface-2: #23262D; /* elementi dentro le card */
@@ -724,6 +724,16 @@
             padding: 0 0 96px;
             justify-content: flex-start;
         }
+        /* Sfumatura dell'accento in alto a destra (presa dalla direzione C "Manifesto") */
+        body.modo-ingresso {
+            padding: 0;
+            background:
+                radial-gradient(120% 70% at 85% 10%, color-mix(in srgb, var(--va-acc) 38%, transparent), transparent 60%),
+                var(--va-bg);
+        }
+        body.modo-ingresso #titolo-principale,
+        body.modo-ingresso footer { display: none !important; }
+
         body.modo-atleta #titolo-principale,
         body.modo-atleta #menu-btn,
         body.modo-atleta #logout-btn,
@@ -735,6 +745,71 @@
         body.modo-atleta #scheda-finale {
             background: none; border: 0; box-shadow: none; padding: 0; max-width: 480px; overflow: visible;
         }
+
+        /* ---------- Ingresso: login atleta e login trainer ---------- */
+        .ing-corpo {
+            max-width: 440px; margin: 0 auto; min-height: 100vh; min-height: 100dvh; box-sizing: border-box;
+            padding: 28px 20px 16px; display: flex; flex-direction: column; gap: 14px;
+            color: var(--va-text); font-family: 'Inter', system-ui, sans-serif;
+        }
+        .ing-marchio { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 15px; }
+        .ing-marchio i {
+            width: 32px; height: 32px; border-radius: 10px; background: var(--va-acc); color: var(--va-on-acc);
+            display: grid; place-items: center; font-style: normal; font-weight: 800; font-size: 15px;
+        }
+        .ing-titolo {
+            font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 52px; line-height: .95;
+            text-transform: uppercase; text-align: left; margin: 36px 0 4px; color: var(--va-text);
+        }
+        .ing-sotto { color: var(--va-muted); font-size: 15px; margin: 0 0 12px; }
+
+        .ing-campo {
+            display: block; margin: 0; padding: 10px 14px; border-radius: 14px;
+            background: var(--va-surface); color: inherit; font-size: inherit; font-weight: 400;
+        }
+        .ing-campo span { display: block; font-size: 12px; font-weight: 500; color: var(--va-muted); margin-bottom: 2px; }
+        .ing-campo input {
+            margin: 0; padding: 2px 0; border: 0; border-radius: 0; background: none;
+            color: var(--va-text); font-size: 17px;
+        }
+        .ing-campo input:focus { outline: none; }
+        .ing-campo:focus-within { box-shadow: inset 0 0 0 2px var(--va-acc); }
+
+        .ing-etichetta { display: block; font-size: 12px; font-weight: 500; color: var(--va-muted); margin-bottom: 8px; }
+        /* PIN: un solo campo vero, invisibile, sopra 6 caselle disegnate */
+        .ing-pin { position: relative; display: block; margin: 0; }
+        .ing-pin input {
+            position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; padding: 0; border: 0;
+            opacity: 0; font-size: 16px; caret-color: transparent; z-index: 1;
+        }
+        .ing-caselle { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; }
+        .ing-caselle i {
+            height: 56px; border-radius: 12px; background: var(--va-surface);
+            display: grid; place-items: center; font-style: normal; font-size: 26px; color: var(--va-text);
+        }
+        .ing-pin:focus-within .ing-caselle i.attivo { box-shadow: inset 0 0 0 2px var(--va-acc); }
+
+        .ing-cta {
+            margin: 0; height: 56px; padding: 0; border-radius: 16px;
+            background: var(--va-acc); color: var(--va-on-acc);
+            font-family: 'Inter', sans-serif; font-size: 16px; font-weight: 700;
+        }
+        .ing-cta.in-fondo { margin-top: auto; }
+        .ing-aiuto { color: var(--va-muted); font-size: 13px; text-align: center; margin: 0; }
+
+        .ing-trainer {
+            margin: auto 0 0; padding: 14px 16px; border-radius: 16px;
+            background: var(--va-surface); color: var(--va-muted);
+            display: flex; justify-content: space-between; align-items: center;
+            font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 500;
+        }
+        .ing-trainer b { color: var(--va-text); font-weight: 700; }
+        .ing-indietro {
+            align-self: flex-start; width: auto; margin: 0; padding: 8px 0; background: none;
+            color: var(--va-muted); font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 600;
+        }
+        .ing-piede { color: var(--va-muted); font-size: 12px; text-align: center; margin: 4px 0 0; }
+        .ing-piede b { color: var(--va-text); font-weight: 600; }
 
         .va { color: var(--va-text); font-family: 'Inter', system-ui, sans-serif; }
         .va button { width: auto; margin: 0; font-family: inherit; }
@@ -842,7 +917,7 @@
         .va-cta:disabled { opacity: .7; }
     </style>
 </head>
-<body>
+<body class="modo-ingresso">
 
     <button id="menu-btn" onclick="toggleDrawer()">MENU</button>
     <button id="logout-btn" onclick="tornaAllaHome()">LOGOUT</button>
@@ -884,32 +959,53 @@
 
     <h1 id="titolo-principale">Gestionale Fit</h1>
 
-    <div class="card" id="schermata-scelta">
-        <h2>Benvenuto</h2>
-        <p style="text-align: center; color: var(--color-etichette);">Seleziona la modalità di accesso:</p>
-        
-        <div class="scelta-ruolo-grid">
-            <div class="ruolo-box" onclick="mostraFormLoginTrainer()">
-                <h3>Area Personal Trainer</h3>
+    <!-- Prima schermata: login atleta (direzione B "Prima l'atleta") -->
+    <div class="ing" id="schermata-scelta">
+        <form class="ing-corpo" onsubmit="event.preventDefault(); caricaSchedaAtletaDaInput();" autocomplete="off">
+            <div class="ing-marchio"><i>G</i>Gestionale Fit</div>
+
+            <h2 class="ing-titolo">Pronto ad<br>allenarti?</h2>
+            <p class="ing-sotto">Entra con il nome e il PIN del tuo trainer.</p>
+
+            <label class="ing-campo">
+                <span>Nome e cognome</span>
+                <input type="text" id="nome-atleta-cerca" name="no_autofill_cerca_atleta_nome" autocomplete="off" required>
+            </label>
+
+            <div>
+                <span class="ing-etichetta" id="pin-etichetta">PIN</span>
+                <label class="ing-pin">
+                    <input type="text" inputmode="numeric" pattern="[0-9]*" id="pin-atleta-cerca" name="no_autofill_cerca_atleta_pin" maxlength="6" autocomplete="off" aria-labelledby="pin-etichetta" required oninput="aggiornaCasellePin()" onfocus="aggiornaCasellePin()">
+                    <span class="ing-caselle" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></span>
+                </label>
             </div>
-            <div class="ruolo-box" onclick="apriLoginAtleta()">
-                <h3>Area Atleta</h3>
-            </div>
-        </div>
+
+            <button type="submit" class="ing-cta">Entra</button>
+            <p class="ing-aiuto">PIN dimenticato? Chiedilo al tuo trainer.</p>
+
+            <button type="button" class="ing-trainer" onclick="mostraFormLoginTrainer()"><span>Sei un trainer?</span><b>Accedi →</b></button>
+            <p class="ing-piede">Powered by <b>GPN Lab</b></p>
+        </form>
     </div>
 
-    <div class="card" id="schermata-login-form-trainer">
-        <h2>Inserisci le tue credenziali di accesso</h2>
-        <form onsubmit="event.preventDefault(); eseguiLoginTrainer();" autocomplete="off">
-            <label for="login-trainer-email">Email:</label>
-            <input type="email" id="login-trainer-email" name="email" placeholder="" autocomplete="username" required>
+    <!-- Login trainer -->
+    <div class="ing" id="schermata-login-form-trainer">
+        <form class="ing-corpo" onsubmit="event.preventDefault(); eseguiLoginTrainer();">
+            <button type="button" class="ing-indietro" onclick="tornaAllaHome()">← Indietro</button>
 
-            <label for="login-trainer-password">Password:</label>
-            <input type="password" id="login-trainer-password" name="password" placeholder="" autocomplete="current-password" required>
+            <h2 class="ing-titolo">Area<br>trainer</h2>
 
-            <button type="submit" class="btn-submit">Accedi al Gestionale</button>
+            <label class="ing-campo">
+                <span>Email</span>
+                <input type="email" id="login-trainer-email" name="email" autocomplete="username" required>
+            </label>
+            <label class="ing-campo">
+                <span>Password</span>
+                <input type="password" id="login-trainer-password" name="password" autocomplete="current-password" required>
+            </label>
+
+            <button type="submit" class="ing-cta in-fondo">Accedi</button>
         </form>
-        <button class="btn-back" onclick="tornaAllaHome()">Indietro</button>
     </div>
 
     <div class="card" id="schermata-login-trainer">
@@ -931,22 +1027,6 @@
         </div>
 
         <button class="btn-back" onclick="tornaAllaHome()">Indietro / Logout</button>
-    </div>
-
-    <div class="card" id="schermata-login-atleta">
-        <h2>Area Atleta</h2>
-        <p style="text-align: center; color: var(--color-etichette);">Inserisci il tuo nome e il PIN fornito dal tuo Trainer</p>
-        
-        <form onsubmit="event.preventDefault(); caricaSchedaAtletaDaInput();" autocomplete="off">
-            <label for="nome-atleta-cerca">Inserisci il tuo Nome e Cognome:</label>
-            <input type="text" id="nome-atleta-cerca" name="no_autofill_cerca_atleta_nome" placeholder="" autocomplete="off" required>
-
-            <label for="pin-atleta-cerca">Inserisci il tuo PIN:</label>
-            <input type="password" inputmode="numeric" id="pin-atleta-cerca" name="no_autofill_cerca_atleta_pin" placeholder="" maxlength="6" autocomplete="off" required>
-
-            <button type="submit" class="btn-submit">Apri La Mia Scheda</button>
-        </form>
-        <button class="btn-back" onclick="tornaAllaHome()">Indietro</button>
     </div>
 
     <div class="card" id="schermata-menu">
@@ -1316,6 +1396,17 @@
             document.getElementById(inputId).value = generaPinSicuro();
         }
 
+        // Disegna le 6 caselle del PIN in base a quello che è scritto nel campo (cifre nascoste da •)
+        function aggiornaCasellePin() {
+            const input = document.getElementById('pin-atleta-cerca');
+            const soloCifre = input.value.replace(/\D/g, '').slice(0, 6);
+            if (input.value !== soloCifre) input.value = soloCifre;
+            document.querySelectorAll('.ing-caselle i').forEach((casella, i) => {
+                casella.textContent = i < soloCifre.length ? '•' : '';
+                casella.classList.toggle('attivo', i === Math.min(soloCifre.length, 5));
+            });
+        }
+
         function mostraFormLoginTrainer() {
             azzeraTuttiInput();
             document.getElementById('schermata-scelta').style.display = 'none';
@@ -1360,6 +1451,7 @@
                 .maybeSingle();
 
             currentTrainer = { id: user.id, nome: (profilo && profilo.nome) || user.email };
+            document.body.classList.remove('modo-ingresso');
 
             azzeraTuttiInput();
             atletaIdCorrente = null;
@@ -1372,14 +1464,6 @@
             document.getElementById('schermata-login-trainer').style.display = 'block';
             document.getElementById('menu-btn').style.display = 'block';
             document.getElementById('logout-btn').style.display = 'block';
-        }
-
-        function apriLoginAtleta() {
-            azzeraTuttiInput();
-            document.getElementById('schermata-scelta').style.display = 'none';
-            document.getElementById('schermata-login-atleta').style.display = 'block';
-            document.getElementById('logout-btn').style.display = 'none';
-            document.getElementById('menu-btn').style.display = 'none';
         }
 
         function tornaAllaHome() {
@@ -1404,13 +1488,14 @@
             
             document.getElementById('schermata-login-form-trainer').style.display = 'none';
             document.getElementById('schermata-login-trainer').style.display = 'none';
-            document.getElementById('schermata-login-atleta').style.display = 'none';
             document.getElementById('schermata-menu').style.display = 'none';
             document.getElementById('form-creazione').style.display = 'none';
             document.getElementById('scheda-finale').style.display = 'none';
             document.getElementById('menu-btn').style.display = 'none';
             document.getElementById('logout-btn').style.display = 'none';
             document.getElementById('schermata-scelta').style.display = 'block';
+            document.body.classList.add('modo-ingresso');
+            aggiornaCasellePin();
         }
 
         function tornaAlLoginTrainer() {
@@ -2123,6 +2208,11 @@
                 return;
             }
 
+            if (!/^\d{6}$/.test(pinInput)) {
+                alert("Il PIN è di 6 cifre.");
+                return;
+            }
+
             // Il controllo di nome e PIN lo fa il server: restituisce solo la scheda di questo atleta
             const { data, error } = await supabaseClient.rpc('accesso_atleta', {
                 p_nome: nomeInput,
@@ -2152,7 +2242,9 @@
             statoAtleta = { giorno: 0, focus: 0, valori: {} };
 
             document.getElementById('pin-atleta-cerca').value = '';
-            document.getElementById('schermata-login-atleta').style.display = 'none';
+            aggiornaCasellePin();
+            document.body.classList.remove('modo-ingresso');
+            document.getElementById('schermata-scelta').style.display = 'none';
             renderizzaScheda(datiSchedaAttuale);
             document.getElementById('scheda-finale').style.display = 'block';
             document.getElementById('menu-btn').style.display = 'block';
@@ -2338,6 +2430,7 @@
 
             resetFormAllenamento();
             azzeraTuttiInput();
+            aggiornaCasellePin();
 
             // Se il trainer era già entrato su questo dispositivo, la sessione è ancora valida
             const { data: { session } } = await supabaseClient.auth.getSession();
