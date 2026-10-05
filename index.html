@@ -1038,7 +1038,7 @@
             contenitore.innerHTML = filtrati.map(a => {
                 const attivo = a.ultimo && a.ultimo.data_allenamento >= limite7;
                 const sotto = a.ultimo
-                    ? `Ultimo allenamento: ${quandoRelativo(a.ultimo.data_allenamento)}${a.ultimo.giorno_nome ? ' · ' + esc(a.ultimo.giorno_nome) : ''}`
+                    ? `Ultimo allenamento: ${quandoRelativo(a.ultimo.data_allenamento)}`
                     : 'Nessun allenamento registrato';
                 return `
                     <button type="button" class="tr-atleta ${a.id === atletaIdCorrente ? 'scelto' : ''}" onclick="apriAtletaTrainer('${a.id}')">
