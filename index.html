@@ -244,6 +244,14 @@
         .va-riga small { color: var(--va-muted); font-size: 13px; font-weight: 400; }
         .va-num { font-family: 'Barlow Condensed', sans-serif; font-size: 22px; font-weight: 600; color: var(--va-muted); }
         .va-num.fatto { color: var(--va-acc); }
+        .va-riga.fatta b { color: var(--va-muted); font-weight: 500; }   /* fatto: passa in secondo piano */
+
+        .va-fatto {
+            display: block; width: 100% !important; margin-top: 10px !important; padding: 14px; border-radius: 12px;
+            background: var(--va-surface-2); color: var(--va-text); font-size: 15px; font-weight: 700;
+        }
+        .va-fatto.fatto { background: color-mix(in srgb, var(--va-acc) 14%, transparent); color: var(--va-acc); }
+        .va-fatto:disabled { cursor: default; transform: none; }
 
         .va-cta {
             position: fixed; left: 12px; right: 12px; bottom: 12px; z-index: 50;
@@ -1609,19 +1617,38 @@
             return String(testo ?? '').replace(/(\d)\s*[xX]\s*(\d)/g, '$1×$2');
         }
 
+        function esercizioCompletato(v) {
+            return !!v && (v.fatto || v.salvato);   // una volta fatto, resta fatto anche se ritocchi i numeri
+        }
+
         function chiaveEsercizio(gIdx, eIdx) {
             return `${gIdx}-${eIdx}`;
+        }
+
+        // Registrazione di oggi per un esercizio (se l'atleta l'ha già salvato oggi)
+        function logDiOggi(nomeEsercizio) {
+            const oggi = dataGiorniFa(0);
+            return logDiEsercizio(nomeEsercizio).find(l => l.data_allenamento === oggi) || null;
+        }
+
+        // Ultima registrazione PRIMA di oggi: è quella con cui confrontare il carico
+        function ultimoPrimaDiOggi(nomeEsercizio) {
+            const oggi = dataGiorniFa(0);
+            return logDiEsercizio(nomeEsercizio).find(l => l.data_allenamento < oggi) || null;
         }
 
         function valoriEsercizio(gIdx, eIdx) {
             const chiave = chiaveEsercizio(gIdx, eIdx);
             if (!statoAtleta.valori[chiave]) {
                 const ex = datiSchedaAttuale.giorni[gIdx].esercizi[eIdx];
-                const ultimo = logDiEsercizio(ex.nome)[0];
+                // Se oggi è già salvato riparto da lì (e lo segno come salvato), altrimenti dall'ultima volta
+                const diOggi = logDiOggi(ex.nome);
+                const base = diOggi || ultimoPrimaDiOggi(ex.nome);
                 statoAtleta.valori[chiave] = {
-                    kg: ultimo && ultimo.kg_usati ? ultimo.kg_usati : '',
-                    reps: ultimo && ultimo.reps_fatte ? ultimo.reps_fatte : repsDaSerie(ex.serie),
-                    toccato: false
+                    kg: base && base.kg_usati ? base.kg_usati : '',
+                    reps: base && base.reps_fatte ? base.reps_fatte : repsDaSerie(ex.serie),
+                    toccato: false,
+                    salvato: !!diOggi
                 };
             }
             return statoAtleta.valori[chiave];
@@ -1649,11 +1676,13 @@
             const fIdx = Math.min(statoAtleta.focus, esercizi.length - 1);
             const ex = esercizi[fIdx];
             const valori = valoriEsercizio(gIdx, fIdx);
-            const ultimo = logDiEsercizio(ex.nome)[0];
+            const ultimo = ultimoPrimaDiOggi(ex.nome);
 
             const nomeBreve = String(data.cliente || nomeAtletaSalvato || '').trim().split(/\s+/)[0];
             const iniziale = (coachAtleta || 'GPN Lab').trim().charAt(0).toUpperCase();
-            const fatti = esercizi.filter((_, i) => (statoAtleta.valori[chiaveEsercizio(gIdx, i)] || {}).toccato || (statoAtleta.valori[chiaveEsercizio(gIdx, i)] || {}).salvato).length;
+            esercizi.forEach((_, i) => valoriEsercizio(gIdx, i));
+            const fatti = esercizi.filter((_, i) => esercizioCompletato(statoAtleta.valori[chiaveEsercizio(gIdx, i)])).length;
+            const tuttiFatti = esercizi.length > 0 && fatti === esercizi.length;
             const percentuale = esercizi.length ? Math.round(Math.max(fatti, 0.15) / esercizi.length * 100) : 0;
             const secRecupero = secondiRecupero(ex.recupero);
 
@@ -1681,10 +1710,9 @@
 
             const altriEsercizi = esercizi.map((e, i) => {
                 if (i === fIdx) return '';
-                const v = statoAtleta.valori[chiaveEsercizio(gIdx, i)] || {};
-                const fatto = v.toccato || v.salvato;
+                const fatto = esercizioCompletato(statoAtleta.valori[chiaveEsercizio(gIdx, i)]);
                 return `
-                    <button class="va-riga" onclick="vaiAEsercizioAtleta(${i})">
+                    <button class="va-riga ${fatto ? 'fatta' : ''}" onclick="vaiAEsercizioAtleta(${i})">
                         <span><b>${esc(e.nome)}</b><small>${esc(mostraSerie(e.serie))} · ${esc(e.recupero)}</small></span>
                         <span class="va-num ${fatto ? 'fatto' : ''}">${fatto ? '✓' : String(i + 1).padStart(2, '0')}</span>
                     </button>`;
@@ -1745,6 +1773,14 @@
 
                         ${secRecupero !== null ? `<button type="button" class="va-recupero" onclick="avviaRecuperoAtleta(${secRecupero})">⏱ Avvia recupero ${secRecupero}s</button>` : ''}
 
+                        ${valori.salvato && !valori.toccato
+                            ? `<button type="button" class="va-fatto fatto" onclick="segnaFattoAtleta()">✓ Salvato oggi · tocca per rifarlo</button>`
+                            : valori.salvato
+                                ? `<button type="button" class="va-fatto fatto" disabled>✓ Fatto · modifica da salvare</button>`
+                            : valori.fatto
+                                ? `<button type="button" class="va-fatto fatto" onclick="segnaFattoAtleta()">✓ Fatto · tocca per annullare</button>`
+                                : `<button type="button" class="va-fatto" onclick="segnaFattoAtleta()">✓ Esercizio fatto</button>`}
+
                         ${storicoHtml}
                     </article>
 
@@ -1752,16 +1788,56 @@
 
                     ${anteprimaTrainer
                         ? `<button type="button" class="va-cta" onclick="chiudiAnteprima()">Chiudi anteprima</button>`
-                        : `<button type="button" class="va-cta" id="va-cta" onclick="salvaLogAtleta()">Salva allenamento</button>`}
+                        : `<button type="button" class="va-cta" id="va-cta" onclick="salvaLogAtleta()">${tuttiFatti && esercizi.some((_, i) => (statoAtleta.valori[chiaveEsercizio(gIdx, i)] || {}).toccato) ? 'Tutto fatto · Salva allenamento' : 'Salva allenamento'}</button>`}
                 </div>
             `;
         }
 
+        // Primo esercizio del giorno non ancora salvato oggi (se sono tutti fatti, il primo)
+        function primoDaFare(gIdx) {
+            const esercizi = datiSchedaAttuale.giorni[gIdx].esercizi || [];
+            const i = esercizi.findIndex((e, j) => !esercizioCompletato(statoAtleta.valori[chiaveEsercizio(gIdx, j)]) && !logDiOggi(e.nome));
+            return i >= 0 ? i : 0;
+        }
+
         function scegliGiornoAtleta(gIdx) {
             statoAtleta.giorno = gIdx;
-            statoAtleta.focus = 0;
+            statoAtleta.focus = primoDaFare(gIdx);
             renderSchedaAtleta();
             window.scrollTo(0, 0);
+        }
+
+        // "Esercizio fatto": lo segna (anche se i numeri sono rimasti uguali) e passa al prossimo non ancora fatto
+        function segnaFattoAtleta() {
+            const gIdx = statoAtleta.giorno;
+            const esercizi = datiSchedaAttuale.giorni[gIdx].esercizi;
+            const valori = valoriEsercizio(gIdx, statoAtleta.focus);
+
+            // Già salvato oggi: si può rifare (es. seconda seduta), ma salvando si sostituiscono i valori di oggi
+            if (valori.salvato && !valori.toccato && !valori.fatto) {
+                if (!confirm("Vuoi rifare questo esercizio? Se salvi di nuovo, i valori di oggi verranno sostituiti con quelli nuovi.")) return;
+                valori.salvato = false;
+                renderSchedaAtleta();
+                return;
+            }
+
+            if (valori.fatto) {
+                valori.fatto = false;
+                renderSchedaAtleta();
+                return;
+            }
+
+            valori.fatto = true;
+            valori.toccato = true;   // così viene salvato
+            for (let passo = 1; passo < esercizi.length; passo++) {
+                const i = (statoAtleta.focus + passo) % esercizi.length;
+                if (!esercizioCompletato(statoAtleta.valori[chiaveEsercizio(gIdx, i)])) {
+                    statoAtleta.focus = i;
+                    break;
+                }
+            }
+            renderSchedaAtleta();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function vaiAEsercizioAtleta(eIdx) {
@@ -1774,7 +1850,7 @@
             const giorno = datiSchedaAttuale.giorni[statoAtleta.giorno];
             const ex = giorno.esercizi[statoAtleta.focus];
             const valori = valoriEsercizio(statoAtleta.giorno, statoAtleta.focus);
-            document.getElementById('va-delta-box').innerHTML = htmlDelta(valori.kg, logDiEsercizio(ex.nome)[0]);
+            document.getElementById('va-delta-box').innerHTML = htmlDelta(valori.kg, ultimoPrimaDiOggi(ex.nome));
         }
 
         // Scrittura a mano nel campo (non ridisegna la pagina, così la tastiera resta aperta)
@@ -1855,7 +1931,7 @@
             }
 
             storicoLogAtletaCache = storico;
-            Object.values(statoAtleta.valori).forEach(v => { if (v.toccato) v.salvato = true; v.toccato = false; });
+            Object.values(statoAtleta.valori).forEach(v => { if (v.toccato) v.salvato = true; v.toccato = false; v.fatto = false; });
             renderSchedaAtleta();
 
             const nuovoPulsante = document.getElementById('va-cta');
@@ -1919,6 +1995,7 @@
             }
             // Parto dal primo giorno che ha esercizi
             statoAtleta.giorno = Math.max(0, datiSchedaAttuale.giorni.findIndex(g => g.esercizi && g.esercizi.length));
+            statoAtleta.focus = primoDaFare(statoAtleta.giorno);
 
             mostraSchermata('scheda-finale');
             renderSchedaAtleta();
