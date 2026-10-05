@@ -1947,6 +1947,16 @@
             const nomeInput = document.getElementById('nome-atleta-cerca').value.trim();
             const pinInput = document.getElementById('pin-atleta-cerca').value.trim();
 
+            // Chi scrive un'email qui è quasi sempre un trainer finito nell'accesso sbagliato
+            if (nomeInput.includes('@')) {
+                if (confirm("Sembra un'email: questo è l'accesso per gli atleti. Sei un trainer? Ti porto al tuo accesso.")) {
+                    mostraFormLoginTrainer();
+                    document.getElementById('login-trainer-email').value = nomeInput;
+                    document.getElementById('login-trainer-password').focus();
+                }
+                return;
+            }
+
             if (!nomeInput || !pinInput) {
                 alert("Inserisci sia il Nome che il PIN!");
                 return;
