@@ -412,6 +412,13 @@
             background: var(--va-surface); color: var(--va-text); font-size: 15px; font-weight: 600;
         }
         .fg-voce.pericolo { color: var(--va-danger); }
+        .fg-colori { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+        .fg-colore {
+            display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 12px 4px; border-radius: 14px;
+            background: var(--va-surface); color: var(--va-muted); font-size: 13px; font-weight: 600;
+        }
+        .fg-colore i { width: 40px; height: 40px; border-radius: 50%; display: block; }
+        .fg-colore.scelto { box-shadow: inset 0 0 0 2px var(--va-text); color: var(--va-text); }
 
         /* =========================================================
            AREA TRAINER SU SCHERMO GRANDE (PC, tablet orizzontale)
@@ -489,6 +496,7 @@
 
         <div id="drawer-content-trainer" hidden>
             <p class="dr-info">Accesso come <b id="dr-trainer-nome"></b></p>
+            <button type="button" class="dr-voce" onclick="apriFoglioColore()">Colore dell'app</button>
             <button type="button" class="dr-voce" onclick="apriCambioPassword()">Cambia password</button>
         </div>
 
@@ -677,6 +685,25 @@
 
         const elencoMuscoliConsigliati = ["Petto", "Dorso", "Gambe", "Spalle", "Bicipiti", "Tricipiti", "Addome", "Full Body"];
         const opzioniRecupero = ["60 sec", "90 sec", "2 min", "3 min"];
+
+        // Colori dell'app che il trainer può scegliere: tutti controllati per la leggibilità
+        // (scritta scura sopra e colore sullo sfondo grafite, almeno 4,5:1)
+        const COLORI_APP = [
+            { nome: 'Arancio', hex: '#FF7A45' },
+            { nome: 'Lime',    hex: '#C6FF3D' },
+            { nome: 'Azzurro', hex: '#38BDF8' },
+            { nome: 'Viola',   hex: '#A78BFA' },
+            { nome: 'Corallo', hex: '#FB7185' },
+            { nome: 'Verde',   hex: '#34D399' },
+            { nome: 'Giallo',  hex: '#FACC15' }
+        ];
+        const COLORE_PREDEFINITO = '#FF7A45';
+
+        function applicaColore(hex) {
+            const valido = COLORI_APP.some(c => c.hex === hex) ? hex : COLORE_PREDEFINITO;
+            document.documentElement.style.setProperty('--va-acc', valido);
+            return valido;
+        }
 
         // Pulisce un testo prima di inserirlo nell'HTML (evita che venga eseguito come codice)
         function esc(valore) {
@@ -893,13 +920,17 @@
 
         // Mostra l'area trainer dopo il login (o quando la sessione è ancora attiva)
         async function entraComeTrainer(user) {
-            const { data: profilo } = await supabaseClient
+            let { data: profilo, error: erroreProfilo } = await supabaseClient
                 .from('profili_trainer')
-                .select('nome')
+                .select('nome, colore')
                 .eq('id', user.id)
                 .maybeSingle();
+            if (erroreProfilo) {
+                ({ data: profilo } = await supabaseClient.from('profili_trainer').select('nome').eq('id', user.id).maybeSingle());
+            }
 
             currentTrainer = { id: user.id, nome: (profilo && profilo.nome) || user.email };
+            currentTrainer.colore = applicaColore(profilo && profilo.colore);
             isModalitaAtleta = false;
 
             svuotaCampiIngresso();
@@ -930,6 +961,7 @@
             chiudiDrawer();
             chiudiFoglio();
             svuotaCampiIngresso();
+            applicaColore(COLORE_PREDEFINITO);
             mostraSchermata('schermata-scelta');
         }
 
@@ -1404,6 +1436,8 @@
         }
 
         function chiudiFoglio() {
+            // Colore provato ma non salvato: torno a quello di prima
+            if (bozzaFoglio && bozzaFoglio.tipo === 'colore') applicaColore(bozzaFoglio.originale);
             document.getElementById('foglio').hidden = true;
             document.getElementById('foglio-velo').hidden = true;
             bozzaFoglio = null;
@@ -1574,6 +1608,60 @@
             impostaModifiche(true);
             chiudiFoglio();
             disegnaPaginaAtleta();
+        }
+
+        // --- Colore dell'app ---
+        function apriFoglioColore() {
+            chiudiDrawer();
+            bozzaFoglio = { tipo: 'colore', originale: currentTrainer.colore || COLORE_PREDEFINITO, scelto: currentTrainer.colore || COLORE_PREDEFINITO };
+            disegnaFoglioColore();
+        }
+
+        function disegnaFoglioColore() {
+            const b = bozzaFoglio;
+            apriFoglio(`
+                <div class="fg">
+                    <h3>Colore dell'app</h3>
+                    <p>Lo vedi tu e lo vedono i tuoi atleti nella loro scheda. Toccane uno per provarlo.</p>
+                    <div class="fg-colori">
+                        ${COLORI_APP.map(c => `
+                            <button type="button" class="fg-colore ${c.hex === b.scelto ? 'scelto' : ''}" onclick="provaColore('${c.hex}')" aria-label="${c.nome}">
+                                <i style="background:${c.hex}"></i>${c.nome}
+                            </button>`).join('')}
+                    </div>
+                    <div class="fg-azioni">
+                        <button type="button" class="fg-sec" onclick="annullaColore()">Annulla</button>
+                        <button type="button" class="fg-pri" id="fg-salva-colore" onclick="salvaColore()">Salva</button>
+                    </div>
+                </div>
+            `);
+        }
+
+        // Anteprima dal vivo: l'app cambia subito colore, ma si salva solo con "Salva"
+        function provaColore(hex) {
+            bozzaFoglio.scelto = applicaColore(hex);
+            disegnaFoglioColore();
+        }
+
+        function annullaColore() {
+            applicaColore(bozzaFoglio.originale);
+            chiudiFoglio();
+        }
+
+        async function salvaColore() {
+            const scelto = bozzaFoglio.scelto;
+            document.getElementById('fg-salva-colore').innerText = 'Salvataggio…';
+            const { error } = await supabaseClient.from('profili_trainer').update({ colore: scelto }).eq('id', currentTrainer.id);
+            if (error) {
+                console.error(error);
+                applicaColore(bozzaFoglio.originale);
+                document.getElementById('fg-salva-colore').innerText = 'Salva';
+                alert("Non sono riuscito a salvare il colore. Se non l'hai ancora fatto, lancia l'SQL 05 su Supabase.");
+                return;
+            }
+            currentTrainer.colore = scelto;
+            bozzaFoglio.originale = scelto;
+            chiudiFoglio();
         }
 
         // --- Nuovo atleta ---
@@ -2110,6 +2198,7 @@
             pinAtletaSalvato = pinInput;
             storicoLogAtletaCache = data.storico || [];
             coachAtleta = data.coach || "";
+            applicaColore(data.colore);
             statoAtleta = { giorno: 0, focus: 0, valori: {} };
 
             svuotaCampiIngresso();
