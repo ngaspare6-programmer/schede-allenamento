@@ -44,10 +44,12 @@
         button:active { transform: scale(0.98); }
         input { font-family: inherit; }
 
-        /* Sfumatura dell'accento in alto a destra (presa dalla direzione C "Manifesto") */
+        /* Ingresso: foto di palestra in bianco e nero (Brett Jordan, Unsplash, licenza gratuita)
+           con un velo scuro: leggero in alto (si vede la foto), pieno in basso dove ci sono i campi */
         body.modo-ingresso {
             background:
-                radial-gradient(120% 70% at 85% 10%, color-mix(in srgb, var(--va-acc) 38%, transparent), transparent 60%),
+                linear-gradient(180deg, rgba(18,19,22,.45) 0%, rgba(18,19,22,.78) 38%, rgba(18,19,22,.96) 62%, #121316 80%),
+                url('sfondo-ingresso.jpg') center top / cover no-repeat,
                 var(--va-bg);
         }
         body.modo-atleta { padding-bottom: 96px; }
@@ -108,7 +110,7 @@
 
         .ing-campo {
             display: block; margin: 0; padding: 10px 14px; border-radius: 14px;
-            background: var(--va-surface); color: inherit; font-size: inherit; font-weight: 400;
+            background: rgba(26, 28, 33, .92); color: inherit; font-size: inherit; font-weight: 400;
         }
         .ing-campo span { display: block; font-size: 12px; font-weight: 500; color: var(--va-muted); margin-bottom: 2px; }
         .ing-campo input {
@@ -127,7 +129,7 @@
         }
         .ing-caselle { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; }
         .ing-caselle i {
-            height: 56px; border-radius: 12px; background: var(--va-surface);
+            height: 56px; border-radius: 12px; background: rgba(26, 28, 33, .92);
             display: grid; place-items: center; font-style: normal; font-size: 26px; color: var(--va-text);
         }
         .ing-pin:focus-within .ing-caselle i.attivo { box-shadow: inset 0 0 0 2px var(--va-acc); }
@@ -142,7 +144,7 @@
 
         .ing-trainer {
             margin: auto 0 0; padding: 14px 16px; border-radius: 16px;
-            background: var(--va-surface); color: var(--va-muted);
+            background: rgba(26, 28, 33, .92); color: var(--va-muted);
             display: flex; justify-content: space-between; align-items: center;
             font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 500;
         }
