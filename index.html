@@ -79,6 +79,10 @@
         .dr-sec { background: var(--va-surface-2); color: var(--va-text); }
         .dr-info { margin: 0; color: var(--va-muted); font-size: 14px; }
         .dr-info b { color: var(--va-text); }
+        .dr-voce {
+            width: 100%; margin-top: 16px; height: 48px; border-radius: 14px; text-align: left; padding: 0 16px;
+            background: var(--va-surface); color: var(--va-text); font-size: 15px; font-weight: 600;
+        }
         .dr-esci {
             margin-top: auto; height: 48px; border-radius: 14px;
             background: transparent; color: var(--va-muted); border: 1px solid var(--va-surface-2);
@@ -148,6 +152,10 @@
             color: var(--va-muted); font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 600;
         }
         .ing-piede { color: var(--va-muted); font-size: 12px; text-align: center; margin: 4px 0 0; }
+        .ing-link {
+            align-self: flex-end; margin: -4px 0 0; padding: 4px 0; background: none;
+            color: var(--va-muted); font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 600;
+        }
         .ing-piede b { color: var(--va-text); font-weight: 600; }
 
         .va { color: var(--va-text); font-family: 'Inter', system-ui, sans-serif; }
@@ -481,6 +489,7 @@
 
         <div id="drawer-content-trainer" hidden>
             <p class="dr-info">Accesso come <b id="dr-trainer-nome"></b></p>
+            <button type="button" class="dr-voce" onclick="apriCambioPassword()">Cambia password</button>
         </div>
 
         <button type="button" class="dr-esci" onclick="tornaAllaHome()">Esci</button>
@@ -530,8 +539,30 @@
                 <span>Password</span>
                 <input type="password" id="login-trainer-password" name="password" autocomplete="current-password" required>
             </label>
+            <button type="button" class="ing-link" onclick="passwordDimenticata()">Password dimenticata?</button>
 
             <button type="submit" class="ing-cta in-fondo">Accedi</button>
+        </form>
+    </div>
+
+    <!-- Nuova password: dal link della mail di recupero, o da "Cambia password" nel menu -->
+    <div class="ing" id="schermata-nuova-password" hidden>
+        <form class="ing-corpo" onsubmit="event.preventDefault(); salvaNuovaPassword();">
+            <button type="button" class="ing-indietro" id="np-annulla" onclick="annullaNuovaPassword()">← Annulla</button>
+
+            <h2 class="ing-titolo">Nuova<br>password</h2>
+            <p class="ing-sotto">Almeno 8 caratteri. Scegline una che usi solo qui.</p>
+
+            <label class="ing-campo">
+                <span>Nuova password</span>
+                <input type="password" id="np-password" autocomplete="new-password" minlength="8" required>
+            </label>
+            <label class="ing-campo">
+                <span>Ripeti la password</span>
+                <input type="password" id="np-conferma" autocomplete="new-password" minlength="8" required>
+            </label>
+
+            <button type="submit" class="ing-cta in-fondo" id="np-salva">Salva password</button>
         </form>
     </div>
 
@@ -601,7 +632,16 @@
         const SUPABASE_URL = 'https://zkrsyltlvrlpjsfawsmk.supabase.co';
         const SUPABASE_ANON_KEY = 'sb_publishable_5qQg44naV2ocZjWX_2HyPA_JiZx1GyI';
 
+        // Se si arriva dal link di recupero password, l'indirizzo contiene "type=recovery" (o un errore)
+        const hashIniziale = window.location.hash;
+        const arrivoDaRecupero = hashIniziale.includes('type=recovery');
+        const erroreLinkRecupero = hashIniziale.includes('error_code=');
+
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        supabaseClient.auth.onAuthStateChange((evento) => {
+            if (evento === 'PASSWORD_RECOVERY') apriSchermataNuovaPassword(true);
+        });
 
         // --- Stato comune ---
         let currentTrainer = null;          // { id, nome } quando è entrato un trainer
@@ -662,7 +702,7 @@
         }
 
         // --- Navigazione tra le schermate ---
-        const SCHERMATE = ['schermata-scelta', 'schermata-login-form-trainer', 'tr-casa', 'tr-atleta', 'scheda-finale'];
+        const SCHERMATE = ['schermata-scelta', 'schermata-login-form-trainer', 'schermata-nuova-password', 'tr-casa', 'tr-atleta', 'scheda-finale'];
 
         const schermoGrande = window.matchMedia('(min-width: 900px)');
         let schermataCorrente = 'schermata-scelta';
@@ -681,7 +721,7 @@
             document.getElementById('tr-vuoto').hidden = !(dueColonne && !atletaIdCorrente);
 
             document.body.classList.toggle('modo-trainer', trainer);
-            document.body.classList.toggle('modo-ingresso', id === 'schermata-scelta' || id === 'schermata-login-form-trainer');
+            document.body.classList.toggle('modo-ingresso', ['schermata-scelta', 'schermata-login-form-trainer', 'schermata-nuova-password'].includes(id));
             document.body.classList.toggle('modo-atleta', id === 'scheda-finale');
             if (scorriInCima) window.scrollTo(0, 0);
         }
@@ -745,6 +785,82 @@
         function mostraFormLoginTrainer() {
             svuotaCampiIngresso();
             mostraSchermata('schermata-login-form-trainer');
+        }
+
+        // --- Recupero e cambio password (trainer) ---
+        async function passwordDimenticata() {
+            const email = document.getElementById('login-trainer-email').value.trim();
+            if (!email) {
+                alert("Scrivi prima la tua email nel campo qui sopra, poi tocca di nuovo \"Password dimenticata?\".");
+                document.getElementById('login-trainer-email').focus();
+                return;
+            }
+            const { error } = await supabaseClient.auth.resetPasswordForEmail(email);
+            if (error) {
+                console.error(error);
+                alert(error.message.toLowerCase().includes('rate')
+                    ? "Hai chiesto troppe email in poco tempo. Riprova tra qualche minuto."
+                    : "Invio non riuscito. Riprova tra poco.");
+                return;
+            }
+            // Messaggio uguale sia che l'email esista sia che no: non riveliamo chi è registrato
+            alert("Se l'email è registrata, ti arriva un link per scegliere una nuova password. Aprilo entro un'ora, una volta sola.");
+        }
+
+        let nuovaPasswordDaRecupero = false;
+
+        function apriSchermataNuovaPassword(daRecupero) {
+            nuovaPasswordDaRecupero = daRecupero;
+            document.getElementById('np-password').value = '';
+            document.getElementById('np-conferma').value = '';
+            document.getElementById('np-annulla').innerText = daRecupero ? '← Torna all\'inizio' : '← Annulla';
+            mostraSchermata('schermata-nuova-password');
+        }
+
+        function apriCambioPassword() {
+            chiudiDrawer();
+            apriSchermataNuovaPassword(false);
+        }
+
+        function annullaNuovaPassword() {
+            if (nuovaPasswordDaRecupero || !currentTrainer) {
+                supabaseClient.auth.signOut();
+                tornaAllaHome();
+            } else {
+                mostraSchermata(atletaIdCorrente ? 'tr-atleta' : 'tr-casa');
+            }
+        }
+
+        async function salvaNuovaPassword() {
+            const password = document.getElementById('np-password').value;
+            const conferma = document.getElementById('np-conferma').value;
+            if (password.length < 8) { alert("La password deve avere almeno 8 caratteri."); return; }
+            if (password !== conferma) { alert("Le due password non coincidono."); return; }
+
+            const pulsante = document.getElementById('np-salva');
+            pulsante.innerText = 'Salvataggio…';
+            const { data, error } = await supabaseClient.auth.updateUser({ password });
+            pulsante.innerText = 'Salva password';
+            document.getElementById('np-password').value = '';
+            document.getElementById('np-conferma').value = '';
+
+            if (error) {
+                console.error(error);
+                alert(error.message.toLowerCase().includes('different')
+                    ? "La nuova password deve essere diversa da quella vecchia."
+                    : "Non sono riuscito a salvare la password. Se arrivi dal link della mail, chiedine uno nuovo.");
+                return;
+            }
+
+            // Tolgo dall'indirizzo i dati del link della mail
+            history.replaceState(null, '', window.location.pathname + window.location.search);
+            alert("Password aggiornata.");
+            if (nuovaPasswordDaRecupero || !currentTrainer) {
+                nuovaPasswordDaRecupero = false;
+                await entraComeTrainer(data.user);
+            } else {
+                mostraSchermata(atletaIdCorrente ? 'tr-atleta' : 'tr-casa');
+            }
         }
 
         async function eseguiLoginTrainer() {
@@ -2013,6 +2129,20 @@
 
         window.onload = async function() {
             svuotaCampiIngresso();
+
+            // Link di recupero scaduto o già usato
+            if (erroreLinkRecupero) {
+                history.replaceState(null, '', window.location.pathname + window.location.search);
+                alert("Il link per reimpostare la password è scaduto o è già stato usato. Chiedine uno nuovo da \"Password dimenticata?\".");
+                mostraFormLoginTrainer();
+                return;
+            }
+
+            // Arrivo dal link della mail: prima si sceglie la nuova password
+            if (arrivoDaRecupero) {
+                apriSchermataNuovaPassword(true);
+                return;
+            }
 
             // Se il trainer era già entrato su questo dispositivo, la sessione è ancora valida
             const { data: { session } } = await supabaseClient.auth.getSession();
