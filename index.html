@@ -49,7 +49,7 @@
         body.modo-ingresso {
             /* Ingresso neutro: prima del login l'app non sa di che palestra sei, quindi niente colore di marca */
             --va-acc: #ECEDEF;       /* pulsante "Entra", "G", campo attivo: bianco caldo */
-            --va-muted: #B9BCC4;     /* scritte secondarie più chiare: si staccano dalla foto */
+            --va-muted: #D6D8DD;     /* scritte secondarie quasi bianche: si staccano bene dalla foto */
             background:
                 linear-gradient(180deg, rgba(18,19,22,.62) 0%, rgba(18,19,22,.86) 34%, rgba(18,19,22,.97) 58%, #121316 78%),
                 url('sfondo-ingresso.jpg') center top / cover no-repeat,
@@ -109,7 +109,15 @@
             font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 52px; line-height: .95;
             text-transform: uppercase; text-align: left; margin: 36px 0 4px; color: var(--va-text);
         }
-        .ing-sotto { color: var(--va-muted); font-size: 15px; margin: 0 0 12px; }
+        .ing-sotto { color: var(--va-muted); font-size: 16px; font-weight: 500; margin: 0 0 12px; }
+        /* Ingresso: scritte piccole più marcate (più peso, un filo più grandi) */
+        body.modo-ingresso .ing-campo span,
+        body.modo-ingresso .ing-etichetta { font-size: 13px; font-weight: 600; }
+        body.modo-ingresso .ing-aiuto,
+        body.modo-ingresso .ing-link,
+        body.modo-ingresso .ing-indietro { font-size: 14px; font-weight: 600; }
+        body.modo-ingresso .ing-trainer { font-size: 15px; font-weight: 600; }
+        body.modo-ingresso .ing-piede { font-size: 13px; font-weight: 500; }
 
         .ing-campo {
             display: block; margin: 0; padding: 10px 14px; border-radius: 14px;
