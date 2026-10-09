@@ -8,7 +8,7 @@
     <!-- Font: Barlow Condensed per numeri e titoli, Inter per il resto -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 
     <!-- Libreria ufficiale JavaScript di Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -101,10 +101,10 @@
             color: var(--va-text); font-family: 'Inter', system-ui, sans-serif;
         }
         .ing-marchio { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 15px; }
-        .ing-marchio i {
-            width: 32px; height: 32px; border-radius: 10px; background: var(--va-acc); color: var(--va-on-acc);
-            display: grid; place-items: center; font-style: normal; font-weight: 800; font-size: 15px;
-        }
+        /* Logo GPN Lab (direzione B, vedi brand/): "gpn·lab", il punto è il colore di GPN Lab */
+        .logo-gpn { font-family: 'Space Grotesk', 'Inter', sans-serif; font-weight: 700; font-size: 26px; letter-spacing: -0.03em; line-height: 1; color: var(--va-text); }
+        .logo-gpn i { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #FF7A45; margin: 0 2px 4px 3px; }
+        .logo-gpn em { font-style: normal; font-weight: 500; opacity: .6; }
         .ing-titolo {
             font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 52px; line-height: .95;
             text-transform: uppercase; text-align: left; margin: 36px 0 4px; color: var(--va-text);
@@ -170,6 +170,7 @@
             color: var(--va-muted); font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 600;
         }
         .ing-piede b { color: var(--va-text); font-weight: 600; }
+        .ing-slogan { display: block; margin-top: 4px; font-size: 10px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; opacity: .75; }
 
         .va { color: var(--va-text); font-family: 'Inter', system-ui, sans-serif; }
         .va button { width: auto; margin: 0; font-family: inherit; }
@@ -519,7 +520,7 @@
     <!-- Prima schermata: login atleta (direzione B "Prima l'atleta") -->
     <div class="ing" id="schermata-scelta">
         <form class="ing-corpo" onsubmit="event.preventDefault(); caricaSchedaAtletaDaInput();" autocomplete="off">
-            <div class="ing-marchio"><i>G</i>Gestionale Fit</div>
+            <div class="ing-marchio" aria-label="GPN Lab"><span class="logo-gpn">gpn<i></i><em>lab</em></span></div>
 
             <h2 class="ing-titolo">Pronto ad<br>allenarti?</h2>
             <p class="ing-sotto">Entra con il nome e il PIN del tuo trainer.</p>
@@ -541,7 +542,7 @@
             <p class="ing-aiuto">PIN dimenticato? Chiedilo al tuo trainer.</p>
 
             <button type="button" class="ing-trainer" onclick="mostraFormLoginTrainer()"><span>Sei un trainer?</span><b>Accedi →</b></button>
-            <p class="ing-piede">Powered by <b>GPN Lab</b></p>
+            <p class="ing-piede">Powered by <b>GPN Lab</b><span class="ing-slogan">Innovative Management Solutions</span></p>
         </form>
     </div>
 
