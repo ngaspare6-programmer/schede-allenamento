@@ -47,8 +47,11 @@
         /* Ingresso: foto di palestra in bianco e nero (Brett Jordan, Unsplash, licenza gratuita)
            con un velo scuro: leggero in alto (si vede la foto), pieno in basso dove ci sono i campi */
         body.modo-ingresso {
+            /* Ingresso neutro: prima del login l'app non sa di che palestra sei, quindi niente colore di marca */
+            --va-acc: #ECEDEF;       /* pulsante "Entra", "G", campo attivo: bianco caldo */
+            --va-muted: #B9BCC4;     /* scritte secondarie più chiare: si staccano dalla foto */
             background:
-                linear-gradient(180deg, rgba(18,19,22,.45) 0%, rgba(18,19,22,.78) 38%, rgba(18,19,22,.96) 62%, #121316 80%),
+                linear-gradient(180deg, rgba(18,19,22,.62) 0%, rgba(18,19,22,.86) 34%, rgba(18,19,22,.97) 58%, #121316 78%),
                 url('sfondo-ingresso.jpg') center top / cover no-repeat,
                 var(--va-bg);
         }
