@@ -703,6 +703,7 @@
         // Colori dell'app che il trainer può scegliere: tutti controllati per la leggibilità
         // (scritta scura sopra e colore sullo sfondo grafite, almeno 4,5:1)
         const COLORI_APP = [
+            { nome: 'Neutro',  hex: '#ECEDEF' },
             { nome: 'Arancio', hex: '#FF7A45' },
             { nome: 'Lime',    hex: '#C6FF3D' },
             { nome: 'Azzurro', hex: '#38BDF8' },
@@ -711,7 +712,7 @@
             { nome: 'Verde',   hex: '#34D399' },
             { nome: 'Giallo',  hex: '#FACC15' }
         ];
-        const COLORE_PREDEFINITO = '#FF7A45';
+        const COLORE_PREDEFINITO = '#ECEDEF';   // neutro: il trainer decide se dare un colore all'app
 
         function applicaColore(hex) {
             const valido = COLORI_APP.some(c => c.hex === hex) ? hex : COLORE_PREDEFINITO;
@@ -1636,7 +1637,7 @@
             apriFoglio(`
                 <div class="fg">
                     <h3>Colore dell'app</h3>
-                    <p>Lo vedi tu e lo vedono i tuoi atleti nella loro scheda. Toccane uno per provarlo.</p>
+                    <p>Lo vedi tu e lo vedono i tuoi atleti nella loro scheda. "Neutro" è bianco e grafite; gli altri danno all'app il colore della tua palestra. Toccane uno per provarlo.</p>
                     <div class="fg-colori">
                         ${COLORI_APP.map(c => `
                             <button type="button" class="fg-colore ${c.hex === b.scelto ? 'scelto' : ''}" onclick="provaColore('${c.hex}')" aria-label="${c.nome}">
