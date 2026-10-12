@@ -389,6 +389,13 @@
         .tr-due .sec { background: var(--va-surface); color: var(--va-text); }
         .tr-due .pri { background: var(--va-acc); color: var(--va-on-acc); }
         .tr-due .pri.pulito { background: var(--va-surface-2); color: var(--va-muted); }
+        /* Pulsante "Invia" in alto: azione sull'atleta, grigio perché il pulsante pieno resta "Salva scheda" */
+        .tr-azioni { display: flex; gap: 8px; }
+        .tr-invia {
+            height: 44px; border-radius: 14px; padding: 0 14px !important; background: var(--va-surface); color: var(--va-text);
+            font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 6px;
+        }
+        .tr-invia svg { width: 16px; height: 16px; }
 
         /* Banner dell'anteprima (il trainer vede la scheda come l'atleta) */
         .va-anteprima {
@@ -417,6 +424,18 @@
         .fg-stepper b { font-family: 'Barlow Condensed', sans-serif; font-size: 28px; font-weight: 700; }
         .fg .tr-chips { padding: 0; }
         .fg-pin { font-family: 'Barlow Condensed', sans-serif; font-size: 48px; font-weight: 700; letter-spacing: .12em; text-align: center; background: var(--va-surface); border-radius: 16px; padding: 12px; }
+        .fg-maiusc { font-size: 11px; color: var(--va-muted); letter-spacing: .08em; text-transform: uppercase; margin-bottom: -6px; }
+        /* Anteprima del messaggio per l'atleta: riga a sinistra come una citazione */
+        .fg-msg {
+            background: var(--va-surface); border-radius: 16px; padding: 12px 14px; border-left: 3px solid var(--va-surface-2);
+            font-size: 14px; line-height: 1.5; color: var(--va-text); white-space: pre-line;
+        }
+        .fg-msg b { font-weight: 600; }
+        .fg-pri.icona { display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .fg-pri.icona svg { width: 18px; height: 18px; }
+        .fg-due { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .fg-due button { background: var(--va-surface); color: var(--va-text); border-radius: 14px; padding: 14px 10px; font-weight: 600; font-size: 15px; }
+        .fg-testo { background: none; color: var(--va-muted); font-weight: 600; font-size: 14px; padding: 6px 0; }
         .fg-riga-pin { display: grid; grid-template-columns: 1fr auto; gap: 8px; }
         .fg-riga-pin button { padding: 0 16px; border-radius: 14px; background: var(--va-surface-2); color: var(--va-text); font-weight: 600; font-size: 14px; }
         .fg-azioni { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 4px; }
@@ -622,7 +641,10 @@
     <main class="va tr" id="tr-atleta" hidden>
         <div class="tr-barra">
             <button type="button" class="tr-link" onclick="tornaACasaTrainer()">← Atleti</button>
-            <button type="button" class="tr-icona" onclick="apriFoglioMenuAtleta()" aria-label="Altre azioni">⋯</button>
+            <span class="tr-azioni">
+                <button type="button" class="tr-invia" onclick="apriFoglioInvio('PIN e invio')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7 8l5-5 5 5M5 14v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5"/></svg>Invia</button>
+                <button type="button" class="tr-icona" onclick="apriFoglioMenuAtleta()" aria-label="Altre azioni">⋯</button>
+            </span>
         </div>
         <section class="tr-testa">
             <h3 class="tr-titolo" id="tr-nome-atleta"></h3>
@@ -1162,13 +1184,17 @@
         async function caricaCasaTrainer() {
             document.getElementById('tr-lista').innerHTML = `<p class="tr-vuoto">Caricamento…</p>`;
 
-            const [risAtleti, risLog] = await Promise.all([
-                supabaseClient.from('atleti').select('id, nome, scheda, updated_at').order('nome'),
+            let [risAtleti, risLog] = await Promise.all([
+                supabaseClient.from('atleti').select('id, nome, pin, scheda, updated_at').order('nome'),
                 supabaseClient.from('allenamenti_log')
                     .select('atleta_id, data_allenamento, giorno_nome')
                     .gte('data_allenamento', dataGiorniFa(365))
                     .order('data_allenamento', { ascending: false })
             ]);
+            // Database senza la colonna "pin" (SQL 08 non ancora lanciato): carico gli atleti senza
+            if (risAtleti.error && /pin/.test(risAtleti.error.message || '')) {
+                risAtleti = await supabaseClient.from('atleti').select('id, nome, scheda, updated_at').order('nome');
+            }
 
             if (risAtleti.error) {
                 console.error(risAtleti.error);
@@ -1400,6 +1426,9 @@
         async function salvaSchedaTrainer() {
             if (!modificheNonSalvate || !atletaIdCorrente) return;
             const pulsante = document.getElementById('tr-salva');
+            const haEsercizi = s => !!(s && Array.isArray(s.giorni) && s.giorni.some(g => g.esercizi && g.esercizi.length));
+            const prima = atletiTrainer.find(a => a.id === atletaIdCorrente);
+            const eraVuota = !haEsercizi(prima && prima.scheda);
             pulsante.innerText = 'Salvataggio…';
 
             const { error } = await supabaseClient.rpc('salva_atleta', {
@@ -1419,6 +1448,89 @@
             const atleta = atletiTrainer.find(a => a.id === atletaIdCorrente);
             if (atleta) atleta.scheda = JSON.parse(JSON.stringify(schedaInModifica));
             impostaModifiche(false);
+
+            // Prima scheda con esercizi: subito il foglio per mandarla. Dopo c'è sempre il pulsante "Invia" in alto.
+            if (eraVuota && haEsercizi(schedaInModifica)) apriFoglioInvio('Scheda pronta');
+        }
+
+        // =========================================================
+        // INVIO ALL'ATLETA: PIN + messaggio con il link, da mandare su WhatsApp, mail…
+        // =========================================================
+        const LINK_APP = 'palestra.gpnlab.com';
+        const primoNome = nome => (nome || '').trim().split(/\s+/)[0];
+
+        function testoInvio(atleta) {
+            const firma = currentTrainer && currentTrainer.nome && !currentTrainer.nome.includes('@')
+                ? `\n${primoNome(currentTrainer.nome)}` : '';
+            const accesso = atleta.pin
+                ? `\nEntra con il nome ${atleta.nome} e il PIN ${atleta.pin}.`
+                : `\nEntra con il nome ${atleta.nome} e il tuo PIN.`;
+            return `Ciao ${primoNome(atleta.nome)}! La tua scheda è su ${LINK_APP}${accesso}${firma}`;
+        }
+
+        // Su telefono: un pulsante che apre il menu di condivisione. Su PC: WhatsApp, Email, Copia.
+        const condivisioneTelefono = () => !!navigator.share && window.matchMedia('(pointer: coarse)').matches;
+
+        function apriFoglioInvio(titolo) {
+            const atleta = atletiTrainer.find(a => a.id === atletaIdCorrente);
+            if (!atleta) return;
+            const nome = primoNome(atleta.nome);
+            const testo = testoInvio(atleta);
+            bozzaFoglio = { tipo: 'invio', testo, nome };
+
+            // Nell'anteprima nome e PIN in grassetto: è lì che il trainer controlla
+            let anteprima = esc(testo);
+            anteprima = anteprima.replace(`il nome ${esc(atleta.nome)}`, `il nome <b>${esc(atleta.nome)}</b>`);
+            if (atleta.pin) anteprima = anteprima.replace(`PIN ${atleta.pin}`, `PIN <b>${atleta.pin}</b>`);
+            anteprima = anteprima.replace(LINK_APP, `<b>${LINK_APP}</b>`);
+
+            const icona = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 8l5-5 5 5M5 14v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5"/></svg>`;
+            const pulsanti = condivisioneTelefono()
+                ? `<button type="button" class="fg-pri largo icona" onclick="inviaCondividi()">${icona}Invia a ${esc(nome)}</button>
+                   <button type="button" class="fg-testo" onclick="chiudiFoglio()">Più tardi</button>`
+                : `<div class="fg-due">
+                       <button type="button" onclick="inviaWhatsApp()">WhatsApp</button>
+                       <button type="button" onclick="inviaEmail()">Email</button>
+                   </div>
+                   <div class="fg-azioni">
+                       <button type="button" class="fg-testo" id="fg-copia" onclick="copiaTestoInvio()">Copia il messaggio</button>
+                       <button type="button" class="fg-testo" onclick="chiudiFoglio()">Più tardi</button>
+                   </div>`;
+
+            apriFoglio(`
+                <div class="fg">
+                    <h3>${esc(titolo)}</h3>
+                    ${atleta.pin
+                        ? `<p>PIN di accesso di ${esc(nome)}</p><div class="fg-pin">${esc(atleta.pin)}</div>`
+                        : `<p>Il PIN di ${esc(nome)} non è visibile perché è stato creato prima di questa funzione. Se non lo ricorda, generane uno nuovo dal menu ⋯.</p>`}
+                    <span class="fg-maiusc">Messaggio per ${esc(nome)}</span>
+                    <div class="fg-msg">${anteprima}</div>
+                    ${pulsanti}
+                </div>
+            `);
+        }
+
+        async function inviaCondividi() {
+            try {
+                await navigator.share({ text: bozzaFoglio.testo });
+                chiudiFoglio();
+            } catch (e) { /* il trainer ha chiuso il menu: il foglio resta aperto */ }
+        }
+        function inviaWhatsApp() {
+            window.open('https://wa.me/?text=' + encodeURIComponent(bozzaFoglio.testo), '_blank', 'noopener');
+        }
+        function inviaEmail() {
+            window.location.href = 'mailto:?subject=' + encodeURIComponent('La tua scheda di allenamento')
+                + '&body=' + encodeURIComponent(bozzaFoglio.testo);
+        }
+        async function copiaTestoInvio() {
+            try {
+                await navigator.clipboard.writeText(bozzaFoglio.testo);
+                document.getElementById('fg-copia').innerText = 'Copiato ✓';
+                setTimeout(chiudiFoglio, 900);
+            } catch (e) {
+                chiudiFoglio();
+            }
         }
 
         // --- Anteprima: il trainer vede la scheda come la vedrà l'atleta ---
@@ -1703,7 +1815,7 @@
                             <button type="button" onclick="document.getElementById('fg-nuovo-pin').value = generaPinSicuro()">Genera</button>
                         </div>
                     </div>
-                    <p>L'atleta entrerà con il suo nome e questo PIN. Dopo la creazione il PIN non sarà più visibile: se lo perde, ne generi uno nuovo.</p>
+                    <p>L'atleta entrerà con il suo nome e questo PIN. Quando salvi la scheda potrai mandarglieli su WhatsApp o per mail; li ritrovi sempre nel menu ⋯ dell'atleta.</p>
                     <div class="fg-azioni">
                         <button type="button" class="fg-sec" onclick="chiudiFoglio()">Annulla</button>
                         <button type="button" class="fg-pri" id="fg-crea" onclick="creaAtletaTrainer()">Crea atleta</button>
@@ -1738,26 +1850,8 @@
             }
 
             await caricaCasaTrainer();
-            mostraFoglioPin(nome, pin, `Atleta creato`, nuovoId);
-        }
-
-        // Mostra il PIN una volta sola, poi apre l'atleta
-        function mostraFoglioPin(nome, pin, titolo, idDaAprire) {
-            bozzaFoglio = { tipo: 'pin', idDaAprire };
-            apriFoglio(`
-                <div class="fg">
-                    <h3>${esc(titolo)}</h3>
-                    <p>Comunica a <b>${esc(nome)}</b> questo PIN. Per sicurezza non sarà più visibile.</p>
-                    <div class="fg-pin">${esc(pin)}</div>
-                    <button type="button" class="fg-pri largo" onclick="chiudiFoglioPin()">${idDaAprire ? 'Prepara la scheda' : 'Fatto'}</button>
-                </div>
-            `);
-        }
-
-        function chiudiFoglioPin() {
-            const id = bozzaFoglio && bozzaFoglio.idDaAprire;
             chiudiFoglio();
-            if (id) apriAtletaTrainer(id);
+            apriAtletaTrainer(nuovoId);
         }
 
         // --- Menu "⋯" dell'atleta ---
@@ -1781,7 +1875,9 @@
                 alert("Errore durante il cambio PIN: " + error.message);
                 return;
             }
-            mostraFoglioPin(nomeAtletaSalvato, nuovoPin, 'Nuovo PIN', null);
+            const atleta = atletiTrainer.find(a => a.id === atletaIdCorrente);
+            if (atleta) atleta.pin = nuovoPin;
+            apriFoglioInvio('Nuovo PIN');
         }
 
         async function eliminaAtletaTrainer() {
