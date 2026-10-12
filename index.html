@@ -112,7 +112,7 @@
             font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 52px; line-height: .95;
             text-transform: uppercase; text-align: left; margin: 36px 0 4px; color: var(--va-text);
         }
-        .ing-sotto { color: var(--va-muted); font-size: 16px; font-weight: 500; margin: 0 0 12px; }
+        .ing-sotto { color: var(--va-muted); font-size: 16px; font-weight: 500; margin: 0 0 12px; text-wrap: balance; }  /* se va a capo, due righe pari: niente parola sola sotto */
         /* Ingresso: scritte piccole più marcate (più peso, un filo più grandi) */
         body.modo-ingresso .ing-campo span,
         body.modo-ingresso .ing-etichetta { font-size: 13px; font-weight: 600; }
@@ -545,7 +545,7 @@
             <div class="ing-marchio" aria-label="GPN Lab"><span class="logo-gpn">gpn<i></i><em>lab</em></span></div>
 
             <h2 class="ing-titolo">Pronto ad<br>allenarti?</h2>
-            <p class="ing-sotto">Entra con il nome e il PIN del tuo trainer.</p>
+            <p class="ing-sotto">Entra con nome e PIN forniti dal tuo trainer.</p>
 
             <label class="ing-campo">
                 <span>Nome e cognome</span>
