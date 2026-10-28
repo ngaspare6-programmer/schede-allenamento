@@ -219,6 +219,10 @@
         .va-stats span { display: block; font-size: 11px; color: var(--va-muted); letter-spacing: .08em; text-transform: uppercase; margin-bottom: 2px; }
         .va-stats b { font-family: 'Barlow Condensed', sans-serif; font-size: 34px; font-weight: 600; line-height: 1; word-break: break-word; }
         .va-stats b em { font-style: normal; font-size: 18px; color: var(--va-muted); margin-left: 2px; }
+        /* Ripetizioni diverse a ogni serie: 12 → 10 → 8 */
+        .va-ripetizioni { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin: -8px 0 20px; padding: 10px 14px; background: var(--va-bg); border-radius: 12px; font-size: 13px; color: var(--va-muted); }
+        .va-ripetizioni b { font-family: 'Barlow Condensed', sans-serif; font-size: 26px; font-weight: 600; color: var(--va-text); text-align: right; }
+        .va-ripetizioni b em { font-style: normal; color: var(--va-muted); margin: 0 4px; }
 
         .va-input-riga { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
         .va-stepper { background: var(--va-bg); border-radius: 14px; padding: 10px 12px; }
@@ -270,6 +274,22 @@
         .va-num { font-family: 'Barlow Condensed', sans-serif; font-size: 22px; font-weight: 600; color: var(--va-muted); }
         .va-num.fatto { color: var(--va-acc-testo); }
         .va-riga.fatta b { color: var(--va-muted); font-weight: 500; }   /* fatto: passa in secondo piano */
+        /* Nota del coach: riquadro con la riga a sinistra, come una citazione */
+        .va-nota {
+            background: var(--va-bg); border-radius: 14px; padding: 10px 14px; margin: -8px 0 20px;
+            border-left: 3px solid var(--va-surface-2); font-size: 14px; line-height: 1.45; white-space: pre-line;
+        }
+        .va-nota b { display: block; font-size: 11px; color: var(--va-muted); letter-spacing: .08em; text-transform: uppercase; margin-bottom: 2px; }
+        /* Super serie e circuiti: cosa fare finita la serie */
+        .va-poi {
+            display: flex; justify-content: space-between; gap: 12px; margin-top: 16px; padding: 12px 14px;
+            background: var(--va-bg); border-radius: 12px; font-size: 14px; color: var(--va-muted);
+        }
+        .va-poi b { color: var(--va-text); font-weight: 600; text-align: right; }
+        /* Gruppo nella lista "Altri esercizi": linea a sinistra + nome del gruppo */
+        .va-gruppo { position: relative; padding-left: 14px; margin: 6px 0; }
+        .va-gruppo::before { content: ''; position: absolute; left: 0; top: 24px; bottom: 10px; width: 3px; border-radius: 2px; background: var(--va-acc-testo); }
+        .va-gruppo-et { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--va-text); padding-top: 8px; }
 
         .va-fatto {
             display: block; width: 100% !important; margin-top: 10px !important; padding: 14px; border-radius: 12px;
@@ -366,6 +386,19 @@
         .tr-es-ultima { margin-left: auto; text-align: right; flex-shrink: 0; }
         .tr-es-ultima b { font-family: 'Barlow Condensed', sans-serif; font-size: 22px; font-weight: 600; }
         .tr-es-ultima small { font-size: 11px; }
+        .tr-es-nota { display: block; font-style: italic; margin-top: 2px; }
+        /* Super serie / circuito nella scheda del trainer: le card restano separate, unite da una linea */
+        .tr-gruppo { grid-column: 1 / -1; position: relative; display: flex; flex-direction: column; gap: 6px; padding-left: 14px; margin-top: 4px; }
+        .tr-gruppo::before { content: ''; position: absolute; left: 3px; top: 24px; bottom: 6px; width: 3px; border-radius: 2px; background: var(--va-acc-testo); }
+        .tr-gruppo-et { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--va-text); padding: 2px 0 0 2px; }
+        .fg-textarea { min-height: 72px; resize: vertical; line-height: 1.45; font-family: inherit; }
+        .fg-interr { display: flex !important; width: 100% !important; justify-content: space-between; align-items: center; gap: 12px; text-align: left;
+            background: var(--va-surface); color: var(--va-text); border-radius: 14px; padding: 12px 14px !important; font-size: 15px; font-weight: 600; }
+        .fg-interr small { display: block; color: var(--va-muted); font-size: 12px; font-weight: 500; margin-top: 2px; }
+        .fg-sw { width: 44px; height: 26px; border-radius: 13px; background: var(--va-surface-2); position: relative; flex-shrink: 0; transition: background .15s; }
+        .fg-sw::after { content: ''; position: absolute; left: 3px; top: 3px; width: 20px; height: 20px; border-radius: 50%; background: var(--va-muted); transition: left .15s, background .15s; }
+        .fg-interr.on .fg-sw { background: var(--va-acc); }
+        .fg-interr.on .fg-sw::after { left: 21px; background: var(--va-on-acc); }
         .tr-aggiungi {
             margin: 6px 12px 0 !important; width: calc(100% - 24px) !important; padding: 14px !important; border-radius: 16px;
             background: none; color: var(--va-muted); box-shadow: inset 0 0 0 1px var(--va-surface-2);
@@ -419,6 +452,11 @@
         .fg p { margin: 0; color: var(--va-muted); font-size: 14px; line-height: 1.5; }
         .fg-lab { display: block; font-size: 12px; color: var(--va-muted); margin-bottom: 8px; }
         .fg-righe2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        /* Ripetizioni diverse a ogni serie: una riga per serie */
+        .fg-serie-righe { display: flex; flex-direction: column; gap: 6px; }
+        .fg-serie-riga { display: flex; justify-content: space-between; align-items: center; background: var(--va-surface); border-radius: 14px; padding: 6px 10px 6px 14px; font-size: 14px; font-weight: 600; color: var(--va-muted); }
+        .fg-serie-riga .fg-stepper { background: none; padding: 0; gap: 14px; }
+        .fg-serie-riga .fg-stepper b { color: var(--va-text); min-width: 30px; text-align: center; }
         .fg-stepper { background: var(--va-surface); border-radius: 14px; padding: 8px 10px; display: flex; align-items: center; justify-content: space-between; }
         .fg-stepper button { width: 36px; height: 36px; border-radius: 10px; padding: 0; background: var(--va-surface-2); color: var(--va-text); font-size: 20px; font-weight: 600; }
         .fg-stepper b { font-family: 'Barlow Condensed', sans-serif; font-size: 28px; font-weight: 700; }
@@ -1324,6 +1362,31 @@
             contenitore.innerHTML = tabTrainer === 'progressi' ? htmlProgressi() : htmlSchedaTrainer();
         }
 
+        // Super serie e circuiti: un esercizio con "conPrecedente" si fa subito dopo quello prima.
+        // Restituisce { inizio, fine, quanti, pos } del gruppo dell'esercizio i, o null se è da solo.
+        function infoGruppo(esercizi, i) {
+            let inizio = i, fine = i;
+            while (inizio > 0 && esercizi[inizio].conPrecedente) inizio--;
+            while (fine + 1 < esercizi.length && esercizi[fine + 1].conPrecedente) fine++;
+            const quanti = fine - inizio + 1;
+            return quanti > 1 ? { inizio, fine, quanti, pos: i - inizio + 1 } : null;
+        }
+        const nomeGruppo = quanti => quanti === 2 ? 'Super serie' : `Circuito · ${quanti} esercizi`;
+
+        // Racchiude in un blocco con la linea gli esercizi che vanno insieme (htmlRiga disegna il singolo esercizio)
+        function htmlConGruppi(esercizi, htmlRiga, classe, salta) {
+            let html = '';
+            for (let i = 0; i < esercizi.length; i++) {
+                const g = infoGruppo(esercizi, i);
+                if (!g) { if (i !== salta) html += htmlRiga(esercizi[i], i, null); continue; }
+                const righe = [];
+                for (let j = g.inizio; j <= g.fine; j++) if (j !== salta) righe.push(htmlRiga(esercizi[j], j, infoGruppo(esercizi, j)));
+                if (righe.length) html += `<div class="${classe}"><div class="${classe}-et">${nomeGruppo(g.quanti)}</div>${righe.join('')}</div>`;
+                i = g.fine;
+            }
+            return html;
+        }
+
         function htmlSchedaTrainer() {
             const giorni = schedaInModifica.giorni;
             const gIdx = Math.min(giornoTrainer, giorni.length - 1);
@@ -1333,15 +1396,16 @@
                 `<button type="button" class="tr-chip ${i === gIdx ? 'on' : ''}" onclick="scegliGiornoTrainer(${i})">${esc(g.nome || 'Giorno ' + (i + 1))}</button>`
             ).join('') + `<button type="button" class="tr-chip piu" onclick="aggiungiGiornoTrainer()">+ Giorno</button>`;
 
-            const righe = giorno.esercizi.map((ex, i) => {
+            const righe = htmlConGruppi(giorno.esercizi, (ex, i, g) => {
                 const ultimo = logDiEsercizio(ex.nome)[0];
+                const recupero = g && g.pos < g.quanti ? 'subito il prossimo' : ex.recupero;
                 return `
                     <button type="button" class="tr-es" onclick="apriFoglioEsercizio(${i})">
                         <span class="tr-es-n">${i + 1}</span>
-                        <span><b>${esc(ex.nome)}</b><small>${esc(mostraSerie(ex.serie))} · ${esc(ex.recupero)}</small></span>
+                        <span><b>${esc(ex.nome)}</b><small>${esc(mostraSerie(ex.serie))} · ${esc(recupero)}</small>${ex.note ? `<small class="tr-es-nota">${esc(ex.note.length > 40 ? ex.note.slice(0, 40) + '…' : ex.note)}</small>` : ''}</span>
                         ${ultimo && ultimo.kg_usati ? `<span class="tr-es-ultima"><b>${esc(mostraNumero(ultimo.kg_usati))}</b><small class="muted"> kg ultima</small></span>` : ''}
                     </button>`;
-            }).join('');
+            }, 'tr-gruppo', -1);
 
             const suggeriti = eserciziSuggeriti(giorno.muscoli, giorno.esercizi.map(e => e.nome)).slice(0, 8);
             ultimiSuggeriti = suggeriti;
@@ -1362,6 +1426,7 @@
                     ${righe || `<p class="tr-vuoto" style="padding: 8px 8px 0;">Ancora nessun esercizio in questo giorno.</p>`}
                 </div>
                 <button type="button" class="tr-aggiungi" onclick="apriFoglioEsercizio(-1)">+ Aggiungi esercizio</button>
+                ${giorno.esercizi.length ? `<button type="button" class="tr-aggiungi" onclick="apriFoglioEsercizio(-1, true)">+ Aggiungi super serie</button>` : ''}
                 <h5 class="tr-sezione">Suggeriti · tocca per aggiungere</h5>
                 ${htmlSuggeriti}
             `;
@@ -1580,17 +1645,21 @@
         }
 
         // --- Esercizio ---
-        function apriFoglioEsercizio(eIdx) {
+        // inSuperSerie: nuovo esercizio già collegato all'ultimo ("+ Aggiungi super serie")
+        function apriFoglioEsercizio(eIdx, inSuperSerie) {
             const giorno = schedaInModifica.giorni[giornoTrainer];
             const ex = eIdx >= 0 ? giorno.esercizi[eIdx] : { nome: '', muscolo: '', serie: '3x10', recupero: '60 sec', immagine: '' };
             const m = String(ex.serie || '').match(/^\s*(\d+)\s*[x×]\s*(\d+)\s*$/i);
+            const diverse = repsPerSerie(ex.serie);
 
             bozzaFoglio = {
                 tipo: 'esercizio', eIdx,
                 nome: ex.nome || '', muscolo: ex.muscolo || '', recupero: ex.recupero || '', immagine: ex.immagine || '',
-                serieLibera: m ? null : String(ex.serie || ''),
-                nSerie: m ? parseInt(m[1], 10) : 3,
-                nReps: m ? parseInt(m[2], 10) : 10
+                note: ex.note || '', conPrecedente: !!ex.conPrecedente || !!inSuperSerie,
+                serieLibera: (m || diverse) ? null : String(ex.serie || ''),
+                nSerie: m ? parseInt(m[1], 10) : diverse ? diverse.length : 3,
+                nReps: m ? parseInt(m[2], 10) : diverse ? diverse[0] : 10,
+                repsSerie: diverse   // null = stesse ripetizioni per tutte le serie
             };
             disegnaFoglioEsercizio();
         }
@@ -1601,16 +1670,34 @@
             const suggerimenti = eserciziSuggeriti(giorno.muscoli, []).map(s => s.nome);
             const lista = suggerimenti.length ? suggerimenti : tuttiGliEsercizi();
             const recuperoAltro = b.recupero && !opzioniRecupero.includes(b.recupero);
+            // L'esercizio prima di questo (per "Insieme al precedente"): il primo del giorno non ce l'ha
+            const precedente = b.eIdx > 0 ? giorno.esercizi[b.eIdx - 1] : (b.eIdx < 0 ? giorno.esercizi[giorno.esercizi.length - 1] : null);
 
+            const htmlInterrReps = `
+                   <button type="button" class="fg-interr ${b.repsSerie ? 'on' : ''}" onclick="interruttoreRepsSerie()">
+                       <span>Ripetizioni diverse a ogni serie<small>${b.repsSerie ? 'Una ripetizione per ogni serie' : 'Es. piramide 12 · 10 · 8'}</small></span>
+                       <span class="fg-sw" aria-hidden="true"></span>
+                   </button>`;
             const htmlSerie = b.serieLibera !== null
                 ? `<div><span class="fg-lab">Serie × ripetizioni</span>
                        <input class="fg-input" value="${esc(b.serieLibera)}" oninput="bozzaFoglio.serieLibera = this.value"></div>`
+                : b.repsSerie
+                ? `<div class="fg-righe2">
+                       <div><span class="fg-lab">Serie</span>
+                           <div class="fg-stepper"><button type="button" onclick="cambiaNumeroFoglio('nSerie', -1)" aria-label="Una serie in meno">−</button><b id="fg-nSerie">${b.nSerie}</b><button type="button" onclick="cambiaNumeroFoglio('nSerie', 1)" aria-label="Una serie in più">+</button></div></div>
+                   </div>
+                   ${htmlInterrReps}
+                   <div class="fg-serie-righe">
+                       ${b.repsSerie.map((r, i) => `<div class="fg-serie-riga">Serie ${i + 1}
+                           <div class="fg-stepper"><button type="button" onclick="cambiaRepsSerie(${i}, -1)" aria-label="Una ripetizione in meno">−</button><b>${r}</b><button type="button" onclick="cambiaRepsSerie(${i}, 1)" aria-label="Una ripetizione in più">+</button></div></div>`).join('')}
+                   </div>`
                 : `<div class="fg-righe2">
                        <div><span class="fg-lab">Serie</span>
                            <div class="fg-stepper"><button type="button" onclick="cambiaNumeroFoglio('nSerie', -1)" aria-label="Una serie in meno">−</button><b id="fg-nSerie">${b.nSerie}</b><button type="button" onclick="cambiaNumeroFoglio('nSerie', 1)" aria-label="Una serie in più">+</button></div></div>
                        <div><span class="fg-lab">Ripetizioni</span>
                            <div class="fg-stepper"><button type="button" onclick="cambiaNumeroFoglio('nReps', -1)" aria-label="Una ripetizione in meno">−</button><b id="fg-nReps">${b.nReps}</b><button type="button" onclick="cambiaNumeroFoglio('nReps', 1)" aria-label="Una ripetizione in più">+</button></div></div>
-                   </div>`;
+                   </div>
+                   ${htmlInterrReps}`;
 
             apriFoglio(`
                 <div class="fg">
@@ -1634,6 +1721,14 @@
                     <div><span class="fg-lab">Foto o GIF (facoltativo)</span>
                         <input class="fg-input" type="url" value="${esc(b.immagine)}" placeholder="Incolla un link" oninput="bozzaFoglio.immagine = this.value.trim()">
                     </div>
+                    <div><span class="fg-lab">Note per l'atleta (facoltativo)</span>
+                        <textarea class="fg-input fg-textarea" placeholder="Es. ultima serie in stripping: −20% e vai a cedimento" oninput="bozzaFoglio.note = this.value">${esc(b.note)}</textarea>
+                    </div>
+                    ${precedente ? `
+                    <button type="button" class="fg-interr ${b.conPrecedente ? 'on' : ''}" onclick="bozzaFoglio.conPrecedente = !bozzaFoglio.conPrecedente; disegnaFoglioEsercizio()">
+                        <span>Insieme al precedente<small>Subito dopo ${esc(precedente.nome)}, senza recupero in mezzo</small></span>
+                        <span class="fg-sw" aria-hidden="true"></span>
+                    </button>` : ''}
                     <div class="fg-azioni">
                         ${b.eIdx >= 0 ? `<button type="button" class="fg-elimina" onclick="eliminaEsercizioFoglio()">Elimina</button>` : `<button type="button" class="fg-sec" onclick="chiudiFoglio()">Annulla</button>`}
                         <button type="button" class="fg-pri" onclick="confermaFoglioEsercizio()">Fatto</button>
@@ -1643,8 +1738,27 @@
         }
 
         function cambiaNumeroFoglio(campo, passo) {
-            bozzaFoglio[campo] = Math.max(1, bozzaFoglio[campo] + passo);
-            document.getElementById('fg-' + campo).innerText = bozzaFoglio[campo];
+            const b = bozzaFoglio;
+            b[campo] = Math.max(1, b[campo] + passo);
+            document.getElementById('fg-' + campo).innerText = b[campo];
+            // Ripetizioni diverse: una riga per serie (la serie nuova copia l'ultima)
+            if (campo === 'nSerie' && b.repsSerie) {
+                while (b.repsSerie.length < b.nSerie) b.repsSerie.push(b.repsSerie[b.repsSerie.length - 1]);
+                b.repsSerie.length = b.nSerie;
+                disegnaFoglioEsercizio();
+            }
+        }
+
+        function interruttoreRepsSerie() {
+            const b = bozzaFoglio;
+            if (b.repsSerie) { b.nReps = b.repsSerie[0]; b.repsSerie = null; }
+            else b.repsSerie = Array(b.nSerie).fill(b.nReps);
+            disegnaFoglioEsercizio();
+        }
+
+        function cambiaRepsSerie(i, passo) {
+            bozzaFoglio.repsSerie[i] = Math.max(1, bozzaFoglio.repsSerie[i] + passo);
+            disegnaFoglioEsercizio();
         }
 
         // Pulsanti a scelta (recupero, muscolo): un secondo tocco sul muscolo lo toglie
@@ -1664,10 +1778,14 @@
             const esercizio = {
                 nome,
                 muscolo: b.muscolo,
-                serie: b.serieLibera !== null ? (b.serieLibera.trim() || '3x10') : `${b.nSerie}x${b.nReps}`,
+                serie: b.serieLibera !== null ? (b.serieLibera.trim() || '3x10')
+                    : b.repsSerie && new Set(b.repsSerie).size > 1 ? `${b.nSerie}x${b.repsSerie.join('-')}`
+                    : `${b.nSerie}x${b.repsSerie ? b.repsSerie[0] : b.nReps}`,
                 recupero: b.recupero || '60 sec',
                 immagine: b.immagine
             };
+            if (b.note.trim()) esercizio.note = b.note.trim();
+            if (b.conPrecedente) esercizio.conPrecedente = true;
             const esercizi = schedaInModifica.giorni[giornoTrainer].esercizi;
             if (b.eIdx >= 0) esercizi[b.eIdx] = esercizio; else esercizi.push(esercizio);
             impostaModifiche(true);
@@ -1677,7 +1795,11 @@
 
         function eliminaEsercizioFoglio() {
             if (!confirm("Eliminare questo esercizio dalla scheda?")) return;
-            schedaInModifica.giorni[giornoTrainer].esercizi.splice(bozzaFoglio.eIdx, 1);
+            const esercizi = schedaInModifica.giorni[giornoTrainer].esercizi;
+            const tolto = esercizi[bozzaFoglio.eIdx], dopo = esercizi[bozzaFoglio.eIdx + 1];
+            // Se era il primo di un gruppo, il gruppo ora parte dal successivo (non si attacca all'esercizio prima)
+            if (dopo && dopo.conPrecedente && !tolto.conPrecedente) delete dopo.conPrecedente;
+            esercizi.splice(bozzaFoglio.eIdx, 1);
             impostaModifiche(true);
             chiudiFoglio();
             disegnaPaginaAtleta();
@@ -1938,7 +2060,17 @@
             return String(testo ?? '').replace(/(\d)\.(\d)/g, '$1,$2');
         }
         function mostraSerie(testo) {
+            const diverse = repsPerSerie(testo);
+            if (diverse) return `${diverse.length} serie · ${diverse.join('-')}`;
             return String(testo ?? '').replace(/(\d)\s*[xX]\s*(\d)/g, '$1×$2');
+        }
+
+        // Ripetizioni diverse a ogni serie: "4x12-10-8-6" → [12, 10, 8, 6]; altrimenti null
+        function repsPerSerie(serie) {
+            const m = String(serie || '').match(/^\s*(\d+)\s*[x×]\s*(\d+(?:\s*-\s*\d+)+)\s*$/i);
+            if (!m) return null;
+            const reps = m[2].split('-').map(n => parseInt(n, 10));
+            return reps.length === parseInt(m[1], 10) ? reps : null;
         }
 
         function esercizioCompletato(v) {
@@ -2008,8 +2140,11 @@
             const fatti = esercizi.filter((_, i) => esercizioCompletato(statoAtleta.valori[chiaveEsercizio(gIdx, i)])).length;
             const tuttiFatti = esercizi.length > 0 && fatti === esercizi.length;
             const percentuale = esercizi.length ? Math.round(Math.max(fatti, 0.15) / esercizi.length * 100) : 0;
-            const secRecupero = secondiRecupero(ex.recupero);
+            const gruppo = infoGruppo(esercizi, fIdx);
+            const inMezzo = gruppo && gruppo.pos < gruppo.quanti;   // nel gruppo, ma non l'ultimo: niente recupero
+            const secRecupero = inMezzo ? null : secondiRecupero(ex.recupero);
 
+            const repsDiverse = repsPerSerie(ex.serie);
             const immagineValida = ex.immagine && /^https?:\/\//i.test(ex.immagine);
 
             const chipsGiorni = data.giorni.filter(g => g.esercizi && g.esercizi.length).length > 1 ? `
@@ -2017,9 +2152,13 @@
                     ${data.giorni.map((g, i) => (g.esercizi && g.esercizi.length) ? `<button class="${i === gIdx ? 'attivo' : ''}" onclick="scegliGiornoAtleta(${i})">${esc(g.nome)}</button>` : '').join('')}
                 </nav>` : '';
 
-            const recuperoStat = secRecupero !== null
-                ? `${secRecupero}<em>s</em>`
+            const recuperoStat = inMezzo ? 'Subito'
+                : secRecupero !== null ? `${secRecupero}<em>s</em>`
                 : esc(ex.recupero || '–');
+            const htmlPoi = !gruppo ? ''
+                : inMezzo
+                    ? `<div class="va-poi"><span>Finita la serie</span><b>Subito: ${esc(esercizi[fIdx + 1].nome)}</b></div>`
+                    : `<div class="va-poi"><span>Finita la serie</span><b>Recupero, poi di nuovo ${esc(esercizi[gruppo.inizio].nome)}</b></div>`;
 
             const storico = logDiEsercizio(ex.nome).slice(0, 5);
             const storicoHtml = storico.length ? `
@@ -2032,15 +2171,15 @@
                         </div>`).join('')}
                 </details>` : '';
 
-            const altriEsercizi = esercizi.map((e, i) => {
-                if (i === fIdx) return '';
+            const altriEsercizi = htmlConGruppi(esercizi, (e, i, g) => {
+                const recupero = g && g.pos < g.quanti ? 'subito il prossimo' : e.recupero;
                 const fatto = esercizioCompletato(statoAtleta.valori[chiaveEsercizio(gIdx, i)]);
                 return `
                     <button class="va-riga ${fatto ? 'fatta' : ''}" onclick="vaiAEsercizioAtleta(${i})">
-                        <span><b>${esc(e.nome)}</b><small>${esc(mostraSerie(e.serie))} · ${esc(e.recupero)}</small></span>
+                        <span><b>${esc(e.nome)}</b><small>${esc(mostraSerie(e.serie))} · ${esc(recupero)}</small></span>
                         <span class="va-num ${fatto ? 'fatto' : ''}">${fatto ? '✓' : String(i + 1).padStart(2, '0')}</span>
                     </button>`;
-            }).join('');
+            }, 'va-gruppo', fIdx);
 
             document.getElementById('res-lista-giorni').innerHTML = `
                 <div class="va">
@@ -2064,15 +2203,18 @@
                     </section>
 
                     <article class="va-attuale">
-                        <div class="va-n">ESERCIZIO ${fIdx + 1} DI ${esercizi.length}</div>
+                        <div class="va-n">${gruppo ? `${gruppo.quanti === 2 ? 'SUPER SERIE' : 'CIRCUITO'} · ${gruppo.pos} DI ${gruppo.quanti}` : `ESERCIZIO ${fIdx + 1} DI ${esercizi.length}`}</div>
                         <h4>${esc(ex.nome)}</h4>
+                        ${ex.note ? `<div class="va-nota"><b>Nota del coach</b>${esc(ex.note)}</div>` : ''}
                         ${immagineValida ? `<img src="${esc(ex.immagine)}" class="va-img" alt="${esc(ex.nome)}">` : ''}
 
                         <div class="va-stats">
-                            <div><span>Serie</span><b>${esc(mostraSerie(ex.serie) || '–')}</b></div>
+                            <div><span>Serie</span><b>${repsDiverse ? repsDiverse.length : esc(mostraSerie(ex.serie) || '–')}</b></div>
                             <div><span>Recupero</span><b>${recuperoStat}</b></div>
                             <div><span>Ultima</span><b>${ultimo && ultimo.kg_usati ? esc(mostraNumero(ultimo.kg_usati)) + '<em>kg</em>' : '–'}</b></div>
                         </div>
+
+                        ${repsDiverse ? `<div class="va-ripetizioni"><span>Ripetizioni</span><b>${repsDiverse.join('<em>→</em>')}</b></div>` : ''}
 
                         <div class="va-input-riga">
                             <div class="va-stepper">
@@ -2095,6 +2237,7 @@
 
                         <div id="va-delta-box">${htmlDelta(valori.kg, ultimo)}</div>
 
+                        ${htmlPoi}
                         ${secRecupero !== null ? `<button type="button" class="va-recupero" onclick="avviaRecuperoAtleta(${secRecupero})">⏱ Avvia recupero ${secRecupero}s</button>` : ''}
 
                         ${valori.salvato && !valori.toccato
