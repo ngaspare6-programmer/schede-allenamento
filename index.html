@@ -32,8 +32,9 @@
 
         * { box-sizing: border-box; }
         [hidden] { display: none !important; }
-        /* Niente zoom col doppio tocco (scomodo mentre ci si allena); lo zoom pinzando resta */
-        html { touch-action: manipulation; }
+        /* Niente zoom col doppio tocco (scomodo mentre ci si allena); lo zoom pinzando resta.
+           Su tutti gli elementi: i riquadri che scorrono da soli (foglio, menu, giorni) non la ereditano dalla pagina */
+        html, * { touch-action: manipulation; }
 
         body {
             margin: 0;
