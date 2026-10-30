@@ -717,6 +717,21 @@
     </div>
 
     <script>
+        // iPhone: il doppio tocco fa zoom anche dove il CSS lo vieta (es. sui numeri tra − e +).
+        // Il secondo tocco veloce non fa zoom; se era su un pulsante, il clic arriva lo stesso. Lo zoom pinzando resta.
+        let ultimoTocco = 0, piuDita = false;
+        document.addEventListener('touchstart', e => { if (e.touches.length > 1) piuDita = true; }, { passive: true });
+        document.addEventListener('touchend', e => {
+            if (piuDita) { if (!e.touches.length) piuDita = false; ultimoTocco = 0; return; }
+            const ora = Date.now();
+            if (ora - ultimoTocco < 350 && !e.target.closest('input, textarea, select')) {
+                e.preventDefault();
+                const pulsante = e.target.closest('button, a, [onclick]');
+                if (pulsante) pulsante.click();
+            }
+            ultimoTocco = ora;
+        }, { passive: false });
+
         const SUPABASE_URL = 'https://zkrsyltlvrlpjsfawsmk.supabase.co';
         const SUPABASE_ANON_KEY = 'sb_publishable_5qQg44naV2ocZjWX_2HyPA_JiZx1GyI';
 
