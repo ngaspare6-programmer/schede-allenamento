@@ -300,14 +300,23 @@
         .va-chiudi { display: flex !important; width: 100% !important; justify-content: space-between; align-items: center; background: none; padding: 0; color: var(--va-muted); font-size: 12px; font-weight: 600; }
         .va-stat-click { background: none !important; border-radius: 12px; padding: 6px 8px !important; margin: -6px -8px !important; text-align: left; color: var(--va-text); box-shadow: inset 0 0 0 1px var(--va-surface-2); }
         /* Barra in basso dell'atleta */
-        .va-barra-b { position: fixed; left: 50%; transform: translateX(-50%); bottom: 0; width: 100%; max-width: 480px; z-index: 50; display: flex; justify-content: space-around;
-            background: color-mix(in srgb, var(--va-bg) 96%, transparent); border-top: 1px solid var(--va-surface); padding: 9px 4px calc(12px + env(safe-area-inset-bottom)); }
-        .va-barra-b button { width: 68px !important; background: none; padding: 0; text-align: center; font-size: 11px; font-weight: 600; color: var(--va-muted); position: relative; }
-        .va-barra-b svg { width: 23px; height: 23px; display: block; margin: 0 auto 3px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-        .va-barra-b .on { color: var(--va-text); } .va-barra-b .on::before { content: ''; position: absolute; top: -9px; left: 20px; right: 20px; height: 2px; border-radius: 2px; background: var(--va-acc-testo); }
+        /* Sospesa e stretta attorno ai tasti (scelta di Gaspare 7/11, come la Checklist; bozza design/direzioni/barra-sospesa.html).
+           Tasti al massimo 64 punti; sui telefoni stretti si stringono per lasciare 12 punti per lato (5 tasti + 26 tra bordi, spazi e contorno). */
+        .va-barra-b { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(14px + env(safe-area-inset-bottom)); width: max-content; z-index: 50;
+            display: flex; align-items: center; justify-content: center; gap: 2px; padding: 8px; border-radius: 26px;
+            background: color-mix(in srgb, var(--va-surface) 96%, transparent); border: 1px solid var(--va-surface-2); box-shadow: 0 10px 28px rgba(0,0,0,.45); }
+        .va-barra-b button { width: min(64px, calc((100vw - 50px) / 5)) !important; height: 46px; flex: none; background: none; padding: 0;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; white-space: nowrap;
+            font-size: 11px; font-weight: 600; color: var(--va-muted); position: relative; }
+        @media (max-width: 350px) { .va-barra-b button { font-size: 10px; } }
+        .va-barra-b svg { width: 23px; height: 23px; flex: none; display: block; margin: 0 auto 3px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+        /* tasto aperto: cerchio che esce sopra la pillola, scritta in riga con le altre. Icona nel colore "sopra l'accento" (bianca sul verde, scura sul Neutro) */
+        .va-barra-b .on { color: var(--va-text); justify-content: flex-end; padding-bottom: 3px; }
+        .va-barra-b .on svg { width: 24px; height: 24px; padding: 12px; box-sizing: content-box; border-radius: 50%; background: var(--va-acc); color: var(--va-on-acc);
+            border: 3px solid #ECEDEF; box-shadow: 0 6px 16px rgba(0,0,0,.5); margin-bottom: 2px; }
         .va-barra-b .presto { opacity: .4; }
         .va.con-barra { padding-bottom: 170px; }
-        .va.con-barra .va-cta { bottom: calc(80px + env(safe-area-inset-bottom)); }   /* sopra la barra in basso */
+        .va.con-barra .va-cta { bottom: calc(110px + env(safe-area-inset-bottom)); }   /* sopra la barra sospesa e il cerchio del tasto aperto */
         /* Progressi */
         .pr-titolo { font-family: 'Barlow Condensed', sans-serif; font-size: 36px; font-weight: 700; text-transform: uppercase; line-height: 1; padding: 18px 20px 0; }
         .pr-sotto { color: var(--va-muted); font-size: 13px; padding: 4px 20px 0; }
@@ -2454,7 +2463,7 @@
             nutrizione: '<path d="M5 19c0-8 5-13 14-14-1 9-6 14-14 14zM5 19l7-7"/>'
         };
         function htmlBarraAtleta() {
-            const voci = [['allenamento', 'Allenamento'], ['progressi', 'Progressi'], ['home', 'Home'], ['prenota', 'Prenota'], ['nutrizione', 'Nutrizione']];
+            const voci = [['allenamento', 'Scheda'], ['progressi', 'Progressi'], ['home', 'Home'], ['prenota', 'Prenota'], ['nutrizione', 'Nutrizione']];
             const attiva = statoAtleta.vista === 'scheda' ? 'allenamento' : statoAtleta.vista;
             return `<nav class="va-barra-b">${voci.map(([k, t]) =>
                 `<button type="button" class="${k === attiva ? 'on' : ''} ${k === 'nutrizione' || k === 'prenota' ? 'presto' : ''}" onclick="vaiSezioneAtleta('${k}')"><svg viewBox="0 0 24 24" aria-hidden="true">${ICONE_BARRA[k]}</svg>${t}</button>`).join('')}</nav>`;
