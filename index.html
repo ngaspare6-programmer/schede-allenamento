@@ -316,7 +316,8 @@
             border: 3px solid #ECEDEF; box-shadow: 0 6px 16px rgba(0,0,0,.5); margin-bottom: 2px; }
         .va-barra-b .presto { opacity: .4; }
         .va.con-barra { padding-bottom: 170px; }
-        .va.con-barra .va-cta { bottom: calc(110px + env(safe-area-inset-bottom)); }   /* sopra la barra sospesa e il cerchio del tasto aperto */
+        /* "Salva allenamento" fermo in fondo alla lista (richiesta di Gaspare 7/11): scorre con gli esercizi, non galleggia sopra */
+        .va.con-barra .va-cta { position: static; display: block; width: calc(100% - 24px) !important; max-width: none; margin: 20px 12px 0 !important; box-shadow: none; }   /* allineato alle card (12 punti per lato) */
         /* Progressi */
         .pr-titolo { font-family: 'Barlow Condensed', sans-serif; font-size: 36px; font-weight: 700; text-transform: uppercase; line-height: 1; padding: 18px 20px 0; }
         .pr-sotto { color: var(--va-muted); font-size: 13px; padding: 4px 20px 0; }
