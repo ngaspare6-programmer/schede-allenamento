@@ -205,6 +205,15 @@
         .va-giorni button.attivo { background: var(--va-text); color: var(--va-bg); }
 
         .va-giorno { padding: 20px 20px 24px; }
+        /* Home dell'atleta: la card della scheda con le date */
+        .va-sopra { font-size: 11px; color: var(--va-muted); letter-spacing: .08em; text-transform: uppercase; padding: 22px 20px 0; }
+        .va-scheda-card { display: block; width: calc(100% - 24px) !important; margin: 10px 12px 0 !important; text-align: left; background: var(--va-surface); border-radius: 20px; padding: 18px; color: var(--va-text); }
+        .va-scheda-card .et { display: flex; justify-content: space-between; font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--va-muted); }
+        .va-scheda-card .et b { color: #22C55E; letter-spacing: .06em; } .va-scheda-card .et b.scaduta { color: var(--va-danger); }
+        .va-scheda-card h4 { margin: 8px 0 2px; font-family: 'Barlow Condensed', sans-serif; font-size: 34px; font-weight: 700; text-transform: uppercase; line-height: 1; }
+        .va-scheda-card .date { color: var(--va-muted); font-size: 13px; }
+        .va-scheda-card .sett { display: flex; justify-content: space-between; margin-top: 14px; font-size: 12px; color: var(--va-muted); }
+        .va-scheda-card .giu { display: flex; justify-content: space-between; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--va-surface-2); font-size: 15px; font-weight: 600; }
         .va-giorno small { color: var(--va-muted); font-size: 13px; }
         .va-giorno h3 {
             font-family: 'Barlow Condensed', sans-serif; font-size: 44px; font-weight: 700; line-height: 1;
@@ -277,6 +286,60 @@
         .va-num { font-family: 'Barlow Condensed', sans-serif; font-size: 22px; font-weight: 600; color: var(--va-muted); }
         .va-num.fatto { color: var(--va-acc-testo); }
         .va-riga.fatta b { color: var(--va-muted); font-weight: 500; }   /* fatto: passa in secondo piano */
+        /* Esercizi a card (chiusi): numero nel quadratino, nome, serie e recupero, freccia */
+        .va-esercizi { padding: 4px 12px 0; }
+        .va-esercizi .va-riga { background: var(--va-surface); border-radius: 16px; padding: 14px; margin-top: 8px; justify-content: flex-start; }
+        .va-esercizi .va-riga + .va-riga { border-top: 0; }
+        .va-esercizi .va-riga > span:nth-child(2) { flex: 1; min-width: 0; }
+        .va-quad { width: 40px; height: 40px; border-radius: 12px; background: var(--va-surface-2); display: grid; place-items: center; flex-shrink: 0;
+            font-family: 'Barlow Condensed', sans-serif; font-size: 20px; font-weight: 700; color: var(--va-text); }
+        .va-riga.fatta .va-quad { color: #22C55E; }   /* fatto = verde, come "carico aumentato" */
+        .va-freccia { color: var(--va-muted); font-size: 18px; }
+        .va-esercizi .va-gruppo { padding-left: 14px; margin: 8px 0 0; }
+        .va-esercizi .va-attuale { margin: 8px 0 0; box-shadow: inset 0 0 0 1.5px var(--va-surface-2); scroll-margin-top: 12px; }
+        .va-chiudi { display: flex !important; width: 100% !important; justify-content: space-between; align-items: center; background: none; padding: 0; color: var(--va-muted); font-size: 12px; font-weight: 600; }
+        .va-stat-click { background: none !important; border-radius: 12px; padding: 6px 8px !important; margin: -6px -8px !important; text-align: left; color: var(--va-text); box-shadow: inset 0 0 0 1px var(--va-surface-2); }
+        /* Barra in basso dell'atleta */
+        .va-barra-b { position: fixed; left: 50%; transform: translateX(-50%); bottom: 0; width: 100%; max-width: 480px; z-index: 50; display: flex; justify-content: space-around;
+            background: color-mix(in srgb, var(--va-bg) 96%, transparent); border-top: 1px solid var(--va-surface); padding: 9px 4px calc(12px + env(safe-area-inset-bottom)); }
+        .va-barra-b button { width: 68px !important; background: none; padding: 0; text-align: center; font-size: 11px; font-weight: 600; color: var(--va-muted); position: relative; }
+        .va-barra-b svg { width: 23px; height: 23px; display: block; margin: 0 auto 3px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+        .va-barra-b .on { color: var(--va-text); } .va-barra-b .on::before { content: ''; position: absolute; top: -9px; left: 20px; right: 20px; height: 2px; border-radius: 2px; background: var(--va-acc-testo); }
+        .va-barra-b .presto { opacity: .4; }
+        .va.con-barra { padding-bottom: 170px; }
+        .va.con-barra .va-cta { bottom: calc(80px + env(safe-area-inset-bottom)); }   /* sopra la barra in basso */
+        /* Progressi */
+        .pr-titolo { font-family: 'Barlow Condensed', sans-serif; font-size: 36px; font-weight: 700; text-transform: uppercase; line-height: 1; padding: 18px 20px 0; }
+        .pr-sotto { color: var(--va-muted); font-size: 13px; padding: 4px 20px 0; }
+        .pr-indietro { display: block; padding: 16px 20px 0 !important; background: none; color: var(--va-muted); font-size: 13px; font-weight: 600; text-align: left; }
+        .pr-riass { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 14px 12px 0; }
+        .pr-riass div { background: var(--va-surface); border-radius: 16px; padding: 12px 14px; }
+        .pr-riass span { font-size: 11px; color: var(--va-muted); text-transform: uppercase; letter-spacing: .06em; }
+        .pr-riass b { display: block; font-family: 'Barlow Condensed', sans-serif; font-size: 34px; font-weight: 700; line-height: 1.1; }
+        .pr-lista { padding: 0 12px; }
+        .pr-card { display: block !important; width: 100% !important; text-align: left; background: var(--va-surface); border-radius: 16px; padding: 14px; margin-top: 8px; color: var(--va-text); }
+        .pr-card.vuota { opacity: .6; }
+        .pr-card .r1 { display: flex; justify-content: space-between; align-items: baseline; } .pr-card .r1 b { font-size: 15px; }
+        .pr-card .r1 span { font-family: 'Barlow Condensed', sans-serif; font-size: 26px; font-weight: 700; }
+        .pr-card .r2 { display: flex; justify-content: space-between; align-items: end; margin-top: 4px; gap: 10px; color: var(--va-text); }
+        .pr-card svg { width: 110px; height: 32px; flex-shrink: 0; }
+        .pr-su { color: #22C55E; font-size: 13px; font-weight: 600; } .pr-pari { color: var(--va-muted); font-size: 13px; font-weight: 600; } .pr-giallo { color: #F5A524; font-size: 13px; font-weight: 600; }
+        .pr-grande { margin: 12px 12px 0; background: var(--va-surface); border-radius: 18px; padding: 16px; color: var(--va-text); }
+        .pr-grande span { font-size: 11px; color: var(--va-muted); letter-spacing: .06em; text-transform: uppercase; }
+        .pr-grande svg { width: 100%; height: 120px; display: block; margin-top: 8px; }
+        .pr-storico { margin: 8px 12px 0; background: var(--va-surface); border-radius: 16px; padding: 4px 14px; }
+        .pr-storico > div { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; font-size: 14px; }
+        .pr-storico > div + div { border-top: 1px solid var(--va-surface-2); } .pr-storico span { color: var(--va-muted); } .pr-storico b { color: var(--va-text); }
+        .pr-storico .dx { display: flex; align-items: center; gap: 12px; }
+        .pr-el { background: none; padding: 0 !important; color: var(--va-danger); font-size: 13px; font-weight: 600; width: auto !important; }
+        .pr-segnale { display: block !important; width: calc(100% - 24px) !important; margin: 8px 12px 0 !important; text-align: left; padding: 13px 14px; border-radius: 16px; background: var(--va-surface); box-shadow: inset 3px 0 0 #F5A524; color: var(--va-text); }
+        .pr-segnale.ok { box-shadow: inset 3px 0 0 #22C55E; }
+        .pr-segnale b { display: block; font-size: 14px; } .pr-segnale small { display: block; color: var(--va-muted); font-size: 12.5px; margin-top: 2px; }
+        .pr-link-fondo { display: block !important; width: calc(100% - 24px) !important; margin: 14px 12px 0 !important; padding: 14px; border-radius: 16px; border: 1px dashed var(--va-surface-2); background: none; color: var(--va-muted); font-size: 14px; font-weight: 600; text-align: center; }
+        .avviso-breve { position: fixed; left: 50%; bottom: 156px; transform: translateX(-50%); z-index: 1100; background: var(--va-text); color: var(--va-bg); font-size: 13px; font-weight: 600;
+            padding: 10px 16px; border-radius: 12px; opacity: 0; transition: opacity .2s; pointer-events: none; white-space: nowrap; }
+        .avviso-breve.vis { opacity: 1; }
+
         /* Nota del coach: riquadro con la riga a sinistra, come una citazione */
         .va-nota {
             background: var(--va-bg); border-radius: 14px; padding: 10px 14px; margin: -8px 0 20px;
@@ -344,6 +407,15 @@
             border-radius: 50%; background: var(--va-acc-testo); border: 2px solid var(--va-bg);
         }
         .tr-atleta b { display: block; font-size: 15px; font-weight: 600; }
+        .tr-senza { display: inline-block; margin-top: 5px; font-size: 10.5px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: #F5A524; border: 1px solid rgba(245,165,36,.35); border-radius: 999px; padding: 2px 8px; }
+        /* Durata della scheda (in cima alla scheda, lato trainer) */
+        .tr-durata { display: flex !important; width: calc(100% - 40px) !important; margin: 0 20px 16px !important; justify-content: space-between; align-items: center; gap: 12px; text-align: left;
+            background: var(--va-surface); border-radius: 14px; padding: 12px 14px; font-size: 14px; font-weight: 600; color: var(--va-text); }
+        .tr-durata small { display: block; color: var(--va-muted); font-size: 12px; font-weight: 500; }
+        .tr-durata span { color: var(--va-muted); font-weight: 600; white-space: nowrap; }
+        .tr-durata.manca { background: none; border: 1.5px dashed #F5A524; } .tr-durata.manca b { color: #F5A524; }
+        .fg-date2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .fg-input[type="date"] { color-scheme: dark; min-height: 46px; }
         .tr-atleta small { color: var(--va-muted); font-size: 13px; }
         .tr-freccia { margin-left: auto; color: var(--va-muted); font-size: 18px; }
 
@@ -859,12 +931,16 @@
         schermoGrande.addEventListener('change', () => mostraSchermata(schermataCorrente, false));
 
         // --- Menu laterale ---
-        function toggleDrawer() {
+        // modo: 'menu' (☰) o 'timer' (dal recupero); il trainer ha solo il suo menu
+        function toggleDrawer(modo = 'menu') {
             const drawer = document.getElementById('side-drawer');
             if (drawer.classList.contains('open')) {
                 chiudiDrawer();
                 return;
             }
+            drawer.classList.toggle('modo-menu', modo === 'menu');
+            drawer.classList.toggle('modo-timer', modo === 'timer');
+            drawer.querySelector('.dr-testa b').innerText = modo === 'timer' ? 'Recupero' : 'Menu';
             document.getElementById('drawer-content-atleta').hidden = !isModalitaAtleta;
             document.getElementById('drawer-content-trainer').hidden = isModalitaAtleta || !currentTrainer;
             if (currentTrainer) document.getElementById('dr-trainer-nome').innerText = currentTrainer.nome;
@@ -1196,6 +1272,25 @@
         // =========================================================
 
         // Data di N giorni fa, nel formato del database (AAAA-MM-GG, ora italiana)
+        // --- Durata della scheda (scheda.dal / scheda.al, date "AAAA-MM-GG") ---
+        const MESI_BREVI = ['gen', 'feb', 'mar', 'apr', 'mag', 'giu', 'lug', 'ago', 'set', 'ott', 'nov', 'dic'];
+        const daIso = s => { const [a, m, g] = String(s).split('-').map(Number); return new Date(a, m - 1, g); };
+        const aIso = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+        const dataBreve = s => { const d = daIso(s); return `${d.getDate()} ${MESI_BREVI[d.getMonth()]}`; };
+        const giorniTra = (a, b) => Math.round((b - a) / 86400000);
+        function durataScheda(scheda) {
+            if (!scheda || !scheda.dal || !scheda.al) return null;
+            const dal = daIso(scheda.dal), al = daIso(scheda.al), oggi = daIso(dataGiorniFa(0));
+            const settimane = Math.max(1, Math.ceil((giorniTra(dal, al) + 1) / 7));
+            const passati = giorniTra(dal, oggi), mancano = giorniTra(oggi, al);
+            return {
+                testo: `${dataBreve(scheda.dal)} – ${dataBreve(scheda.al)}`, settimane, mancano,
+                settimana: Math.min(settimane, Math.max(1, Math.floor(passati / 7) + 1)),
+                fase: passati < 0 ? 'Da iniziare' : mancano < 0 ? 'Scaduta' : 'In corso',
+                traGiorni: -passati
+            };
+        }
+
         function dataGiorniFa(giorni) {
             const d = new Date();
             d.setDate(d.getDate() - giorni);
@@ -1291,13 +1386,14 @@
 
             contenitore.innerHTML = filtrati.map(a => {
                 const attivo = a.ultimo && a.ultimo.data_allenamento >= limite7;
-                const sotto = a.ultimo
+                const durata = durataScheda(a.scheda);
+                const sotto = (a.ultimo
                     ? `Ultimo allenamento: ${quandoRelativo(a.ultimo.data_allenamento)}`
-                    : 'Nessun allenamento registrato';
+                    : 'Nessun allenamento registrato') + (durata ? ` · scheda ${durata.testo}` : '');
                 return `
                     <button type="button" class="tr-atleta ${a.id === atletaIdCorrente ? 'scelto' : ''}" onclick="apriAtletaTrainer('${a.id}')">
                         <span class="tr-av ${attivo ? 'attivo' : ''}">${esc(iniziali(a.nome))}</span>
-                        <span><b>${esc(a.nome)}</b><small>${sotto}</small></span>
+                        <span><b>${esc(a.nome)}</b><small>${sotto}</small>${durata ? '' : '<span class="tr-senza">senza date</span>'}</span>
                         <span class="tr-freccia">›</span>
                     </button>`;
             }).join('');
@@ -1318,6 +1414,16 @@
                 schedaInModifica.giorni = [{ nome: 'Giorno 1', muscoli: '', esercizi: [] }];
             }
             schedaInModifica.giorni.forEach(g => { if (!Array.isArray(g.esercizi)) g.esercizi = []; });
+            // Ogni esercizio ha un codice fisso. Alle schede di prima lo aggiungo e lo salvo subito,
+            // senza toccare altro, così gli allenamenti di oggi in poi restano attaccati all'esercizio
+            let codiciNuovi = false;
+            schedaInModifica.giorni.forEach(g => g.esercizi.forEach(e => { if (!e.id) { e.id = nuovoIdEsercizio(); codiciNuovi = true; } }));
+            if (codiciNuovi && atleta.scheda && Array.isArray(atleta.scheda.giorni)) {
+                const conCodici = JSON.parse(JSON.stringify(schedaInModifica));
+                supabaseClient.rpc('salva_atleta', { p_id: atleta.id, p_nome: atleta.nome, p_pin: null, p_scheda: conCodici })
+                    .then(({ error }) => { if (!error) atleta.scheda = conCodici; });
+            }
+            progT = { giorno: null, es: null, registro: false };
 
             giornoTrainer = 0;
             tabTrainer = 'scheda';
@@ -1370,6 +1476,7 @@
 
         function cambiaTabTrainer(tab) {
             tabTrainer = tab;
+            progT = { giorno: null, es: null, registro: false };
             document.querySelectorAll('.tr-tabs button[data-tab]').forEach(b => b.classList.toggle('on', b.dataset.tab === tab));
             disegnaPaginaAtleta();
         }
@@ -1415,7 +1522,7 @@
             ).join('') + `<button type="button" class="tr-chip piu" onclick="aggiungiGiornoTrainer()">+ Giorno</button>`;
 
             const righe = htmlConGruppi(giorno.esercizi, (ex, i, g) => {
-                const ultimo = logDiEsercizio(ex.nome)[0];
+                const ultimo = logDiEsercizio(ex)[0];
                 const recupero = g && g.pos < g.quanti ? 'subito il prossimo' : ex.recupero;
                 return `
                     <button type="button" class="tr-es" onclick="apriFoglioEsercizio(${i})">
@@ -1434,7 +1541,13 @@
                         `<button type="button" class="tr-chip sugg" onclick="aggiungiSuggerito(${i})">+ ${esc(s.nome)}</button>`).join('')}</div>`
                     : `<p class="tr-vuoto">Hai già aggiunto tutti gli esercizi suggeriti per questi muscoli.</p>`;
 
+            const durata = durataScheda(schedaInModifica);
+            const rigaDurata = durata
+                ? `<button type="button" class="tr-durata" onclick="apriFoglioDurata()"><span style="color:inherit"><small>Durata della scheda</small>${durata.testo} · ${durata.settimane} settiman${durata.settimane === 1 ? 'a' : 'e'}</span><span>Modifica →</span></button>`
+                : `<button type="button" class="tr-durata manca" onclick="apriFoglioDurata()"><span style="color:inherit;white-space:normal"><b>+ Aggiungi la durata della scheda</b><small>L'atleta vedrà da quando a quando vale e a che settimana è</small></span></button>`;
+
             return `
+                ${rigaDurata}
                 <div class="tr-chips">${chips}</div>
                 <div class="tr-giorno-testa">
                     <div><small>Muscoli</small><b>${esc(giorno.muscoli) || '—'}</b></div>
@@ -1450,7 +1563,136 @@
             `;
         }
 
+        // =========================================================
+        // PROGRESSI (atleta e trainer): giorni → esercizi → dettaglio
+        // =========================================================
+        let progT = { giorno: null, es: null, registro: false };
+
+        // Carichi di un esercizio dal più vecchio: [{ data, kg, reps, id }]
+        function carichiEsercizio(ex) {
+            return logDiEsercizio(ex).filter(l => numeroDa(l.kg_usati) !== null)
+                .map(l => ({ data: l.data_allenamento, kg: numeroDa(l.kg_usati), reps: l.reps_fatte, id: l.id }))
+                .sort((a, b) => a.data < b.data ? -1 : 1);
+        }
+        // Da quante sedute (e da che data) il carico è sempre lo stesso
+        function fermoEsercizio(c) {
+            let n = 1;
+            while (n < c.length && c[c.length - 1 - n].kg === c[c.length - 1].kg) n++;
+            const dal = c[c.length - n].data;
+            return { sedute: n, dal, settimane: Math.floor(giorniTra(daIso(dal), daIso(dataGiorniFa(0))) / 7) };
+        }
+        const eFermo = c => c.length >= 3 && fermoEsercizio(c).sedute >= 3 && fermoEsercizio(c).settimane >= 3;
+        // Lineetta dell'andamento (l'ultimo punto in verde)
+        function lineaCarichi(valori, w, h, spesso) {
+            if (valori.length < 2) return '';
+            const min = Math.min(...valori), max = Math.max(...valori), passo = w / (valori.length - 1);
+            const y = v => max === min ? h / 2 : h - 4 - (v - min) / (max - min) * (h - 8);
+            const punti = valori.map((v, i) => `${(i * passo).toFixed(1)},${y(v).toFixed(1)}`).join(' ');
+            const u = valori.length - 1;
+            return `<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true"><polyline points="${punti}" fill="none" stroke="currentColor" stroke-width="${spesso}" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"/><circle cx="${u * passo}" cy="${y(valori[u])}" r="${spesso + 1.5}" fill="#22C55E"/></svg>`;
+        }
+        const esDelGiorno = (scheda, gIdx) => (scheda.giorni[gIdx].esercizi || []);
+        function riassuntoProgressi(scheda) {
+            const mese = dataGiorniFa(0).slice(0, 7);
+            const date = new Set(storicoLogAtletaCache.map(l => l.data_allenamento).filter(d => d && d.startsWith(mese)));
+            const tutti = scheda.giorni.flatMap(g => g.esercizi || []).map(carichiEsercizio).filter(c => c.length >= 2);
+            const su = tutti.filter(c => c[c.length - 1].kg > c[0].kg).length;
+            const nomeMese = new Date().toLocaleDateString('it-IT', { month: 'long' });
+            return `<div class="pr-riass"><div><span>Allenamenti a ${nomeMese}</span><b>${date.size}</b></div><div><span>Carichi aumentati</span><b>${tutti.length ? `${su} su ${tutti.length}` : '–'}</b></div></div>`;
+        }
+        function cardGiorniProgressi(scheda, clic) {
+            return `<div class="va-sopra">Giorni della scheda</div><div class="va-esercizi">` + scheda.giorni.map((g, i) => {
+                if (!(g.esercizi || []).length) return '';
+                const c = g.esercizi.map(carichiEsercizio).filter(x => x.length >= 2);
+                const su = c.filter(x => x[x.length - 1].kg > x[0].kg).length;
+                return `<button class="va-riga" onclick="${clic}=${i}; ridisegnaProgressi()"><span class="va-quad">${i + 1}</span>
+                    <span><b>${esc(g.nome)}${g.muscoli ? ' · ' + esc(g.muscoli) : ''}</b><small>${c.length ? `${su} su ${c.length} carichi aumentati` : 'Ancora pochi allenamenti'}</small></span><span class="va-freccia">→</span></button>`;
+            }).join('') + `</div>`;
+        }
+        function righeEserciziProgressi(esercizi, clic, perTrainer) {
+            return esercizi.map((ex, i) => {
+                const c = carichiEsercizio(ex);
+                if (!c.length) return `<div class="pr-card vuota"><div class="r1"><b>${esc(ex.nome)}</b><span>–</span></div><div class="r2"><span class="pr-pari">Ancora nessun carico salvato</span></div></div>`;
+                const ultimo = c[c.length - 1], d = ultimo.kg - c[0].kg;
+                const nota = perTrainer && eFermo(c) ? `<span class="pr-giallo">fermo da ${fermoEsercizio(c).settimane} settimane</span>`
+                    : d > 0 ? `<span class="pr-su">↑ +${mostraNumero(formattaNumero(d))} kg dal ${dataBreve(c[0].data)}</span>`
+                    : `<span class="pr-pari">= stesso carico</span>`;
+                return `<button class="pr-card" onclick="${clic}=${i}; ridisegnaProgressi()"><div class="r1"><b>${esc(ex.nome)}</b><span>${esc(mostraNumero(formattaNumero(ultimo.kg)))} kg</span></div>
+                    <div class="r2">${nota}${lineaCarichi(c.slice(-8).map(x => x.kg), 110, 32, 2)}</div></button>`;
+            }).join('');
+        }
+        function dettaglioProgressi(ex, perTrainer) {
+            const c = carichiEsercizio(ex);
+            if (!c.length) return `<div class="pr-titolo">${esc(ex.nome)}</div><p class="tr-vuoto">Ancora nessun carico salvato.</p>`;
+            const d = c[c.length - 1].kg - c[0].kg;
+            return `<div class="pr-titolo">${esc(ex.nome)}</div>
+                <div class="pr-sotto">${d > 0 ? `+${mostraNumero(formattaNumero(d))} kg dal ${dataBreve(c[0].data)}` : d < 0 ? `${mostraNumero(formattaNumero(d))} kg dal ${dataBreve(c[0].data)}` : `Stesso carico dal ${dataBreve(c[0].data)}`}</div>
+                ${c.length >= 2 ? `<div class="pr-grande"><span>Carico</span>${lineaCarichi(c.map(x => x.kg), 320, 120, 3)}</div>` : ''}
+                <div class="va-sopra">Ogni volta</div>
+                <div class="pr-storico">${c.slice().reverse().map(x => `<div><span>${formattaDataItaliana(x.data)}</span><span class="dx"><b>${esc(mostraNumero(formattaNumero(x.kg)))} kg${perTrainer && x.reps ? ' × ' + esc(x.reps) : ''}</b>${perTrainer ? `<button type="button" class="pr-el" onclick="eliminaSingoloLog(${Number(x.id)})">Elimina</button>` : ''}</span></div>`).join('')}</div>`;
+        }
+        function ridisegnaProgressi() {
+            if (isModalitaAtleta) { renderSchedaAtleta(); window.scrollTo(0, 0); }
+            else disegnaPaginaAtleta();
+        }
+
+        // Atleta: pagina Progressi
+        function renderProgressiAtleta() {
+            const data = datiSchedaAttuale, pr = statoAtleta.prog || (statoAtleta.prog = { giorno: null, es: null });
+            let corpo;
+            if (!storicoLogAtletaCache.length) {
+                corpo = `<div class="pr-titolo">I tuoi progressi</div><p class="tr-vuoto" style="padding:14px 20px 0">Ancora nessun allenamento salvato. I progressi compaiono qui dopo i primi allenamenti.</p>`;
+            } else if (pr.giorno == null) {
+                corpo = `<div class="pr-titolo">I tuoi progressi</div><div class="pr-sotto">Giorno per giorno, esercizio per esercizio</div>${riassuntoProgressi(data)}${cardGiorniProgressi(data, 'statoAtleta.prog.giorno')}`;
+            } else if (pr.es == null) {
+                const g = data.giorni[pr.giorno];
+                corpo = `<button type="button" class="pr-indietro" onclick="statoAtleta.prog.giorno=null; ridisegnaProgressi()">← Progressi</button>
+                    <div class="pr-titolo">${esc(g.nome)}</div><div class="pr-sotto">${esc(g.muscoli || '')}</div><div class="va-sopra">Esercizi</div>
+                    <div class="pr-lista">${righeEserciziProgressi(esDelGiorno(data, pr.giorno), 'statoAtleta.prog.es', false)}</div>`;
+            } else {
+                const g = data.giorni[pr.giorno];
+                corpo = `<button type="button" class="pr-indietro" onclick="statoAtleta.prog.es=null; ridisegnaProgressi()">← ${esc(g.nome)}</button>${dettaglioProgressi(g.esercizi[pr.es], false)}`;
+            }
+            document.getElementById('res-lista-giorni').innerHTML = `
+                <div class="va con-barra">${testaAtleta(data)}${corpo}</div>
+                ${htmlBarraAtleta()}`;
+        }
+
+        // Trainer: linguetta Progressi
         function htmlProgressi() {
+            const sch = schedaInModifica;
+            if (storicoLogAtletaCache.length === 0) {
+                return `<p class="tr-vuoto">Ancora nessun allenamento registrato. I progressi compaiono qui quando l'atleta salva dalla sua scheda.</p>`;
+            }
+            if (progT.registro) return `<button type="button" class="pr-indietro" onclick="progT.registro=false; ridisegnaProgressi()">← Progressi</button><div class="pr-titolo">Tutti gli allenamenti</div>${htmlRegistro()}`;
+            if (progT.giorno != null && progT.es != null) {
+                const g = sch.giorni[progT.giorno];
+                return `<button type="button" class="pr-indietro" onclick="progT.es=null; ridisegnaProgressi()">← ${esc(g.nome)}</button>${dettaglioProgressi(g.esercizi[progT.es], true)}`;
+            }
+            if (progT.giorno != null) {
+                const g = sch.giorni[progT.giorno];
+                return `<button type="button" class="pr-indietro" onclick="progT.giorno=null; ridisegnaProgressi()">← Progressi</button>
+                    <div class="pr-titolo">${esc(g.nome)}</div><div class="pr-sotto">${esc(g.muscoli || '')}</div><div class="va-sopra">Esercizi</div>
+                    <div class="pr-lista">${righeEserciziProgressi(esDelGiorno(sch, progT.giorno), 'progT.es', true)}</div>`;
+            }
+            // Da guardare: quando si è allenato l'ultima volta, e gli esercizi fermi
+            const ultimaData = storicoLogAtletaCache.map(l => l.data_allenamento).sort().pop();
+            const diQuelGiorno = storicoLogAtletaCache.filter(l => l.data_allenamento === ultimaData);
+            const nomeGiorno = (diQuelGiorno.find(l => l.giorno_nome) || {}).giorno_nome;
+            const giorniFa = giorniTra(daIso(ultimaData), daIso(dataGiorniFa(0)));
+            const fermi = [];
+            sch.giorni.forEach((g, gi) => (g.esercizi || []).forEach((ex, ei) => { const c = carichiEsercizio(ex); if (eFermo(c)) fermi.push({ ex, gi, ei, c }); }));
+            return `
+                <div class="va-sopra" style="padding-top:4px">Da guardare</div>
+                <div class="pr-segnale ${giorniFa > 7 ? '' : 'ok'}"><b>Ultimo allenamento: ${quandoRelativo(ultimaData)}</b><small>${formattaDataItaliana(ultimaData)}${nomeGiorno ? ' · ' + esc(nomeGiorno) : ''} · ${diQuelGiorno.length} esercizi</small></div>
+                ${fermi.map(f => `<button type="button" class="pr-segnale" onclick="progT.giorno=${f.gi}; progT.es=${f.ei}; ridisegnaProgressi()"><b>Fermo da ${fermoEsercizio(f.c).settimane} settimane: ${esc(f.ex.nome)}</b><small>${esc(mostraNumero(formattaNumero(f.c[f.c.length - 1].kg)))} kg dal ${dataBreve(fermoEsercizio(f.c).dal)} · forse è ora di alzare</small></button>`).join('')}
+                ${riassuntoProgressi(sch)}
+                ${cardGiorniProgressi(sch, 'progT.giorno')}
+                <button type="button" class="pr-link-fondo" onclick="progT.registro=true; ridisegnaProgressi()">Tutti gli allenamenti, per data →</button>`;
+        }
+
+        // Registro per data (con Elimina), come prima
+        function htmlRegistro() {
             if (storicoLogAtletaCache.length === 0) {
                 return `<p class="tr-vuoto">Ancora nessun allenamento registrato. I carichi compaiono qui quando l'atleta li salva dalla sua scheda.</p>`;
             }
@@ -1501,7 +1743,7 @@
         function aggiungiSuggerito(i) {
             const s = ultimiSuggeriti[i];
             if (!s) return;
-            schedaInModifica.giorni[giornoTrainer].esercizi.push({ nome: s.nome, muscolo: s.muscolo, serie: '3x10', recupero: '60 sec', immagine: '' });
+            schedaInModifica.giorni[giornoTrainer].esercizi.push({ id: nuovoIdEsercizio(), nome: s.nome, muscolo: s.muscolo, serie: '3x10', recupero: '60 sec', immagine: '' });
             impostaModifiche(true);
             disegnaPaginaAtleta();
         }
@@ -1531,6 +1773,7 @@
             const atleta = atletiTrainer.find(a => a.id === atletaIdCorrente);
             if (atleta) atleta.scheda = JSON.parse(JSON.stringify(schedaInModifica));
             impostaModifiche(false);
+            disegnaListaAtleti();   // la lista mostra le date della scheda (o "senza date")
 
             // Prima scheda con esercizi: subito il foglio per mandarla. Dopo c'è sempre il pulsante "Invia" in alto.
             if (eraVuota && haEsercizi(schedaInModifica)) apriFoglioInvio('Scheda pronta');
@@ -1622,7 +1865,7 @@
             isModalitaAtleta = true;
             coachAtleta = currentTrainer ? currentTrainer.nome : '';
             datiSchedaAttuale = JSON.parse(JSON.stringify(schedaInModifica));
-            statoAtleta = { giorno: Math.min(giornoTrainer, datiSchedaAttuale.giorni.length - 1), focus: 0, valori: {} };
+            statoAtleta = { giorno: Math.min(giornoTrainer, datiSchedaAttuale.giorni.length - 1), focus: null, valori: {}, vista: 'home' };
             if (!datiSchedaAttuale.giorni.some(g => g.esercizi.length)) {
                 alert("Aggiungi almeno un esercizio per vedere l'anteprima.");
                 anteprimaTrainer = false;
@@ -1660,6 +1903,62 @@
             document.getElementById('foglio').hidden = true;
             document.getElementById('foglio-velo').hidden = true;
             bozzaFoglio = null;
+        }
+
+        // --- Durata della scheda ---
+        // "Dal" parte da oggi ma si cambia; 4/6/8 settimane calcolano "Al" da "Dal"; cambiando "Dal", "Al" si sposta con la stessa durata
+        function apriFoglioDurata() {
+            bozzaFoglio = { tipo: 'durata', dal: schedaInModifica.dal || dataGiorniFa(0), al: schedaInModifica.al || '' };
+            disegnaFoglioDurata();
+        }
+        function disegnaFoglioDurata() {
+            const b = bozzaFoglio;
+            const scelta = b.al ? Math.round((giorniTra(daIso(b.dal), daIso(b.al)) + 1) / 7) : null;
+            apriFoglio(`
+                <div class="fg">
+                    <h3>Durata della scheda</h3>
+                    <div class="fg-date2">
+                        <div><span class="fg-lab">Dal</span><input class="fg-input" type="date" value="${b.dal}" onchange="cambiaDalFoglio(this.value)"></div>
+                        <div><span class="fg-lab">Al</span><input class="fg-input" type="date" value="${b.al}" min="${b.dal}" onchange="bozzaFoglio.al = this.value; disegnaFoglioDurata()"></div>
+                    </div>
+                    <div><span class="fg-lab">Veloce: calcola "Al" partendo da "Dal"</span>
+                        <div class="tr-chips">${[4, 6, 8].map(n => `<button type="button" class="tr-chip ${scelta === n ? 'on' : ''}" onclick="settimaneFoglio(${n})">${n} settimane</button>`).join('')}</div>
+                    </div>
+                    <div class="fg-azioni">
+                        ${schedaInModifica.dal ? `<button type="button" class="fg-elimina" onclick="togliDurata()">Togli le date</button>` : `<button type="button" class="fg-sec" onclick="chiudiFoglio()">Annulla</button>`}
+                        <button type="button" class="fg-pri" onclick="confermaFoglioDurata()">Fatto</button>
+                    </div>
+                </div>`);
+        }
+        function cambiaDalFoglio(v) {
+            if (!v) return;
+            const b = bozzaFoglio;
+            if (b.al) { const al = daIso(v); al.setDate(al.getDate() + giorniTra(daIso(b.dal), daIso(b.al))); b.al = aIso(al); }
+            b.dal = v;
+            disegnaFoglioDurata();
+        }
+        function settimaneFoglio(n) {
+            const al = daIso(bozzaFoglio.dal);
+            al.setDate(al.getDate() + n * 7 - 1);
+            bozzaFoglio.al = aIso(al);
+            disegnaFoglioDurata();
+        }
+        function confermaFoglioDurata() {
+            const b = bozzaFoglio;
+            if (!b.al) { alert('Scegli anche la data "Al", oppure tocca 4, 6 o 8 settimane.'); return; }
+            if (b.al < b.dal) { alert('"Al" non può venire prima di "Dal".'); return; }
+            schedaInModifica.dal = b.dal;
+            schedaInModifica.al = b.al;
+            impostaModifiche(true);
+            chiudiFoglio();
+            disegnaPaginaAtleta();
+        }
+        function togliDurata() {
+            delete schedaInModifica.dal;
+            delete schedaInModifica.al;
+            impostaModifiche(true);
+            chiudiFoglio();
+            disegnaPaginaAtleta();
         }
 
         // --- Esercizio ---
@@ -1805,6 +2104,7 @@
             if (b.note.trim()) esercizio.note = b.note.trim();
             if (b.conPrecedente) esercizio.conPrecedente = true;
             const esercizi = schedaInModifica.giorni[giornoTrainer].esercizi;
+            esercizio.id = (b.eIdx >= 0 && esercizi[b.eIdx].id) || nuovoIdEsercizio();   // rinominare non stacca lo storico
             if (b.eIdx >= 0) esercizi[b.eIdx] = esercizio; else esercizi.push(esercizio);
             impostaModifiche(true);
             chiudiFoglio();
@@ -2035,10 +2335,16 @@
         // --- VISTA ATLETA (design: struttura "Tabellone", colori "Coach") ---
 
         // Storico di un esercizio, dal più recente
-        function logDiEsercizio(nomeEsercizio) {
-            const nome = String(nomeEsercizio || '').toLowerCase().trim();
-            return storicoLogAtletaCache.filter(l => String(l.nome_esercizio || '').toLowerCase().trim() === nome);
+        // Gli allenamenti di un esercizio: per codice (resta uguale se il trainer lo rinomina);
+        // quelli salvati prima del codice si collegano per nome
+        function logDiEsercizio(ex) {
+            const id = ex && ex.id;
+            const nome = String((ex && ex.nome) || ex || '').toLowerCase().trim();
+            return storicoLogAtletaCache.filter(l => id && l.esercizio_id
+                ? l.esercizio_id === id
+                : String(l.nome_esercizio || '').toLowerCase().trim() === nome);
         }
+        const nuovoIdEsercizio = () => Math.random().toString(36).slice(2, 10);
 
         function numeroDa(testo) {
             const n = parseFloat(String(testo ?? '').replace(',', '.'));
@@ -2100,15 +2406,15 @@
         }
 
         // Registrazione di oggi per un esercizio (se l'atleta l'ha già salvato oggi)
-        function logDiOggi(nomeEsercizio) {
+        function logDiOggi(esercizio) {
             const oggi = dataGiorniFa(0);
-            return logDiEsercizio(nomeEsercizio).find(l => l.data_allenamento === oggi) || null;
+            return logDiEsercizio(esercizio).find(l => l.data_allenamento === oggi) || null;
         }
 
         // Ultima registrazione PRIMA di oggi: è quella con cui confrontare il carico
-        function ultimoPrimaDiOggi(nomeEsercizio) {
+        function ultimoPrimaDiOggi(esercizio) {
             const oggi = dataGiorniFa(0);
-            return logDiEsercizio(nomeEsercizio).find(l => l.data_allenamento < oggi) || null;
+            return logDiEsercizio(esercizio).find(l => l.data_allenamento < oggi) || null;
         }
 
         function valoriEsercizio(gIdx, eIdx) {
@@ -2116,8 +2422,8 @@
             if (!statoAtleta.valori[chiave]) {
                 const ex = datiSchedaAttuale.giorni[gIdx].esercizi[eIdx];
                 // Se oggi è già salvato riparto da lì (e lo segno come salvato), altrimenti dall'ultima volta
-                const diOggi = logDiOggi(ex.nome);
-                const base = diOggi || ultimoPrimaDiOggi(ex.nome);
+                const diOggi = logDiOggi(ex);
+                const base = diOggi || ultimoPrimaDiOggi(ex);
                 statoAtleta.valori[chiave] = {
                     kg: base && base.kg_usati ? base.kg_usati : '',
                     reps: base && base.reps_fatte ? base.reps_fatte : repsDaSerie(ex.serie),
@@ -2139,36 +2445,120 @@
             return `<span class="va-delta">= Stesso carico ${dataConArticolo(ultimo.data_allenamento, 'di')}</span>`;
         }
 
+        // Barra in basso dell'atleta (Allenamento · Progressi · Home · Timer · Nutrizione)
+        const ICONE_BARRA = {
+            allenamento: '<path d="M6 7v10M18 7v10M3 10v4M21 10v4M6 12h12"/>',
+            progressi: '<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',
+            home: '<path d="M3 11l9-7 9 7M5 9.5V20h5v-6h4v6h5V9.5"/>',
+            prenota: '<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/>',
+            nutrizione: '<path d="M5 19c0-8 5-13 14-14-1 9-6 14-14 14zM5 19l7-7"/>'
+        };
+        function htmlBarraAtleta() {
+            const voci = [['allenamento', 'Allenamento'], ['progressi', 'Progressi'], ['home', 'Home'], ['prenota', 'Prenota'], ['nutrizione', 'Nutrizione']];
+            const attiva = statoAtleta.vista === 'scheda' ? 'allenamento' : statoAtleta.vista;
+            return `<nav class="va-barra-b">${voci.map(([k, t]) =>
+                `<button type="button" class="${k === attiva ? 'on' : ''} ${k === 'nutrizione' || k === 'prenota' ? 'presto' : ''}" onclick="vaiSezioneAtleta('${k}')"><svg viewBox="0 0 24 24" aria-hidden="true">${ICONE_BARRA[k]}</svg>${t}</button>`).join('')}</nav>`;
+        }
+        function vaiSezioneAtleta(k) {
+            if (k === 'nutrizione') return avvisoBreve('Nutrizione: in arrivo');
+            if (k === 'prenota') return avvisoBreve('Prenotare un appuntamento: in arrivo');
+            if (k === 'progressi') statoAtleta.prog = { giorno: null, es: null };
+            statoAtleta.vista = k === 'allenamento' ? 'scheda' : k;
+            renderSchedaAtleta();
+            window.scrollTo(0, 0);
+        }
+        function testaAtleta(data) {
+            const nomeBreve = String(data.cliente || nomeAtletaSalvato || '').trim().split(/\s+/)[0];
+            const iniziale = (coachAtleta || 'GPN Lab').trim().charAt(0).toUpperCase();
+            return `
+                    <header class="va-top">
+                        <div class="va-logo">${esc(iniziale)}</div>
+                        <div class="va-top-testo">
+                            <p>${coachAtleta ? 'Coach ' + esc(coachAtleta) : 'La tua scheda'}</p>
+                            <h2>Ciao ${esc(nomeBreve)}</h2>
+                        </div>
+                        <button class="va-menu" onclick="toggleDrawer('menu')" aria-label="Apri menu">☰</button>
+                    </header>
+                    ${anteprimaTrainer ? `<div class="va-anteprima">Anteprima: così vede la scheda ${esc(nomeBreve)}. Niente viene salvato.</div>` : ''}`;
+        }
+        function avvisoBreve(testo) {
+            let a = document.getElementById('avviso-breve');
+            if (!a) { a = document.createElement('div'); a.id = 'avviso-breve'; a.className = 'avviso-breve'; document.body.appendChild(a); }
+            a.innerText = testo;
+            a.classList.add('vis');
+            clearTimeout(a._t);
+            a._t = setTimeout(() => a.classList.remove('vis'), 1800);
+        }
+
+        // Allenamento: gli esercizi sono card chiuse; si apre quello toccato (statoAtleta.focus, null = tutti chiusi)
         function renderSchedaAtleta() {
             const data = datiSchedaAttuale;
             if (!data || !data.giorni || data.giorni.length === 0) return;
+            if (statoAtleta.vista === 'home') return renderHomeAtleta();
+            if (statoAtleta.vista === 'progressi') return renderProgressiAtleta();
 
             const gIdx = Math.min(statoAtleta.giorno, data.giorni.length - 1);
             const giorno = data.giorni[gIdx];
             const esercizi = giorno.esercizi || [];
             if (esercizi.length === 0) return;
-            const fIdx = Math.min(statoAtleta.focus, esercizi.length - 1);
-            const ex = esercizi[fIdx];
-            const valori = valoriEsercizio(gIdx, fIdx);
-            const ultimo = ultimoPrimaDiOggi(ex.nome);
+            const fIdx = statoAtleta.focus == null ? null : Math.min(statoAtleta.focus, esercizi.length - 1);
 
-            const nomeBreve = String(data.cliente || nomeAtletaSalvato || '').trim().split(/\s+/)[0];
-            const iniziale = (coachAtleta || 'GPN Lab').trim().charAt(0).toUpperCase();
             esercizi.forEach((_, i) => valoriEsercizio(gIdx, i));
             const fatti = esercizi.filter((_, i) => esercizioCompletato(statoAtleta.valori[chiaveEsercizio(gIdx, i)])).length;
             const tuttiFatti = esercizi.length > 0 && fatti === esercizi.length;
             const percentuale = esercizi.length ? Math.round(Math.max(fatti, 0.15) / esercizi.length * 100) : 0;
-            const gruppo = infoGruppo(esercizi, fIdx);
-            const inMezzo = gruppo && gruppo.pos < gruppo.quanti;   // nel gruppo, ma non l'ultimo: niente recupero
-            const secRecupero = inMezzo ? null : secondiRecupero(ex.recupero);
-
-            const repsDiverse = repsPerSerie(ex.serie);
-            const immagineValida = ex.immagine && /^https?:\/\//i.test(ex.immagine);
+            const durata = durataScheda(data);
 
             const chipsGiorni = data.giorni.filter(g => g.esercizi && g.esercizi.length).length > 1 ? `
                 <nav class="va-giorni">
                     ${data.giorni.map((g, i) => (g.esercizi && g.esercizi.length) ? `<button class="${i === gIdx ? 'attivo' : ''}" onclick="scegliGiornoAtleta(${i})">${esc(g.nome)}</button>` : '').join('')}
                 </nav>` : '';
+
+            const lista = htmlConGruppi(esercizi, (e, i, g) => {
+                if (i === fIdx) return htmlEsercizioAperto(esercizi, gIdx, i);
+                const recupero = g && g.pos < g.quanti ? 'subito il prossimo' : e.recupero;
+                const fatto = esercizioCompletato(statoAtleta.valori[chiaveEsercizio(gIdx, i)]);
+                return `
+                    <button class="va-riga ${fatto ? 'fatta' : ''}" onclick="vaiAEsercizioAtleta(${i})">
+                        <span class="va-quad">${i + 1}</span>
+                        <span><b>${esc(e.nome)}</b><small>${esc(mostraSerie(e.serie))} · ${esc(recupero)}</small></span>
+                        <span class="va-freccia">→</span>
+                    </button>`;
+            }, 'va-gruppo', -1);
+
+            document.getElementById('res-lista-giorni').innerHTML = `
+                <div class="va con-barra">
+                    ${testaAtleta(data)}
+                    <div class="va-sopra">${durata ? 'Scheda ' + durata.testo : 'La tua scheda'}</div>
+
+                    ${chipsGiorni}
+
+                    <section class="va-giorno">
+                        <small>${esc(giorno.nome)} · ${fatti} di ${esercizi.length} fatti</small>
+                        <h3>${esc(giorno.muscoli)}</h3>
+                        <div class="va-barra"><i style="width: ${percentuale}%"></i></div>
+                    </section>
+
+                    <section class="va-esercizi">${lista}</section>
+
+                    ${anteprimaTrainer
+                        ? `<button type="button" class="va-cta" onclick="chiudiAnteprima()">Chiudi anteprima</button>`
+                        : `<button type="button" class="va-cta" id="va-cta" onclick="salvaLogAtleta()">${tuttiFatti && esercizi.some((_, i) => (statoAtleta.valori[chiaveEsercizio(gIdx, i)] || {}).toccato) ? 'Tutto fatto · Salva allenamento' : 'Salva allenamento'}</button>`}
+                </div>
+                ${htmlBarraAtleta()}
+            `;
+        }
+
+        // L'esercizio aperto: nota, numeri, kg e reps di oggi, recupero, "Esercizio fatto", storico
+        function htmlEsercizioAperto(esercizi, gIdx, fIdx) {
+            const ex = esercizi[fIdx];
+            const valori = valoriEsercizio(gIdx, fIdx);
+            const ultimo = ultimoPrimaDiOggi(ex);
+            const gruppo = infoGruppo(esercizi, fIdx);
+            const inMezzo = gruppo && gruppo.pos < gruppo.quanti;   // nel gruppo, ma non l'ultimo: niente recupero
+            const secRecupero = inMezzo ? null : secondiRecupero(ex.recupero);
+            const repsDiverse = repsPerSerie(ex.serie);
+            const immagineValida = ex.immagine && /^https?:\/\//i.test(ex.immagine);
 
             const recuperoStat = inMezzo ? 'Subito'
                 : secRecupero !== null ? `${secRecupero}<em>s</em>`
@@ -2178,7 +2568,7 @@
                     ? `<div class="va-poi"><span>Finita la serie</span><b>Subito: ${esc(esercizi[fIdx + 1].nome)}</b></div>`
                     : `<div class="va-poi"><span>Finita la serie</span><b>Recupero, poi di nuovo ${esc(esercizi[gruppo.inizio].nome)}</b></div>`;
 
-            const storico = logDiEsercizio(ex.nome).slice(0, 5);
+            const storico = logDiEsercizio(ex).slice(0, 5);
             const storicoHtml = storico.length ? `
                 <details class="va-storico">
                     <summary>Storico (${storico.length})</summary>
@@ -2189,46 +2579,18 @@
                         </div>`).join('')}
                 </details>` : '';
 
-            const altriEsercizi = htmlConGruppi(esercizi, (e, i, g) => {
-                const recupero = g && g.pos < g.quanti ? 'subito il prossimo' : e.recupero;
-                const fatto = esercizioCompletato(statoAtleta.valori[chiaveEsercizio(gIdx, i)]);
-                return `
-                    <button class="va-riga ${fatto ? 'fatta' : ''}" onclick="vaiAEsercizioAtleta(${i})">
-                        <span><b>${esc(e.nome)}</b><small>${esc(mostraSerie(e.serie))} · ${esc(recupero)}</small></span>
-                        <span class="va-num ${fatto ? 'fatto' : ''}">${fatto ? '✓' : String(i + 1).padStart(2, '0')}</span>
-                    </button>`;
-            }, 'va-gruppo', fIdx);
-
-            document.getElementById('res-lista-giorni').innerHTML = `
-                <div class="va">
-                    <header class="va-top">
-                        <div class="va-logo">${esc(iniziale)}</div>
-                        <div class="va-top-testo">
-                            <p>${coachAtleta ? 'Coach ' + esc(coachAtleta) : 'La tua scheda'}</p>
-                            <h2>Ciao ${esc(nomeBreve)}</h2>
-                        </div>
-                        <button class="va-menu" onclick="toggleDrawer()" aria-label="Apri menu">☰</button>
-                    </header>
-
-                    ${anteprimaTrainer ? `<div class="va-anteprima">Anteprima: così vede la scheda ${esc(nomeBreve)}. Niente viene salvato.</div>` : ''}
-
-                    ${chipsGiorni}
-
-                    <section class="va-giorno">
-                        <small>${esc(giorno.nome)}</small>
-                        <h3>${esc(giorno.muscoli)}</h3>
-                        <div class="va-barra"><i style="width: ${percentuale}%"></i></div>
-                    </section>
-
-                    <article class="va-attuale">
-                        <div class="va-n">${gruppo ? `${gruppo.quanti === 2 ? 'SUPER SERIE' : 'CIRCUITO'} · ${gruppo.pos} DI ${gruppo.quanti}` : `ESERCIZIO ${fIdx + 1} DI ${esercizi.length}`}</div>
+            return `
+                    <article class="va-attuale" id="va-aperto">
+                        <button type="button" class="va-chiudi" onclick="chiudiEsercizioAtleta()"><span class="va-n">${gruppo ? `${gruppo.quanti === 2 ? 'SUPER SERIE' : 'CIRCUITO'} · ${gruppo.pos} DI ${gruppo.quanti}` : `ESERCIZIO ${fIdx + 1} DI ${esercizi.length}`}</span><span>Chiudi ▴</span></button>
                         <h4>${esc(ex.nome)}</h4>
                         ${ex.note ? `<div class="va-nota"><b>Nota del coach</b>${esc(ex.note)}</div>` : ''}
                         ${immagineValida ? `<img src="${esc(ex.immagine)}" class="va-img" alt="${esc(ex.nome)}">` : ''}
 
                         <div class="va-stats">
                             <div><span>Serie</span><b>${repsDiverse ? repsDiverse.length : esc(mostraSerie(ex.serie) || '–')}</b></div>
-                            <div><span>Recupero</span><b>${recuperoStat}</b></div>
+                            ${secRecupero !== null
+                                ? `<button type="button" class="va-stat-click" onclick="avviaRecuperoAtleta(${secRecupero})"><span>Recupero →</span><b>${recuperoStat}</b></button>`
+                                : `<div><span>Recupero</span><b>${recuperoStat}</b></div>`}
                             <div><span>Ultima</span><b>${ultimo && ultimo.kg_usati ? esc(mostraNumero(ultimo.kg_usati)) + '<em>kg</em>' : '–'}</b></div>
                         </div>
 
@@ -2267,27 +2629,22 @@
                                 : `<button type="button" class="va-fatto" onclick="segnaFattoAtleta()">✓ Esercizio fatto</button>`}
 
                         ${storicoHtml}
-                    </article>
-
-                    ${altriEsercizi ? `<section class="va-lista"><h5>Altri esercizi</h5>${altriEsercizi}</section>` : ''}
-
-                    ${anteprimaTrainer
-                        ? `<button type="button" class="va-cta" onclick="chiudiAnteprima()">Chiudi anteprima</button>`
-                        : `<button type="button" class="va-cta" id="va-cta" onclick="salvaLogAtleta()">${tuttiFatti && esercizi.some((_, i) => (statoAtleta.valori[chiaveEsercizio(gIdx, i)] || {}).toccato) ? 'Tutto fatto · Salva allenamento' : 'Salva allenamento'}</button>`}
-                </div>
-            `;
+                    </article>`;
         }
 
-        // Primo esercizio del giorno non ancora salvato oggi (se sono tutti fatti, il primo)
-        function primoDaFare(gIdx) {
-            const esercizi = datiSchedaAttuale.giorni[gIdx].esercizi || [];
-            const i = esercizi.findIndex((e, j) => !esercizioCompletato(statoAtleta.valori[chiaveEsercizio(gIdx, j)]) && !logDiOggi(e.nome));
-            return i >= 0 ? i : 0;
+        function chiudiEsercizioAtleta() {
+            statoAtleta.focus = null;
+            renderSchedaAtleta();
+        }
+        // Dopo aver aperto un esercizio, lo porto in vista
+        function mostraEsercizioAperto() {
+            const el = document.getElementById('va-aperto');
+            if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
         function scegliGiornoAtleta(gIdx) {
             statoAtleta.giorno = gIdx;
-            statoAtleta.focus = primoDaFare(gIdx);
+            statoAtleta.focus = null;
             renderSchedaAtleta();
             window.scrollTo(0, 0);
         }
@@ -2314,28 +2671,29 @@
 
             valori.fatto = true;
             valori.toccato = true;   // così viene salvato
+            // Si chiude e si apre il prossimo non ancora fatto; se erano tutti fatti, restano tutti chiusi
+            let prossimo = null;
             for (let passo = 1; passo < esercizi.length; passo++) {
                 const i = (statoAtleta.focus + passo) % esercizi.length;
-                if (!esercizioCompletato(statoAtleta.valori[chiaveEsercizio(gIdx, i)])) {
-                    statoAtleta.focus = i;
-                    break;
-                }
+                if (!esercizioCompletato(statoAtleta.valori[chiaveEsercizio(gIdx, i)])) { prossimo = i; break; }
             }
+            statoAtleta.focus = prossimo;
             renderSchedaAtleta();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            if (prossimo == null) avvisoBreve('Allenamento finito, bravo! Ricordati di salvare.');
+            else mostraEsercizioAperto();
         }
 
         function vaiAEsercizioAtleta(eIdx) {
             statoAtleta.focus = eIdx;
             renderSchedaAtleta();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            mostraEsercizioAperto();
         }
 
         function aggiornaDeltaAtleta() {
             const giorno = datiSchedaAttuale.giorni[statoAtleta.giorno];
             const ex = giorno.esercizi[statoAtleta.focus];
             const valori = valoriEsercizio(statoAtleta.giorno, statoAtleta.focus);
-            document.getElementById('va-delta-box').innerHTML = htmlDelta(valori.kg, ultimoPrimaDiOggi(ex.nome));
+            document.getElementById('va-delta-box').innerHTML = htmlDelta(valori.kg, ultimoPrimaDiOggi(ex));
         }
 
         // Scrittura a mano nel campo (non ridisegna la pagina, così la tastiera resta aperta)
@@ -2362,7 +2720,9 @@
             box.setAttribute('data-secondi', secondi);
             box.setAttribute('data-tempo-base', secondi);
             box.open = true;
-            if (!document.getElementById('side-drawer').classList.contains('open')) toggleDrawer();
+            const drawer = document.getElementById('side-drawer');
+            if (drawer.classList.contains('open') && !drawer.classList.contains('modo-timer')) chiudiDrawer();
+            if (!drawer.classList.contains('open')) toggleDrawer('timer');
             avviaTimerSidebar();
         }
 
@@ -2382,6 +2742,7 @@
                 righe.push({
                     giorno_nome: giorno.nome,
                     nome_esercizio: esercizio.nome,
+                    esercizio_id: esercizio.id || null,
                     kg_usati: valori.kg,
                     reps_fatte: valori.reps
                 });
@@ -2427,6 +2788,33 @@
                 nuovoPulsante.classList.remove('salvato');
             }, 2500);
         }
+
+        // Home dell'atleta: la card della scheda con le date; toccandola si apre la scheda
+        function renderHomeAtleta() {
+            const data = datiSchedaAttuale, d = durataScheda(data);
+            const giorni = data.giorni.filter(g => g.esercizi && g.esercizi.length);
+            const tot = giorni.reduce((t, g) => t + g.esercizi.length, 0);
+            const riga = !d ? ''
+                : d.fase === 'Da iniziare'
+                    ? `<div class="sett"><span>Si parte il ${dataBreve(data.dal)}</span><span>tra ${d.traGiorni} giorn${d.traGiorni === 1 ? 'o' : 'i'}</span></div><div class="va-barra"><i style="width:0"></i></div>`
+                    : `<div class="sett"><span>Settimana ${d.settimana} di ${d.settimane}</span><span>${d.mancano >= 0 ? `mancano ${d.mancano} giorn${d.mancano === 1 ? 'o' : 'i'}` : 'chiedi la scheda nuova al coach'}</span></div><div class="va-barra"><i style="width:${d.settimana / d.settimane * 100}%"></i></div>`;
+            document.getElementById('res-lista-giorni').innerHTML = `
+                <div class="va con-barra">
+                    ${testaAtleta(data)}
+                    <div class="va-sopra">La tua scheda</div>
+                    <button type="button" class="va-scheda-card" onclick="apriSchedaDaHome()">
+                        <div class="et">Scheda allenamento ${d ? `<b class="${d.fase === 'Scaduta' ? 'scaduta' : ''}">${d.fase}</b>` : ''}</div>
+                        <h4>${d ? d.testo : 'La tua scheda'}</h4>
+                        <div class="date">${giorni.length} giorn${giorni.length === 1 ? 'o' : 'i'} · ${tot} esercizi</div>
+                        ${riga}
+                        <div class="giu"><span>Apri la scheda</span><span>→</span></div>
+                    </button>
+                    ${anteprimaTrainer ? `<button type="button" class="va-cta" onclick="chiudiAnteprima()">Chiudi anteprima</button>` : ''}
+                </div>
+                ${htmlBarraAtleta()}`;
+            window.scrollTo(0, 0);
+        }
+        function apriSchedaDaHome() { statoAtleta.vista = 'scheda'; renderSchedaAtleta(); window.scrollTo(0, 0); }
 
         async function caricaSchedaAtletaDaInput() {
             const nomeInput = document.getElementById('nome-atleta-cerca').value.trim();
@@ -2491,7 +2879,8 @@
             }
             // Parto dal primo giorno che ha esercizi
             statoAtleta.giorno = Math.max(0, datiSchedaAttuale.giorni.findIndex(g => g.esercizi && g.esercizi.length));
-            statoAtleta.focus = primoDaFare(statoAtleta.giorno);
+            statoAtleta.focus = null;   // in Allenamento gli esercizi partono tutti chiusi
+            statoAtleta.vista = 'home';
 
             mostraSchermata('scheda-finale');
             renderSchedaAtleta();
